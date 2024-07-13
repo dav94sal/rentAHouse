@@ -1,2 +1,3 @@
-# airBnB
-Portfolio Project: A mimic of AirBnB
+# RentAHouse
+Portfolio Project
+by David Salas

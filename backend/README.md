@@ -1,4 +1,4 @@
-# AirBnB Mimic Backend
+# RentAHouse Mimic Backend
 
 ## Database Schema Design
 
