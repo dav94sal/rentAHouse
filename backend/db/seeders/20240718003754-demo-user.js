@@ -2,6 +2,7 @@
 
 const { User } = require('../models');
 const bcrypt = require("bcryptjs");
+const user = require('../models/user');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -14,16 +15,22 @@ module.exports = {
     await User.bulkCreate([
       {
         username: 'demo-user',
+        firstName: 'demo',
+        lastName: 'user',
         email: 'demo@user.io',
         hashedPassword: bcrypt.hashSync('password')
       },
       {
         username: 'FakeUser1',
+        firstName: 'fake1',
+        lastName: 'user1',
         email: 'user1@user.io',
         hashedPassword: bcrypt.hashSync('password2')
       },
       {
         username: 'FakeUser2',
+        firstName: 'fake2',
+        lastName: 'user2',
         email: 'user2@user.io',
         hashedPassword: bcrypt.hashSync('password3')
       }
