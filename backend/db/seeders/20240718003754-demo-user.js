@@ -2,7 +2,6 @@
 
 const { User } = require('../models');
 const bcrypt = require("bcryptjs");
-const user = require('../models/user');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -13,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up (queryInterface, Sequelize) {
     options.tableName = 'Users'
-    await User.bulkCreate(options, [
+    await User.bulkCreate([
       {
         username: 'demo-user',
         firstName: 'demo',
