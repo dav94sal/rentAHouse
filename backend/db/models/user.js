@@ -37,18 +37,18 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true
       }
     },
+    firstName: {
+      type: DataTypes.STRING
+    },
+    lastName: {
+      type: DataTypes.STRING
+    },
     hashedPassword: {
       type: DataTypes.STRING.BINARY,
       allowNull: false,
       validate: {
         len: [60, 60]
       }
-    },
-    firstName: {
-      type: DataTypes.STRING
-    },
-    lastName: {
-      type: DataTypes.STRING
     }
   }, {
     defaultScope: {
