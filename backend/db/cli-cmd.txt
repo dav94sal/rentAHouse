@@ -3,3 +3,9 @@ npx sequelize model:generate --name Spots --attributes ownerId:integer,address:s
 
 generate model for bookings
 npx sequelize model:generate --name Bookings --attributes spotId:integer,userId:integer,startDate:date,endDate:date
+
+generate model for image
+npx sequelize model:generate --name Image --attributes imageableId:integer,imageableType:string,url:string
+
+generate model for reviews
+npx sequelize model:generate --name Reviews --attributes userId:integer,spotId:integer,review:string,stars:integer
