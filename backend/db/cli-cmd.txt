@@ -1,0 +1,5 @@
+generate model for spots
+npx sequelize model:generate --name Spots --attributes ownerId:integer,address:string,city:string,state:string,country:string,lat:float,lng:float,name:string,description:string,price:decimal
+
+generate model for bookings
+npx sequelize model:generate --name Bookings --attributes spotId:integer,userId:integer,startDate:date,endDate:date
