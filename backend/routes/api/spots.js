@@ -5,15 +5,27 @@ const router = express.Router();
 
 router.get('/:id', async (req,res,next) => {
   let spot = await Spot.findByPk(req.params.id);
-  console.log(spot)
-  const reviews = await spot.getReviews();
-  // const avgStarRating = reviews.reduce((acc, rev) => acc + rev.stars, 0);
 
+  if (spot) {
+    const owner = await spot.getUser();
+    const images = await spot.getImages({attributes: ['id', 'url']});
+    const reviews = await spot.getReviews({attributes: ['stars']});
+    const avgStarRating = reviews.reduce((acc, rev) => acc + rev.stars, 0) / reviews.length;
 
-  spot = spot.toJSON();
-  // spot.numReviews = numReviews;
+    spot = spot.toJSON();
+    spot.numReviews = reviews.length;
+    spot.avgStarRating = avgStarRating;
+    spot.SpotImages = images;
+    spot.Owner = owner;
 
-  res.json(spot)
+    res.json(spot)
+  } else {
+    const err = new Error(`Could not find spot ${req.params.id}`);
+    err.title = 'Spot not found';
+    err.errors = {message: `Could not find spot ${req.params.id}`};
+    err.status = 404;
+    next(err);
+  }
 })
 
 router.get('/', async (req,res,next) => {
