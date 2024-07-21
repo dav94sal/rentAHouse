@@ -57,7 +57,43 @@ const demoSpots = [
     name: "Cemetary Gates",
     description: 'This is a dead spot',
     price: 115
-  }
+  },
+  {
+    ownerId: 4,
+    address: '678 12th St',
+    city: 'Lewisville',
+    state: 'Texas',
+    country: 'USA',
+    lat: 30.33399,
+    lng: -97.8765,
+    name: "Dean Cave",
+    description: 'Greatest burgers in the world for breakfast!',
+    price: 115
+  },
+  {
+    ownerId: 5,
+    address: '234 5th St',
+    city: 'Singer',
+    state: 'Georgia',
+    country: 'USA',
+    lat: 49.84411,
+    lng: -82.59068,
+    name: "Idgit Inn",
+    description: 'For all the idgits that plan ahead',
+    price: 200
+  },
+  {
+    ownerId: 6,
+    address: '43219 Stairway Rd',
+    city: 'Lawrence',
+    state: 'Kansas',
+    country: 'USA',
+    lat: 46.85411,
+    lng: -90.59188,
+    name: "Mary's Bed and Breakfast",
+    description: 'In honor of Mary Winchester',
+    price: 100
+  },
 ]
 
 /** @type {import('sequelize-cli').Migration} */

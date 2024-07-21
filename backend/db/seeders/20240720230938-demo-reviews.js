@@ -29,10 +29,28 @@ const demoReviews = [
     stars: 5
   },
   {
-    userId: 2,
-    spotId: 4,
-    review: "Meh...",
+    userId: 5,
+    spotId: 1,
+    review: "Ya idgits can't get a better heater?",
     stars: 3
+  },
+  {
+    userId: 4,
+    spotId: 7,
+    review: "Bitch...",
+    stars: 4
+  },
+  {
+    userId: 6,
+    spotId: 5,
+    review: "Jerk..",
+    stars: 3
+  },
+  {
+    userId: 1,
+    spotId: 7,
+    review: "So amazing!",
+    stars: 5
   },
 ]
 
