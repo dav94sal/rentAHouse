@@ -2,11 +2,13 @@
 
 const { User } = require('../models');
 const bcrypt = require("bcryptjs");
+const { Op } = require('sequelize');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 };
+options.tableName = 'Users';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -33,13 +35,32 @@ module.exports = {
         lastName: 'user2',
         email: 'user2@user.io',
         hashedPassword: bcrypt.hashSync('password3')
+      },
+      {
+        username: 'bonJovifan1',
+        firstName: 'Dean',
+        lastName: 'Winchester',
+        email: 'dWinchester@supernatural.io',
+        hashedPassword: bcrypt.hashSync('password')
+      },
+      {
+        username: 'bSinger',
+        firstName: 'Bobby',
+        lastName: 'Singer',
+        email: 'bSinger@supernatural.io',
+        hashedPassword: bcrypt.hashSync('password2')
+      },
+      {
+        username: 'sasquatch',
+        firstName: 'Sam',
+        lastName: 'Winchester',
+        email: 'sammy@supernatural.io',
+        hashedPassword: bcrypt.hashSync('password3')
       }
     ], {validate: true});
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'Users';
-    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       username: {[Op.in]: ['demo-user', 'FakeUser1', 'FakeUser2']}
     }, {});
