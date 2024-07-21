@@ -2,12 +2,13 @@
 
 const { User } = require('../models');
 const bcrypt = require("bcryptjs");
-const user = require('../models/user');
+const { Op } = require('sequelize');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 };
+options.tableName = 'Users';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -38,8 +39,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'Users';
-    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       username: {[Op.in]: ['demo-user', 'FakeUser1', 'FakeUser2']}
     }, {});

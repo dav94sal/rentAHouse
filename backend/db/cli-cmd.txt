@@ -9,3 +9,15 @@ npx sequelize model:generate --name Image --attributes imageableId:integer,image
 
 generate model for reviews
 npx sequelize model:generate --name Reviews --attributes userId:integer,spotId:integer,review:string,stars:integer
+
+generate seeder file for Spots
+npx sequelize seed:generate --name demo-spots
+
+generate seeder file for Bookings
+npx sequelize seed:generate --name demo-bookings
+
+generate seeder file for Reviews
+npx sequelize seed:generate --name demo-reviews
+
+generate seeder file for Reviews
+npx sequelize seed:generate --name demo-Images
