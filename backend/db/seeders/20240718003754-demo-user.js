@@ -13,6 +13,7 @@ options.tableName = 'Users';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
+    options.tableName = 'Users'
     await User.bulkCreate([
       {
         username: 'demo-user',
