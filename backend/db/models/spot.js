@@ -50,11 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     lat: {
-      type: DataTypes.FLOAT(8, 5),
+      type: DataTypes.DECIMAL(8, 5),
       allowNull: false
     },
     lng: {
-      type: DataTypes.FLOAT(8, 5),
+      type: DataTypes.DECIMAL(8, 5),
       allowNull: false
     },
     name: {
