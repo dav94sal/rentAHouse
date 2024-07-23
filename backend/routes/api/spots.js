@@ -48,7 +48,7 @@ router.get('/:id', async (req,res,next) => {
   } else {
     const err = new Error(`Could not find spot ${req.params.id}`);
     err.title = 'Spot not found';
-    err.errors = {message: `Could not find spot ${req.params.id}`};
+    err.errors = {message: `Spot couldn't be found`};
     err.status = 404;
     next(err);
   }
