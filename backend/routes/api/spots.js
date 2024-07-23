@@ -33,7 +33,9 @@ router.get('/', async (req,res,next) => {
   const spots = await Spot.findAll();
 
   for (let spot of spots) {
-    const images = await spot.getImages();
+    const images = await spot.getImages({attributes: ['url']});
+    let image = images[0];
+
     const reviews = await spot.getReviews({attributes: ['stars']});
     const avgRating = reviews.reduce(
       (acc, review) => acc + review.stars, 0
@@ -41,7 +43,11 @@ router.get('/', async (req,res,next) => {
 
     spot = spot.toJSON();
     spot.avgRating = avgRating;
-    spot.previewImage = images;
+
+    if (image) {
+      image = image.toJSON();
+      spot.previewImage = image.url;
+    }
     response.push(spot)
   }
 
