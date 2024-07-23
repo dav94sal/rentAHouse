@@ -35,30 +35,6 @@ const validateSignup = [
   handleValidationErrors
 ];
 
-// get all spots owned by current user
-router.get('/spots', requireAuth, restoreUser, async (req,res,next) => {
-  const JWT = decodeJWT(req)
-
-  const user = await User.findByPk(JWT.data.id);
-
-  let spots = await user.getSpots();
-  const response = user.toJSON();
-  response.spot = [];
-
-  for (let spot of spots) {
-    const previewImage = await spot.getImages({attributes: ['url']});
-    const reviews = await spot.getReviews({attributes: ['stars']});
-    const avgRating = reviews.reduce((acc, rev) => acc + rev.stars, 0) / reviews.length
-
-    spot = spot.toJSON()
-    spot.previewImage = previewImage[0];
-    spot.avgRating = avgRating;
-    response.spot.push(spot);
-  };
-
-  res.json(response)
-})
-
 // sign up
 router.post('/', validateSignup, async (req,res,next) => {
   const { username, email, password, firstName, lastName } = req.body;
