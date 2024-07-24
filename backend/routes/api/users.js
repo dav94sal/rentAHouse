@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs')
 
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { setTokenCookie, requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
 const { check } = require('express-validator');

@@ -69,4 +69,9 @@ const requireAuth = function (req, res, next) {
   return next(err);
 }
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+const decodeJWT = function (req) {
+  const { token } = req.cookies;
+  return jwt.decode(token);
+}
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, decodeJWT };

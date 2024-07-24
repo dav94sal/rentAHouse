@@ -46,3 +46,23 @@ fetch('/api/users', {
     password: 'password'
   })
 }).then(res => res.json()).then(data => console.log(data));
+
+// create spot
+fetch('spots', {
+  method: 'POST',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  },
+  body: JSON.stringify({
+  "address": "123 Disney Lane",
+  "city": "San Francisco",
+  "state": "California",
+  "country": "United States of America",
+  "lat": 37.7645358,
+  "lng": -122.4730327,
+  "name": "App Academy",
+  "description": "Place where web developers are created",
+  "price": 123
+  })
+}).then(res => res.json()).then(data => console.log(data));
