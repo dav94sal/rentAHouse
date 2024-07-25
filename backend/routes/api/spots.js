@@ -63,12 +63,13 @@ router.get('/current', requireAuth, restoreUser, async (req,res,next) => {
   res.json(response)
 })
 
+// get spot by id
 router.get('/:id', async (req,res,next) => {
   let spot = await Spot.findByPk(req.params.id);
 
   if (spot) {
     const owner = await spot.getUser();
-    const images = await spot.getImages({attributes: ['id', 'url']});
+    const images = await spot.getImages({attributes: ['id', 'url', 'preview']});
     const reviews = await spot.getReviews({attributes: ['stars']});
     const avgStarRating = reviews.reduce((acc, rev) => acc + rev.stars, 0) / reviews.length;
 
@@ -88,6 +89,7 @@ router.get('/:id', async (req,res,next) => {
   }
 })
 
+// get all spots
 router.get('/', async (req,res,next) => {
   const response = [];
   const spots = await Spot.findAll();
@@ -114,6 +116,7 @@ router.get('/', async (req,res,next) => {
   res.json(response)
 })
 
+// add a spot
 router.post('/', requireAuth, restoreUser, validateSpot, async (req,res,next) => {
   const { address, city, state, country, lat, lng, name, description, price } = req.body;
   const JWT = decodeJWT(req);
