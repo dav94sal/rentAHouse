@@ -1,5 +1,5 @@
 const express = require('express');
-const { Spot, User } = require('../../db/models');
+const { Spot, User, Image } = require('../../db/models');
 const { requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
 
 const { check } = require('express-validator');
@@ -49,14 +49,19 @@ router.get('/current', requireAuth, restoreUser, async (req,res,next) => {
   response.spot = [];
 
   for (let spot of spots) {
-    const images = await spot.getImages({attributes: ['url']});
-    const previewImage = images[0];
+    const images = await spot.getImages({
+      attributes: ['url'],
+      where: {preview:true}
+    });
+    let previewImage
+    if (images.length > 0) previewImage = images[0].url
+    else previewImage = null
     const reviews = await spot.getReviews({attributes: ['stars']});
     const avgRating = reviews.reduce((acc, rev) => acc + rev.stars, 0) / reviews.length
 
     spot = spot.toJSON()
     spot.avgRating = avgRating;
-    spot.previewImage = previewImage.url;
+    spot.previewImage = previewImage;
     response.spot.push(spot);
   };
 
@@ -64,8 +69,8 @@ router.get('/current', requireAuth, restoreUser, async (req,res,next) => {
 })
 
 // get spot by id
-router.get('/:id', async (req,res,next) => {
-  let spot = await Spot.findByPk(req.params.id);
+router.get('/:spotId', async (req,res,next) => {
+  let spot = await Spot.findByPk(req.params.spotId);
 
   if (spot) {
     const owner = await spot.getUser();
@@ -81,7 +86,7 @@ router.get('/:id', async (req,res,next) => {
 
     res.json(spot)
   } else {
-    const err = new Error(`Could not find spot ${req.params.id}`);
+    const err = new Error(`Could not find spot ${req.params.spotId}`);
     err.title = 'Spot not found';
     err.errors = {message: `Spot couldn't be found`};
     err.status = 404;
@@ -116,7 +121,7 @@ router.get('/', async (req,res,next) => {
   res.json(response)
 })
 
-// add a spot
+// create a spot
 router.post('/', requireAuth, restoreUser, validateSpot, async (req,res,next) => {
   const { address, city, state, country, lat, lng, name, description, price } = req.body;
   const JWT = decodeJWT(req);
@@ -127,6 +132,32 @@ router.post('/', requireAuth, restoreUser, validateSpot, async (req,res,next) =>
   })
 
   res.json(newSpot);
+})
+
+// add image to spot
+router.post('/:spotId/images', requireAuth, restoreUser, async (req,res,next) => {
+  const { url, preview } = req.body;
+  const spot = await Spot.findByPk(req.params.spotId);
+  const JWT = decodeJWT(req);
+  const ownerId = JWT.data.id;
+
+  console.log(spot.ownerId)
+
+  if (spot && spot.ownerId === ownerId) {
+    const image = await Image.create({
+      imageableId: req.params.spotId,
+      imageableType: "Spot",
+      url,
+      preview
+    });
+
+    const response = {
+      id: image.id,
+      url: image.url,
+      preview: image.preview
+    }
+    res.json(response);
+  } else res.json({message: "Spot couldn't be found"})
 })
 
 module.exports = router;

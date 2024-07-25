@@ -48,7 +48,7 @@ fetch('/api/users', {
 }).then(res => res.json()).then(data => console.log(data));
 
 // create spot
-fetch('spots', {
+fetch('/api/spots', {
   method: 'POST',
   headers: {
     "Content-Type": "application/json",
@@ -64,5 +64,18 @@ fetch('spots', {
   "name": "App Academy",
   "description": "Place where web developers are created",
   "price": 123
+  })
+}).then(res => res.json()).then(data => console.log(data));
+
+// add an image to spot
+fetch('/api/spots/7/images', {
+  method: 'POST',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  },
+  body: JSON.stringify({
+  "url": "",
+  "preview": "true"
   })
 }).then(res => res.json()).then(data => console.log(data));
