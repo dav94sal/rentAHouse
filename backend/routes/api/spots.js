@@ -141,8 +141,6 @@ router.post('/:spotId/images', requireAuth, restoreUser, async (req,res,next) =>
   const JWT = decodeJWT(req);
   const ownerId = JWT.data.id;
 
-  console.log(spot.ownerId)
-
   if (spot && spot.ownerId === ownerId) {
     const image = await Image.create({
       imageableId: req.params.spotId,
