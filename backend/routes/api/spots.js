@@ -155,7 +155,34 @@ router.post('/:spotId/images', requireAuth, restoreUser, async (req,res,next) =>
       preview: image.preview
     }
     res.json(response);
-  } else res.json({message: "Spot couldn't be found"})
+  } else {
+    const err = new Error(`Spot ${req.params.spotId} couldn't be found`);
+    err.title = 'Spot not found';
+    err.errors = {message: `Spot couldn't be found`};
+    err.status = 404;
+    next(err);
+  }
 })
 
+// edit a spot
+router.put('/:spotId', requireAuth, restoreUser, validateSpot, async (req,res,next) => {
+  const JWT = decodeJWT(req);
+  const ownerId = JWT.data.id;
+  const verifySpot = await Spot.findOne({where:{id: req.params.spotId}});
+
+  if (verifySpot && verifySpot.ownerId === ownerId) {
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+    const spot = await Spot.update(
+      { address, city, state, country, lat, lng, name, description, price },
+      { where: { id: req.params.spotId } }
+    );
+    res.json(verifySpot);
+  } else {
+    const err = new Error(`Spot ${req.params.spotId} couldn't be found`);
+    err.title = 'Spot not found';
+    err.errors = {message: `Spot couldn't be found`};
+    err.status = 404;
+    next(err);
+  }
+})
 module.exports = router;
