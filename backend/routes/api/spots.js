@@ -1,9 +1,10 @@
 const express = require('express');
-const { Spot, User, Image } = require('../../db/models');
+const { Spot, User, Image, Review } = require('../../db/models');
 const { requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const review = require('../../db/models/review');
 
 const router = express.Router();
 
@@ -37,6 +38,17 @@ const validateSpot = [
     .withMessage("Price per day must be a positive number"),
   handleValidationErrors
 ]
+
+const validateReview = [
+  check('review')
+    .exists({checkFalsy: true})
+    .withMessage("Review text is required"),
+  check('stars')
+    .exists({checkFalsy: true})
+    .withMessage("Stars must be an integer from 1 to 5"),
+    handleValidationErrors
+]
+
 
 // get all spots owned by current user
 router.get('/current', requireAuth, restoreUser, async (req,res,next) => {
@@ -201,7 +213,7 @@ router.delete('/:spotId', requireAuth, restoreUser, async (req,res,next) => {
     });
 
     res.json({ message: "Successfully deleted" });
-    
+
   } else {
     const err = new Error(`Spot ${req.params.spotId} couldn't be found`);
     err.title = 'Spot not found';
@@ -210,5 +222,47 @@ router.delete('/:spotId', requireAuth, restoreUser, async (req,res,next) => {
     next(err);
   }
 })
+
+// create a review for a spot
+router.post('/:spotId/reviews', requireAuth, validateReview, async (req,res,next) => {
+  const { review, stars } = req.body;
+  const JWT = decodeJWT(req);
+  const userId = JWT.data.id;
+  const spot = await Spot.findOne({
+    where: {
+      id: req.params.spotId
+    },
+    include: Review
+  });
+
+  if (spot) {
+    for (let rev of spot.Reviews) {
+      console.log(rev)
+      if (rev.userId === userId) {
+        const err = new Error("User already has a review for this spot");
+        err.title = "User already has a review for this spot";
+        err.errors = {message: "User already has a review for this spot"};
+        err.status = 500;
+        next(err);
+      }
+    }
+
+    const newReview = await Review.create({
+      userId,
+      spotId: req.params.spotId,
+      review,
+      stars
+    })
+    res.json(newReview)
+
+  } else {
+    const err = new Error(`Could not find spot ${req.params.spotId}`);
+    err.title = 'Spot not found';
+    err.errors = {message: `Spot couldn't be found`};
+    err.status = 404;
+    next(err);
+  }
+})
+
 
 module.exports = router;
