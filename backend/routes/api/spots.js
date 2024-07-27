@@ -4,7 +4,6 @@ const { requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const review = require('../../db/models/review');
 
 const router = express.Router();
 
