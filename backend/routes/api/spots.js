@@ -185,4 +185,30 @@ router.put('/:spotId', requireAuth, restoreUser, validateSpot, async (req,res,ne
     next(err);
   }
 })
+
+// delete a spot
+router.delete('/:spotId', requireAuth, restoreUser, async (req,res,next) => {
+  const JWT = decodeJWT(req);
+  const ownerId = JWT.data.id;
+  const spot = await Spot.findByPk(req.params.spotId)
+
+  if (spot && spot.ownerId === ownerId) {
+    await Spot.destroy({
+      where: {
+        id: req.params.spotId,
+        ownerId
+      }
+    });
+
+    res.json({ message: "Successfully deleted" });
+    
+  } else {
+    const err = new Error(`Spot ${req.params.spotId} couldn't be found`);
+    err.title = 'Spot not found';
+    err.errors = {message: `Spot couldn't be found`};
+    err.status = 404;
+    next(err);
+  }
+})
+
 module.exports = router;

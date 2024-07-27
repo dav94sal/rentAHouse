@@ -99,3 +99,12 @@ fetch('/api/spots/7/images', {
   "preview": "true"
   })
 }).then(res => res.json()).then(data => console.log(data));
+
+// delete a spot
+fetch('/api/spots/7', {
+  method: 'DELETE',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  }
+}).then(res => res.json()).then(data => console.log(data));
