@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Spot.hasMany(models.Review, {
-        foreignKey: 'spotId'
+        foreignKey: 'spotId',
+        onDelete: 'CASCADE'
       }),
       Spot.hasMany(models.Booking, {
         foreignKey: 'spotId'
@@ -24,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
         constraints: false,
         scope: {
           imageableType: 'Spot'
-        }
+        },
+        onDelete: 'CASCADE'
       })
     }
   }
@@ -68,7 +70,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     price: {
       type: DataTypes.DECIMAL(6, 2),
-      allowNull: false
+      allowNull: false,
+      validate: {min: 0}
     }
   }, {
     sequelize,
