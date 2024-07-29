@@ -1,6 +1,6 @@
 const express = require('express');
 const { Review, Spot, User, Image } = require('../../db/models');
-const { requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
+const { requireAuth, decodeJWT } = require('../../utils/auth');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
