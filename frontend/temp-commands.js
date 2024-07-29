@@ -95,8 +95,20 @@ fetch('/api/spots/7/images', {
     "XSRF-TOKEN": ``
   },
   body: JSON.stringify({
-  "url": "",
-  "preview": "true"
+    "url": "",
+    "preview": "true"
+  })
+}).then(res => res.json()).then(data => console.log(data));
+
+// add an image to review
+fetch('/api/reviews/1/images', {
+  method: 'POST',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  },
+  body: JSON.stringify({
+    "url": ""
   })
 }).then(res => res.json()).then(data => console.log(data));
 
