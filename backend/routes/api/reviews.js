@@ -5,6 +5,16 @@ const { requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
+const validateReview = [
+  check('review')
+    .exists({checkFalsy: true})
+    .withMessage("Review text is required"),
+  check('stars')
+    .exists({checkFalsy: true})
+    .withMessage("Stars must be an integer from 1 to 5"),
+    handleValidationErrors
+]
+
 const router = express.Router();
 
 // get current user reviews
@@ -84,6 +94,26 @@ router.post('/:reviewId/images', requireAuth, async (req,res,next) => {
       next(err);
     }
   } else { // send error if id's don't match
+    const err = new Error(`Could not find review ${req.params.reviewId}`);
+    err.title = 'Review not found';
+    err.errors = {message: `Review couldn't be found`};
+    err.status = 404;
+    next(err);
+  }
+})
+
+router.put('/:reviewId', requireAuth, validateReview, async (req,res,next) => {
+  const JWT = decodeJWT(req);
+  const userId = JWT.data.id;
+  const { review, stars } = req.body;
+  const userReview = await Review.findByPk(req.params.reviewId);
+
+  if (userReview && userReview.userId === userId) {
+    await Review.update(
+      { review, stars },
+      {where: { id: req.params.reviewId }}
+    )
+  } else {
     const err = new Error(`Could not find review ${req.params.reviewId}`);
     err.title = 'Review not found';
     err.errors = {message: `Review couldn't be found`};
