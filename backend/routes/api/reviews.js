@@ -102,6 +102,7 @@ router.post('/:reviewId/images', requireAuth, async (req,res,next) => {
   }
 })
 
+// edit review by id
 router.put('/:reviewId', requireAuth, validateReview, async (req,res,next) => {
   const JWT = decodeJWT(req);
   const userId = JWT.data.id;
@@ -113,6 +114,23 @@ router.put('/:reviewId', requireAuth, validateReview, async (req,res,next) => {
       { review, stars },
       {where: { id: req.params.reviewId }}
     )
+    res.json(userReview)
+  } else {
+    const err = new Error(`Could not find review ${req.params.reviewId}`);
+    err.title = 'Review not found';
+    err.errors = {message: `Review couldn't be found`};
+    err.status = 404;
+    next(err);
+  }
+})
+
+// delete review
+router.delete('/:reviewId', requireAuth, async (req,res,next) => {
+  const review = await Review.findByPk(req.params.reviewId);
+
+  if (review) {
+    await Review.destroy({ where: { id: req.params.reviewId }});
+    res.json({ message: "Successfully deleted" })
   } else {
     const err = new Error(`Could not find review ${req.params.reviewId}`);
     err.title = 'Review not found';
