@@ -87,6 +87,19 @@ fetch('/api/spots/1', {
   })
 }).then(res => res.json()).then(data => console.log(data));
 
+// edit review
+fetch('/api/reviews/1', {
+  method: 'PUT',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  },
+  body: JSON.stringify({
+    "review": "This was an awesome spot!",
+    "stars": 5,
+  })
+}).then(res => res.json()).then(data => console.log(data));
+
 // add an image to spot
 fetch('/api/spots/7/images', {
   method: 'POST',
@@ -95,13 +108,34 @@ fetch('/api/spots/7/images', {
     "XSRF-TOKEN": ``
   },
   body: JSON.stringify({
-  "url": "",
-  "preview": "true"
+    "url": "",
+    "preview": "true"
+  })
+}).then(res => res.json()).then(data => console.log(data));
+
+// add an image to review
+fetch('/api/reviews/1/images', {
+  method: 'POST',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  },
+  body: JSON.stringify({
+    "url": ""
   })
 }).then(res => res.json()).then(data => console.log(data));
 
 // delete a spot
 fetch('/api/spots/7', {
+  method: 'DELETE',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  }
+}).then(res => res.json()).then(data => console.log(data));
+
+// delete a review
+fetch('/api/reviews/7', {
   method: 'DELETE',
   headers: {
     "Content-Type": "application/json",

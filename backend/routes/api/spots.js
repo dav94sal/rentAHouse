@@ -105,6 +105,31 @@ router.get('/:spotId', async (req,res,next) => {
   }
 })
 
+// Get reviews for spot id
+router.get('/:spotId/reviews', async (req,res,next) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+  let reviews;
+  const response = [];
+
+  if (spot) {
+    reviews = await spot.getReviews({ include: User });
+    for (let rev of reviews) {
+      const images = await rev.getImages({ attributes: ['id', 'url'] });
+      rev = rev.toJSON();
+      rev.ReviewImages = images;
+      response.push(rev)
+    };
+
+    res.json(response);
+  } else {
+    const err = new Error(`Could not find spot ${req.params.spotId}`);
+    err.title = 'Spot not found';
+    err.errors = {message: `Spot couldn't be found`};
+    err.status = 404;
+    next(err);
+  }
+})
+
 // get all spots
 router.get('/', async (req,res,next) => {
   const response = [];

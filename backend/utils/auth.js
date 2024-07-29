@@ -59,6 +59,11 @@ const restoreUser = (req, res, next) => {
   })
 }
 
+const decodeJWT = function (req) {
+  const { token } = req.cookies;
+  return jwt.decode(token);
+}
+
 const requireAuth = function (req, res, next) {
   if (req.user) return next();
 
@@ -67,11 +72,6 @@ const requireAuth = function (req, res, next) {
   err.errors = { message: 'Authentication required' };
   err.status = 401;
   return next(err);
-}
-
-const decodeJWT = function (req) {
-  const { token } = req.cookies;
-  return jwt.decode(token);
 }
 
 module.exports = { setTokenCookie, restoreUser, requireAuth, decodeJWT };
