@@ -33,7 +33,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
     response.push(booking);
   }
 
-  res.json(response);
+  res.json({bookings: response});
 })
 
 module.exports = router;
