@@ -120,7 +120,8 @@ router.get('/:spotId/reviews', async (req,res,next) => {
       response.push(rev)
     };
 
-    res.json(response);
+    res.status(200)
+    res.json({ Reviews: response });
   } else {
     const err = new Error(`Could not find spot ${req.params.spotId}`);
     err.title = 'Spot not found';
@@ -277,12 +278,13 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req,res,next
       review,
       stars
     })
+
+    res.status(201)
     res.json(newReview)
 
   } else {
-    const err = new Error(`Could not find spot ${req.params.spotId}`);
+    const err = new Error(`Spot couldn't be found`);
     err.title = 'Spot not found';
-    err.errors = {message: `Spot couldn't be found`};
     err.status = 404;
     next(err);
   }

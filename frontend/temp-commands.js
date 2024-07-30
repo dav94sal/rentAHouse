@@ -87,6 +87,19 @@ fetch('/api/spots/1', {
   })
 }).then(res => res.json()).then(data => console.log(data));
 
+// add review to a spot
+fetch('/api/spots/7/reviews', {
+  method: 'POST',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  },
+  body: JSON.stringify({
+    "review": "This was an awesome spot!",
+    "stars": 5,
+  })
+}).then(res => res.json()).then(data => console.log(data));
+
 // edit review
 fetch('/api/reviews/1', {
   method: 'PUT',
@@ -141,17 +154,4 @@ fetch('/api/reviews/7', {
     "Content-Type": "application/json",
     "XSRF-TOKEN": ``
   }
-}).then(res => res.json()).then(data => console.log(data));
-
-// add review to a spot
-fetch('/api/spots/7/reviews', {
-  method: 'POST',
-  headers: {
-    "Content-Type": "application/json",
-    "XSRF-TOKEN": ``
-  },
-  body: JSON.stringify({
-    "review": "This was an awesome spot!",
-    "stars": 5,
-  })
 }).then(res => res.json()).then(data => console.log(data));
