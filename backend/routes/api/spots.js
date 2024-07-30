@@ -57,7 +57,7 @@ router.get('/current', requireAuth, restoreUser, async (req,res,next) => {
 
   let spots = await user.getSpots();
   const response = {};
-  response.spot = [];
+  response.Spots = [];
 
   for (let spot of spots) {
     const images = await spot.getImages({
@@ -73,7 +73,7 @@ router.get('/current', requireAuth, restoreUser, async (req,res,next) => {
     spot = spot.toJSON()
     spot.avgRating = avgRating;
     spot.previewImage = previewImage;
-    response.spot.push(spot);
+    response.Spots.push(spot);
   };
 
   res.json(response)
@@ -84,7 +84,7 @@ router.get('/:spotId', async (req,res,next) => {
   let spot = await Spot.findByPk(req.params.spotId);
 
   if (spot) {
-    const owner = await spot.getUser();
+    const owner = await spot.getUser({attributes: ['id', 'firstName', 'lastName']});
     const images = await spot.getImages({attributes: ['id', 'url', 'preview']});
     const reviews = await spot.getReviews({attributes: ['stars']});
     const avgStarRating = reviews.reduce((acc, rev) => acc + rev.stars, 0) / reviews.length;
@@ -97,8 +97,8 @@ router.get('/:spotId', async (req,res,next) => {
 
     res.json(spot)
   } else {
-    const err = new Error(`Could not find spot ${req.params.spotId}`);
-    err.title = 'Spot not found';
+    const err = new Error(`Spot couldn't be found`);
+    err.title = `Could not find spot ${req.params.spotId}`;
     err.errors = {message: `Spot couldn't be found`};
     err.status = 404;
     next(err);
@@ -154,7 +154,7 @@ router.get('/', async (req,res,next) => {
     response.push(spot)
   }
 
-  res.json(response)
+  res.json({ spot: response })
 })
 
 // create a spot
@@ -167,6 +167,7 @@ router.post('/', requireAuth, restoreUser, validateSpot, async (req,res,next) =>
     ownerId, address, city, state, country, lat, lng, name, description, price
   })
 
+  res.status(201);
   res.json(newSpot);
 })
 
@@ -190,11 +191,11 @@ router.post('/:spotId/images', requireAuth, restoreUser, async (req,res,next) =>
       url: image.url,
       preview: image.preview
     }
+    res.status(201)
     res.json(response);
   } else {
-    const err = new Error(`Spot ${req.params.spotId} couldn't be found`);
-    err.title = 'Spot not found';
-    err.errors = {message: `Spot couldn't be found`};
+    const err = new Error(`Spot couldn't be found`);
+    err.title = "Couldn't find a Spot with the specified id";
     err.status = 404;
     next(err);
   }
@@ -214,9 +215,8 @@ router.put('/:spotId', requireAuth, restoreUser, validateSpot, async (req,res,ne
     );
     res.json(verifySpot);
   } else {
-    const err = new Error(`Spot ${req.params.spotId} couldn't be found`);
-    err.title = 'Spot not found';
-    err.errors = {message: `Spot couldn't be found`};
+    const err = new Error(`Spot couldn't be found`);
+    err.title = "Couldn't find a Spot with the specified id";
     err.status = 404;
     next(err);
   }
