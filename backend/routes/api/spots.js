@@ -1,5 +1,5 @@
 const express = require('express');
-const { Spot, User, Image, Review } = require('../../db/models');
+const { Spot, User, Image, Review, Booking } = require('../../db/models');
 const { requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
 
 const { check } = require('express-validator');
@@ -126,6 +126,35 @@ router.get('/:spotId/reviews', async (req,res,next) => {
     const err = new Error(`Could not find spot ${req.params.spotId}`);
     err.title = 'Spot not found';
     err.errors = {message: `Spot couldn't be found`};
+    err.status = 404;
+    next(err);
+  }
+})
+
+// get all bookings for a spot
+router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
+  const spot = await Spot.findByPk(req.params.spotId)
+  if (spot) {
+    const JWT = decodeJWT(req);
+    const ownerId = JWT.data.id;
+    let bookings
+
+    if (spot.ownerId === ownerId) {
+      bookings = await Booking.findAll({
+        where: { spotId: req.params.spotId},
+        include: User
+      })
+
+    } else {
+      bookings = await Booking.findAll({
+        where: { spotId: req.params.spotId},
+        attributes: ['spotId', 'startDate', 'endDate']
+      })
+    }
+    res.json({ Bookings: bookings });
+  } else {
+    const err = new Error(`Spot couldn't be found`);
+    err.title = 'Spot not found';
     err.status = 404;
     next(err);
   }

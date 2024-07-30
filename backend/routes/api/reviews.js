@@ -133,9 +133,8 @@ router.delete('/:reviewId', requireAuth, async (req,res,next) => {
     await Review.destroy({ where: { id: req.params.reviewId }});
     res.json({ message: "Successfully deleted" })
   } else {
-    const err = new Error(`Could not find review ${req.params.reviewId}`);
+    const err = new Error(`Review couldn't be found`);
     err.title = 'Review not found';
-    err.errors = {message: `Review couldn't be found`};
     err.status = 404;
     next(err);
   }
