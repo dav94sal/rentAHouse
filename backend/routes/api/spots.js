@@ -45,9 +45,38 @@ const validateReview = [
   check('stars')
     .exists({checkFalsy: true})
     .withMessage("Stars must be an integer from 1 to 5"),
+  handleValidationErrors
+]
+
+const validateBooking = [
+  check('startDate')
+    .exists({checkFalsy: true})
+    .withMessage("startDate cannot be in the past"),
+  check('endDate')
+    .exists({checkFalsy: true})
+    .withMessage("endDate cannot be on or before startDate"),
     handleValidationErrors
 ]
 
+const hasExistingBooking = async function (spot, startDate, endDate) {
+  console.log(spot)
+  const bookings = await spot.getBookings({});
+
+  for (let booking of bookings) {
+    const start = new Date(booking.startDate);
+    const end = new Date(booking.endDate);
+
+
+    if (startDate >= start && startDate <= end) {
+      return {startDate: "Start date conflicts with an existing booking"}
+    }
+    if (endDate >= start && endDate <= end) {
+      return {endDate: "End date conflicts with an existing booking"}
+    }
+
+    return false;
+  }
+}
 
 // get all spots owned by current user
 router.get('/current', requireAuth, restoreUser, async (req,res,next) => {
@@ -229,6 +258,48 @@ router.post('/:spotId/images', requireAuth, restoreUser, async (req,res,next) =>
     err.status = 404;
     next(err);
   }
+})
+
+// create a booking
+router.post('/:spotId/bookings', requireAuth, validateBooking, async (req,res,next) => {
+  const JWT = decodeJWT(req);
+  const ownerId = JWT.data.id;
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  if (spot) {
+    const { startDate, endDate } = req.body;
+    const bookingExists = await hasExistingBooking(spot, new Date(startDate), new Date(endDate))
+
+    if (ownerId === spot.ownerId) {
+      const err = new Error(`Cannot book owned spot`);
+      err.title = "Cannot book owned spot";
+      err.status = 403;
+      next(err);
+    } else if (bookingExists) {
+      const err = new Error(`Sorry, this spot is already booked for the specified dates`);
+      err.title = "Booking conflict";
+      err.errors = bookingExists;
+      err.status = 403;
+      next(err);
+    } else {
+      const booking = await Booking.create({
+        spotId: req.params.spotId,
+        userId: ownerId,
+        startDate,
+        endDate
+      })
+
+      res.json(booking)
+    }
+
+  } else {
+    const err = new Error(`Spot couldn't be found`);
+    err.title = "Couldn't find a Spot with the specified id";
+    err.status = 404;
+    next(err);
+  }
+
+
 })
 
 // edit a spot
