@@ -39,16 +39,17 @@ router.get('/current', requireAuth, async (req,res,next) => {
 
   for (let rev of reviews) {
     // get spot preview
-    const imagePreview = await rev.Spot.getImages({
+    const images = await rev.Spot.getImages({
       where: { preview: true },
       attributes: ['url']
     })
 
+    const imagePreview = images[0]
     // get review images
     const reviewImages = await rev.getImages({ attributes: ['id', 'url']});
     rev = rev.toJSON();
 
-    if (imagePreview && rev.Spot) rev.Spot.previewImage = imagePreview[0].url
+    if (imagePreview && rev.Spot) rev.Spot.previewImage = imagePreview.url
     else rev.Spot.previewImage = null;
 
     rev.ReviewImages = reviewImages;

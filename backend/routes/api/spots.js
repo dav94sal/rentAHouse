@@ -141,7 +141,12 @@ router.get('/:spotId/reviews', async (req,res,next) => {
   const response = [];
 
   if (spot) {
-    reviews = await spot.getReviews({ include: User });
+    reviews = await spot.getReviews({
+      include: {
+        model: User,
+        attributes: { exclude: username }
+      }
+    });
     for (let rev of reviews) {
       const images = await rev.getImages({ attributes: ['id', 'url'] });
       rev = rev.toJSON();
@@ -171,7 +176,10 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
     if (spot.ownerId === ownerId) {
       bookings = await Booking.findAll({
         where: { spotId: req.params.spotId},
-        include: User
+        include: {
+          model: User,
+          attributes: { exclude: ['username'] }
+        }
       })
 
     } else {
@@ -180,6 +188,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
         attributes: ['spotId', 'startDate', 'endDate']
       })
     }
+    res.status(201)
     res.json({ Bookings: bookings });
   } else {
     const err = new Error(`Spot couldn't be found`);
