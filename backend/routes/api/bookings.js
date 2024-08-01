@@ -49,7 +49,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
   const bookings = await Booking.findAll({ where: { userId } });
 
   for (let booking of bookings) {
-    let spot = await booking.getSpot();
+    let spot = await booking.getSpot({ attributes: { exclude: ['description'] }});
     const previewImage = await getPreviewImage(spot);
     console.log(previewImage)
 
@@ -62,6 +62,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
     response.push(booking);
   }
 
+  res.status(200)
   res.json({bookings: response});
 })
 
