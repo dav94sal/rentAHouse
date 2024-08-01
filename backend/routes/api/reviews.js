@@ -4,6 +4,7 @@ const { requireAuth, decodeJWT } = require('../../utils/auth');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const { unauthorized } = require('../../utils/errors');
 
 const validateReview = [
   check('review')
@@ -68,7 +69,9 @@ router.post('/:reviewId/images', requireAuth, async (req,res,next) => {
   const review = await Review.findByPk(req.params.reviewId);
 
   // match id to review's userId
-  if (review && review.userId === userId) {
+  if (review) {
+    if (review.userId === userId) return unauthorized(next);
+
     const imageCount = await review.countImages();
 
     if (imageCount < 10) {
@@ -111,7 +114,8 @@ router.put('/:reviewId', requireAuth, validateReview, async (req,res,next) => {
   const { review, stars } = req.body;
   const userReview = await Review.findByPk(req.params.reviewId);
 
-  if (userReview && userReview.userId === userId) {
+  if (userReview) {
+    if (userReview.userId !== userId) return unauthorized(next);
     await Review.update(
       { review, stars },
       {where: { id: req.params.reviewId }}
@@ -128,9 +132,13 @@ router.put('/:reviewId', requireAuth, validateReview, async (req,res,next) => {
 
 // delete review
 router.delete('/:reviewId', requireAuth, async (req,res,next) => {
+  const JWT = decodeJWT(req);
+  const userId = JWT.data.id;
   const review = await Review.findByPk(req.params.reviewId);
 
   if (review) {
+    if ( review.userId !== userId ) return unauthorized(next);
+    
     await Review.destroy({ where: { id: req.params.reviewId }});
     res.json({ message: "Successfully deleted" })
   } else {

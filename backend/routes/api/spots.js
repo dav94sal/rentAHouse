@@ -1,6 +1,7 @@
 const express = require('express');
 const { Spot, User, Image, Review, Booking } = require('../../db/models');
 const { requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
+const { unauthorized } = require('../../utils/errors');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -246,7 +247,9 @@ router.post('/:spotId/images', requireAuth, restoreUser, async (req,res,next) =>
   const JWT = decodeJWT(req);
   const ownerId = JWT.data.id;
 
-  if (spot && spot.ownerId === ownerId) {
+  if (spot) {
+    if (spot.ownerId !== ownerId) return unauthorized(next);
+
     const image = await Image.create({
       imageableId: req.params.spotId,
       imageableType: "Spot",
@@ -276,6 +279,8 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req,res,ne
   const spot = await Spot.findByPk(req.params.spotId);
 
   if (spot) {
+    if (spot.ownerId !== ownerId) return unauthorized(next);
+    
     const { startDate, endDate } = req.body;
     const bookingExists = await hasExistingBooking(spot, new Date(startDate), new Date(endDate))
 
@@ -311,12 +316,13 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req,res,ne
 })
 
 // edit a spot
-router.put('/:spotId', requireAuth, restoreUser, validateSpot, async (req,res,next) => {
+router.put('/:spotId', requireAuth, validateSpot, async (req,res,next) => {
   const JWT = decodeJWT(req);
   const ownerId = JWT.data.id;
   const verifySpot = await Spot.findOne({where:{id: req.params.spotId}});
 
-  if (verifySpot && verifySpot.ownerId === ownerId) {
+  if (verifySpot) {
+    if (verifySpot.ownerId !== ownerId) return unauthorized(next)
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
     const spot = await Spot.update(
       { address, city, state, country, lat, lng, name, description, price },
@@ -337,7 +343,8 @@ router.delete('/:spotId', requireAuth, restoreUser, async (req,res,next) => {
   const ownerId = JWT.data.id;
   const spot = await Spot.findByPk(req.params.spotId)
 
-  if (spot && spot.ownerId === ownerId) {
+  if (spot) {
+    if (spot.ownerId !== ownerId) return unauthorized(next)
     await Spot.destroy({
       where: {
         id: req.params.spotId,
