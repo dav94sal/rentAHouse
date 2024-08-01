@@ -35,9 +35,30 @@ const validateSignup = [
   handleValidationErrors
 ];
 
+const userExists = async function(username, email) {
+  const usernameExists = await User.findAll({ where: { username } });
+  const emailExists = await User.findAll({ where: { email } });
+
+  if (usernameExists) {
+    return {"username": "User with that username already exists"}
+  }
+  else if (emailExists) {
+    return {"email": "User with that email already exists"}
+  } else return false;
+}
+
 // sign up
 router.post('/', validateSignup, async (req,res,next) => {
   const { username, email, password, firstName, lastName } = req.body;
+  const userExists = userExists(username, email);
+  if (userExists){
+    const err = new Error(`User already exists`);
+    err.title = 'User already exists';
+    err.errors = userExists;
+    err.status = 500;
+    next(err);
+  }
+
   const hashedPassword = bcrypt.hashSync(password);
   const user = await User.create({
     username,
