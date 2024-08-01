@@ -4,6 +4,7 @@ const { requireAuth, decodeJWT } = require('../../utils/auth');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const { unauthorized } = require('../../utils/errors');
 
 const router = express.Router();
 
@@ -66,6 +67,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
   res.json({bookings: response});
 })
 
+// edit booking
 router.put('/:bookingId', requireAuth, validateBooking, async (req,res,next) => {
   const JWT = decodeJWT(req);
   const ownerId = JWT.data.id;
@@ -83,12 +85,8 @@ router.put('/:bookingId', requireAuth, validateBooking, async (req,res,next) => 
       err.status = 403;
       next(err);
     }
-    if (ownerId !== booking.userId) {
-      const err = new Error(`Unauthorized`);
-      err.title = "Unauthorized";
-      err.status = 403;
-      next(err);
-    } else if (bookingExists) {
+    if (ownerId !== booking.userId) return unauthorized(next);
+    else if (bookingExists) {
       const err = new Error(`Sorry, this spot is already booked for the specified dates`);
       err.title = "Booking conflict";
       err.errors = bookingExists;
