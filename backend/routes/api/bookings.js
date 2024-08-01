@@ -113,4 +113,27 @@ router.put('/:bookingId', requireAuth, validateBooking, async (req,res,next) => 
   }
 })
 
+router.delete('/:bookingId', requireAuth, async (req,res,next) => {
+  const JWT = decodeJWT(req);
+  const userId = JWT.data.id;
+  const booking = await Booking.findByPk(req.params.bookingId);
+
+  if (booking) {
+    if ( booking.userId !== userId ) return unauthorized(next);
+    if (new Date(booking.startDate).getTime() < Date.now()) {
+      const err = new Error(`Bookings that have been started can't be deleted`);
+      err.status = 400;
+      next(err);
+    }
+
+    await Booking.destroy({ where: { id: req.params.bookingId }});
+    res.json({ message: "Successfully deleted" })
+  } else {
+    const err = new Error(`Review couldn't be found`);
+    err.title = 'Review not found';
+    err.status = 404;
+    next(err);
+  }
+})
+
 module.exports = router;

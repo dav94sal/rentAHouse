@@ -181,3 +181,12 @@ fetch('/api/reviews/7', {
     "XSRF-TOKEN": ``
   }
 }).then(res => res.json()).then(data => console.log(data));
+
+// delete a booking
+fetch('/api/bookings/7', {
+  method: 'DELETE',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  }
+}).then(res => res.json()).then(data => console.log(data));
