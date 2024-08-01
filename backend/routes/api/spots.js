@@ -67,10 +67,10 @@ const hasExistingBooking = async function (spot, startDate, endDate) {
     const end = new Date(booking.endDate);
 
 
-    if (startDate >= start && startDate <= end) {
+    if (startDate.getTime() >= start.getTime() && startDate.getTime() <= end.getTime()) {
       return {startDate: "Start date conflicts with an existing booking"}
     }
-    if (endDate >= start && endDate <= end) {
+    if (endDate.getTime() >= start.getTime() && endDate.getTime() <= end.getTime()) {
       return {endDate: "End date conflicts with an existing booking"}
     }
 
@@ -298,7 +298,6 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req,res,ne
     err.status = 404;
     next(err);
   }
-
 
 })
 

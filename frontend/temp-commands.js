@@ -126,6 +126,19 @@ fetch('/api/reviews/1', {
   })
 }).then(res => res.json()).then(data => console.log(data));
 
+// edit booking
+fetch('/api/bookings/1', {
+  method: 'PUT',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  },
+  body: JSON.stringify({
+     "startDate": "2021-11-19",
+    "endDate": "2021-11-20"
+  })
+}).then(res => res.json()).then(data => console.log(data));
+
 // add an image to spot
 fetch('/api/spots/7/images', {
   method: 'POST',
