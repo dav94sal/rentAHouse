@@ -1,6 +1,6 @@
 const express = require('express');
 const { Review, Spot, User, Image } = require('../../db/models');
-const { requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
+const { requireAuth, decodeJWT } = require('../../utils/auth');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -59,6 +59,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
   res.json(response);
 })
 
+// add image to review
 router.post('/:reviewId/images', requireAuth, async (req,res,next) => {
   // decode JWT and find review
   const JWT = decodeJWT(req);
@@ -85,6 +86,7 @@ router.post('/:reviewId/images', requireAuth, async (req,res,next) => {
 
       review.addImage(image);
 
+      res.status(201)
       res.json(response)
     } else {
       const err = new Error(`Cannot add any more images because there is a maximum of 10 images per resource`);
@@ -94,9 +96,8 @@ router.post('/:reviewId/images', requireAuth, async (req,res,next) => {
       next(err);
     }
   } else { // send error if id's don't match
-    const err = new Error(`Could not find review ${req.params.reviewId}`);
+    const err = new Error(`Review couldn't be found`);
     err.title = 'Review not found';
-    err.errors = {message: `Review couldn't be found`};
     err.status = 404;
     next(err);
   }
@@ -132,9 +133,8 @@ router.delete('/:reviewId', requireAuth, async (req,res,next) => {
     await Review.destroy({ where: { id: req.params.reviewId }});
     res.json({ message: "Successfully deleted" })
   } else {
-    const err = new Error(`Could not find review ${req.params.reviewId}`);
+    const err = new Error(`Review couldn't be found`);
     err.title = 'Review not found';
-    err.errors = {message: `Review couldn't be found`};
     err.status = 404;
     next(err);
   }
