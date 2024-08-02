@@ -129,8 +129,8 @@ router.delete('/:bookingId', requireAuth, async (req,res,next) => {
     await Booking.destroy({ where: { id: req.params.bookingId }});
     res.json({ message: "Successfully deleted" })
   } else {
-    const err = new Error(`Review couldn't be found`);
-    err.title = 'Review not found';
+    const err = new Error(`Booking couldn't be found`);
+    err.title = 'Booking not found';
     err.status = 404;
     next(err);
   }
