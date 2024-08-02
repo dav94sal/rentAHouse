@@ -190,3 +190,21 @@ fetch('/api/bookings/7', {
     "XSRF-TOKEN": ``
   }
 }).then(res => res.json()).then(data => console.log(data));
+
+// delete a spot image
+fetch('/api/spot-images/7', {
+  method: 'DELETE',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  }
+}).then(res => res.json()).then(data => console.log(data));
+
+// delete a review image
+fetch('/api/review-images/1', {
+  method: 'DELETE',
+  headers: {
+    "Content-Type": "application/json",
+    "XSRF-TOKEN": ``
+  }
+}).then(res => res.json()).then(data => console.log(data));
