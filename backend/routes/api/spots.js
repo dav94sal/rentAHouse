@@ -279,8 +279,6 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req,res,ne
   const spot = await Spot.findByPk(req.params.spotId);
 
   if (spot) {
-    if (spot.ownerId !== ownerId) return unauthorized(next);
-    
     const { startDate, endDate } = req.body;
     const bookingExists = await hasExistingBooking(spot, new Date(startDate), new Date(endDate))
 
