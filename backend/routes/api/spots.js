@@ -179,7 +179,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
         where: { spotId: req.params.spotId},
         include: {
           model: User,
-          attributes: { exclude: ['username'] }
+          attributes: ['id', 'firstName', 'lastName']
         }
       })
 
@@ -189,7 +189,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
         attributes: ['spotId', 'startDate', 'endDate']
       })
     }
-    res.status(201)
+    res.status(200)
     res.json({ Bookings: bookings });
   } else {
     const err = new Error(`Spot couldn't be found`);
@@ -301,6 +301,7 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req,res,ne
         endDate
       })
 
+      res.status(201)
       res.json(booking)
     }
 
