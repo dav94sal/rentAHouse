@@ -145,7 +145,7 @@ router.get('/:spotId/reviews', async (req,res,next) => {
     reviews = await spot.getReviews({
       include: {
         model: User,
-        attributes: { exclude: username }
+        attributes: ['id', 'firstName', 'lastName']
       }
     });
     for (let rev of reviews) {

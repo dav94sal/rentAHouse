@@ -58,7 +58,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
   }
 
 
-  res.json(response);
+  res.json({ Reviews: response });
 })
 
 // add image to review
@@ -68,9 +68,9 @@ router.post('/:reviewId/images', requireAuth, async (req,res,next) => {
   const userId = JWT.data.id;
   const review = await Review.findByPk(req.params.reviewId);
 
-  // match id to review's userId
   if (review) {
-    if (review.userId === userId) return unauthorized(next);
+    // match id to review's userId
+    if (review.userId !== userId) return unauthorized(next);
 
     const imageCount = await review.countImages();
 
@@ -138,7 +138,7 @@ router.delete('/:reviewId', requireAuth, async (req,res,next) => {
 
   if (review) {
     if ( review.userId !== userId ) return unauthorized(next);
-    
+
     await Review.destroy({ where: { id: req.params.reviewId }});
     res.json({ message: "Successfully deleted" })
   } else {
