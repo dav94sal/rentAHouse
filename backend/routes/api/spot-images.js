@@ -5,6 +5,7 @@ const { unauthorized } = require('../../utils/errors');
 
 const router = express.Router();
 
+// delete review for a spot
 router.delete('/:imageId', requireAuth, async (req,res,next) => {
   const JWT = decodeJWT(req);
   const ownerId = JWT.data.id;

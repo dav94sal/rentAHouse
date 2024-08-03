@@ -2,8 +2,7 @@ const express = require('express');
 const { Booking, Review, Spot, User, Image } = require('../../db/models');
 const { requireAuth, decodeJWT } = require('../../utils/auth');
 
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const { validateBooking, hasExistingBooking } = require('../../utils/validation');
 const { unauthorized } = require('../../utils/errors');
 
 const router = express.Router();
@@ -13,35 +12,7 @@ const getPreviewImage = async function (spot) {
   return images[0]
 }
 
-const validateBooking = [
-  check('startDate')
-    .exists({checkFalsy: true})
-    .withMessage("startDate cannot be in the past"),
-  check('endDate')
-    .exists({checkFalsy: true})
-    .withMessage("endDate cannot be on or before startDate"),
-    handleValidationErrors
-]
-
-const hasExistingBooking = async function (spot, startDate, endDate) {
-  const bookings = await spot.getBookings();
-
-  for (let booking of bookings) {
-    const start = new Date(booking.startDate);
-    const end = new Date(booking.endDate);
-
-
-    if (startDate.getTime() >= start.getTime() && startDate.getTime() <= end.getTime()) {
-      return {startDate: "Start date conflicts with an existing booking"}
-    }
-    if (endDate.getTime() >= start.getTime() && endDate.getTime() <= end.getTime()) {
-      return {endDate: "End date conflicts with an existing booking"}
-    }
-
-    return false;
-  }
-}
-
+// get current user bookings
 router.get('/current', requireAuth, async (req,res,next) => {
   const JWT = decodeJWT(req);
   const userId = JWT.data.id;
@@ -50,7 +21,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
   const bookings = await Booking.findAll({ where: { userId } });
 
   for (let booking of bookings) {
-    let spot = await booking.getSpot({ attributes: { exclude: ['description'] }});
+    let spot = await booking.getSpot({ attributes: { exclude: ['description', 'createdAt', 'updatedAt'] }});
     const previewImage = await getPreviewImage(spot);
     console.log(previewImage)
 
@@ -113,6 +84,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async (req,res,next) => 
   }
 })
 
+// delete a booking
 router.delete('/:bookingId', requireAuth, async (req,res,next) => {
   const JWT = decodeJWT(req);
   const userId = JWT.data.id;
@@ -122,7 +94,7 @@ router.delete('/:bookingId', requireAuth, async (req,res,next) => {
     if ( booking.userId !== userId ) return unauthorized(next);
     if (new Date(booking.startDate).getTime() < Date.now()) {
       const err = new Error(`Bookings that have been started can't be deleted`);
-      err.status = 400;
+      err.status = 403;
       next(err);
     }
 

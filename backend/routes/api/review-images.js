@@ -5,6 +5,7 @@ const { unauthorized } = require('../../utils/errors');
 
 const router = express.Router();
 
+// delete review image
 router.delete('/:imageId', requireAuth, async (req,res,next) => {
   const JWT = decodeJWT(req);
   const userId = JWT.data.id;
@@ -15,12 +16,9 @@ router.delete('/:imageId', requireAuth, async (req,res,next) => {
 
   if (image) {
     const review = image.Review;
-    if (review.userId !== userId) return unauthorized(next)
-    await Image.destroy({
-      where: {
-        id: req.params.imageId
-      }
-    });
+    if (review.userId !== userId) return unauthorized(next);
+
+    await Image.destroy({ where: { id: req.params.imageId } });
 
     res.json({ message: "Successfully deleted" });
 
