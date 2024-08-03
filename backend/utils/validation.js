@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const { check } = require('express-validator');
+const { User } = require('../db/models')
 
 // middleware for formatting  errors from express-validator middleware
 const handleValidationErrors = (req,res,next) => {
@@ -61,6 +62,7 @@ const validateReview = [
     .withMessage("Review text is required"),
   check('stars')
     .exists({checkFalsy: true})
+    .isInt({min: 1, max: 5 })
     .withMessage("Stars must be an integer from 1 to 5"),
   handleValidationErrors
 ]
@@ -161,7 +163,7 @@ const userExists = async function(username, email) {
 }
 
 const hasExistingBooking = async function (spot, startDate, endDate) {
-  console.log(spot)
+  // console.log(spot)
   const bookings = await spot.getBookings({});
 
   for (let booking of bookings) {
