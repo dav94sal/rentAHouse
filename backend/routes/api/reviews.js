@@ -2,19 +2,8 @@ const express = require('express');
 const { Review, Spot, User, Image } = require('../../db/models');
 const { requireAuth, decodeJWT } = require('../../utils/auth');
 
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const { validateReview } = require('../../utils/validation')
 const { unauthorized } = require('../../utils/errors');
-
-const validateReview = [
-  check('review')
-    .exists({checkFalsy: true})
-    .withMessage("Review text is required"),
-  check('stars')
-    .exists({checkFalsy: true})
-    .withMessage("Stars must be an integer from 1 to 5"),
-    handleValidationErrors
-]
 
 const router = express.Router();
 

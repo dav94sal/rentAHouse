@@ -1,83 +1,17 @@
 const express = require('express');
+const { Op } = require('sequelize')
 const { Spot, User, Image, Review, Booking } = require('../../db/models');
 const { requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
 const { unauthorized } = require('../../utils/errors');
-
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const {
+  validateSpot,
+  validateReview,
+  validateBooking,
+  validateQueryParams,
+  hasExistingBooking
+ } = require('../../utils/validation')
 
 const router = express.Router();
-
-const validateSpot = [
-  check('address')
-    .exists({checkFalsy: true})
-    .withMessage("Street address is required"),
-  check('city')
-    .exists({checkFalsy: true})
-    .withMessage("City is required"),
-  check('state')
-    .exists({checkFalsy: true})
-    .withMessage("State is required"),
-  check('country')
-    .exists({checkFalsy: true})
-    .withMessage("Country is required"),
-  check('lat')
-    .exists({checkFalsy: true})
-    .withMessage("Latitude must be within -90 and 90"),
-  check('lng')
-    .exists({checkFalsy: true})
-    .withMessage("Longitude must be within -180 and 180"),
-  check('name')
-    .exists({checkFalsy: true})
-    .withMessage("Name must be less than 50 characters"),
-  check('description')
-    .exists({checkFalsy: true})
-    .withMessage("Description is required"),
-  check('price')
-    .exists({checkFalsy: true})
-    .withMessage("Price per day must be a positive number"),
-  handleValidationErrors
-]
-
-const validateReview = [
-  check('review')
-    .exists({checkFalsy: true})
-    .withMessage("Review text is required"),
-  check('stars')
-    .exists({checkFalsy: true})
-    .withMessage("Stars must be an integer from 1 to 5"),
-  handleValidationErrors
-]
-
-const validateBooking = [
-  check('startDate')
-    .exists({checkFalsy: true})
-    .withMessage("startDate cannot be in the past"),
-  check('endDate')
-    .exists({checkFalsy: true})
-    .withMessage("endDate cannot be on or before startDate"),
-    handleValidationErrors
-]
-
-const hasExistingBooking = async function (spot, startDate, endDate) {
-  console.log(spot)
-  const bookings = await spot.getBookings({});
-
-  for (let booking of bookings) {
-    const start = new Date(booking.startDate);
-    const end = new Date(booking.endDate);
-
-
-    if (startDate.getTime() >= start.getTime() && startDate.getTime() <= end.getTime()) {
-      return {startDate: "Start date conflicts with an existing booking"}
-    }
-    if (endDate.getTime() >= start.getTime() && endDate.getTime() <= end.getTime()) {
-      return {endDate: "End date conflicts with an existing booking"}
-    }
-
-    return false;
-  }
-}
 
 // get all spots owned by current user
 router.get('/current', requireAuth, restoreUser, async (req,res,next) => {
@@ -200,9 +134,48 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
 })
 
 // get all spots
-router.get('/', async (req,res,next) => {
+router.get('/', validateQueryParams, async (req,res,next) => {
   const response = [];
-  const spots = await Spot.findAll();
+
+  // add query parameters
+  let { page, size, maxLat, minLat, maxLng, minLng, minPrice, maxPrice } = req.query;
+  const where = {};
+
+  // set default page and size, else convert to number
+  if (!page) page = 1
+  else page = Number(page)
+  if (!size) size = 20
+  else size = Number(size)
+
+  // calculate offset and limit
+  let offset;
+  if (page === 1) offset = null;
+  else offset = size * page - size;
+  const limit = size;
+
+  // add optional query params
+  if (maxLat & minLat) where.lat = { [Op.between]: [minLat, maxLat] }
+  else {
+    if (maxLat) where.lat = { [Op.lte]: maxLat }
+    if (minLat) where.lat = { [Op.gte]: minLat }
+  }
+  if (maxLng & minLng) where.lng = { [Op.between]: [minLng, maxLng] }
+  else {
+    if (maxLng) where.lng = { [Op.lte]: maxLng }
+    if (minLng) where.lng = { [Op.gte]: minLng }
+  }
+  if (maxPrice & minPrice) where.price = { [Op.between]: [minPrice, maxPrice] }
+  else {
+    if (maxPrice) where.price = { [Op.lte]: maxPrice }
+    if (minPrice) where.price = { [Op.gte]: minPrice }
+  }
+
+  // get all spots
+  const spots = await Spot.findAll({
+    where,
+    offset,
+    limit
+  });
 
   for (let spot of spots) {
     const images = await spot.getImages({attributes: ['url']});
@@ -223,7 +196,12 @@ router.get('/', async (req,res,next) => {
     response.push(spot)
   }
 
-  res.json({ spot: response })
+  res.status(200);
+  res.json({
+    Spots: response,
+    page,
+    size
+  })
 })
 
 // create a spot

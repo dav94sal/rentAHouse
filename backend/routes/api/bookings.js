@@ -2,8 +2,7 @@ const express = require('express');
 const { Booking, Review, Spot, User, Image } = require('../../db/models');
 const { requireAuth, decodeJWT } = require('../../utils/auth');
 
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const { validateBooking, hasExistingBooking } = require('../../utils/validation');
 const { unauthorized } = require('../../utils/errors');
 
 const router = express.Router();
@@ -11,35 +10,6 @@ const router = express.Router();
 const getPreviewImage = async function (spot) {
   const images = await spot.getImages();
   return images[0]
-}
-
-const validateBooking = [
-  check('startDate')
-    .exists({checkFalsy: true})
-    .withMessage("startDate cannot be in the past"),
-  check('endDate')
-    .exists({checkFalsy: true})
-    .withMessage("endDate cannot be on or before startDate"),
-    handleValidationErrors
-]
-
-const hasExistingBooking = async function (spot, startDate, endDate) {
-  const bookings = await spot.getBookings();
-
-  for (let booking of bookings) {
-    const start = new Date(booking.startDate);
-    const end = new Date(booking.endDate);
-
-
-    if (startDate.getTime() >= start.getTime() && startDate.getTime() <= end.getTime()) {
-      return {startDate: "Start date conflicts with an existing booking"}
-    }
-    if (endDate.getTime() >= start.getTime() && endDate.getTime() <= end.getTime()) {
-      return {endDate: "End date conflicts with an existing booking"}
-    }
-
-    return false;
-  }
 }
 
 // get current user bookings
