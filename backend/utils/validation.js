@@ -103,11 +103,11 @@ const validateQueryParams = [
   check('maxPrice')
     .if((value, { req }) => req.query.maxPrice)
     .isFloat({ min: 0 })
-    .withMessage("Minimum price must be greater than or equal to 0"),
+    .withMessage("Maximum price must be greater than or equal to 0"),
   check('minPrice')
     .if((value, { req }) => req.query.minPrice)
     .isFloat({ min: 0 })
-    .withMessage("Maximum price must be greater than or equal to 0"),
+    .withMessage("Minimum price must be greater than or equal to 0"),
   handleValidationErrors
 ]
 
