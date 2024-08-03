@@ -46,7 +46,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
     response.push(rev)
   }
 
-
+  res.status(200)
   res.json({ Reviews: response });
 })
 

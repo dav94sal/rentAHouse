@@ -14,7 +14,7 @@ const {
 const router = express.Router();
 
 // get all spots owned by current user
-router.get('/current', requireAuth, restoreUser, async (req,res,next) => {
+router.get('/current', requireAuth, async (req,res,next) => {
   const JWT = decodeJWT(req)
 
   const user = await User.findByPk(JWT.data.id);
@@ -41,7 +41,7 @@ router.get('/current', requireAuth, restoreUser, async (req,res,next) => {
   };
 
   res.json(response)
-})
+});
 
 // get spot by id
 router.get('/:spotId', async (req,res,next) => {
@@ -67,7 +67,7 @@ router.get('/:spotId', async (req,res,next) => {
     err.status = 404;
     next(err);
   }
-})
+});
 
 // Get reviews for spot id
 router.get('/:spotId/reviews', async (req,res,next) => {
@@ -98,7 +98,7 @@ router.get('/:spotId/reviews', async (req,res,next) => {
     err.status = 404;
     next(err);
   }
-})
+});
 
 // get all bookings for a spot
 router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
@@ -131,7 +131,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
     err.status = 404;
     next(err);
   }
-})
+});
 
 // get all spots
 router.get('/', validateQueryParams, async (req,res,next) => {
@@ -170,7 +170,7 @@ router.get('/', validateQueryParams, async (req,res,next) => {
     if (minPrice) where.price = { [Op.gte]: minPrice }
   }
 
-  // get all spots
+  // get spots
   const spots = await Spot.findAll({
     where,
     offset,
@@ -202,24 +202,10 @@ router.get('/', validateQueryParams, async (req,res,next) => {
     page,
     size
   })
-})
-
-// create a spot
-router.post('/', requireAuth, restoreUser, validateSpot, async (req,res,next) => {
-  const { address, city, state, country, lat, lng, name, description, price } = req.body;
-  const JWT = decodeJWT(req);
-  const ownerId = JWT.data.id;
-
-  const newSpot = await Spot.create({
-    ownerId, address, city, state, country, lat, lng, name, description, price
-  })
-
-  res.status(201);
-  res.json(newSpot);
-})
+});
 
 // add image to spot
-router.post('/:spotId/images', requireAuth, restoreUser, async (req,res,next) => {
+router.post('/:spotId/images', requireAuth, async (req,res,next) => {
   const { url, preview } = req.body;
   const spot = await Spot.findByPk(req.params.spotId);
   const JWT = decodeJWT(req);
@@ -248,7 +234,7 @@ router.post('/:spotId/images', requireAuth, restoreUser, async (req,res,next) =>
     err.status = 404;
     next(err);
   }
-})
+});
 
 // create a booking
 router.post('/:spotId/bookings', requireAuth, validateBooking, async (req,res,next) => {
@@ -282,63 +268,13 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req,res,ne
       res.status(201)
       res.json(booking)
     }
-
   } else {
     const err = new Error(`Spot couldn't be found`);
     err.title = "Couldn't find a Spot with the specified id";
     err.status = 404;
     next(err);
   }
-
-})
-
-// edit a spot
-router.put('/:spotId', requireAuth, validateSpot, async (req,res,next) => {
-  const JWT = decodeJWT(req);
-  const ownerId = JWT.data.id;
-  const verifySpot = await Spot.findOne({where:{id: req.params.spotId}});
-
-  if (verifySpot) {
-    if (verifySpot.ownerId !== ownerId) return unauthorized(next)
-    const { address, city, state, country, lat, lng, name, description, price } = req.body;
-    const spot = await Spot.update(
-      { address, city, state, country, lat, lng, name, description, price },
-      { where: { id: req.params.spotId } }
-    );
-    res.json(verifySpot);
-  } else {
-    const err = new Error(`Spot couldn't be found`);
-    err.title = "Couldn't find a Spot with the specified id";
-    err.status = 404;
-    next(err);
-  }
-})
-
-// delete a spot
-router.delete('/:spotId', requireAuth, restoreUser, async (req,res,next) => {
-  const JWT = decodeJWT(req);
-  const ownerId = JWT.data.id;
-  const spot = await Spot.findByPk(req.params.spotId)
-
-  if (spot) {
-    if (spot.ownerId !== ownerId) return unauthorized(next)
-    await Spot.destroy({
-      where: {
-        id: req.params.spotId,
-        ownerId
-      }
-    });
-
-    res.json({ message: "Successfully deleted" });
-
-  } else {
-    const err = new Error(`Spot ${req.params.spotId} couldn't be found`);
-    err.title = 'Spot not found';
-    err.errors = {message: `Spot couldn't be found`};
-    err.status = 404;
-    next(err);
-  }
-})
+});
 
 // create a review for a spot
 router.post('/:spotId/reviews', requireAuth, validateReview, async (req,res,next) => {
@@ -380,7 +316,68 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req,res,next
     err.status = 404;
     next(err);
   }
-})
+});
 
+// create a spot
+router.post('/', requireAuth, validateSpot, async (req,res,next) => {
+  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+  const JWT = decodeJWT(req);
+  const ownerId = JWT.data.id;
+
+  const newSpot = await Spot.create({
+    ownerId, address, city, state, country, lat, lng, name, description, price
+  })
+
+  res.status(201);
+  res.json(newSpot);
+});
+
+// edit a spot
+router.put('/:spotId', requireAuth, validateSpot, async (req,res,next) => {
+  const JWT = decodeJWT(req);
+  const ownerId = JWT.data.id;
+  const verifySpot = await Spot.findOne({where:{id: req.params.spotId}});
+
+  if (verifySpot) {
+    if (verifySpot.ownerId !== ownerId) return unauthorized(next)
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+    const spot = await Spot.update(
+      { address, city, state, country, lat, lng, name, description, price },
+      { where: { id: req.params.spotId } }
+    );
+    res.json(verifySpot);
+  } else {
+    const err = new Error(`Spot couldn't be found`);
+    err.title = "Couldn't find a Spot with the specified id";
+    err.status = 404;
+    next(err);
+  }
+});
+
+// delete a spot
+router.delete('/:spotId', requireAuth, async (req,res,next) => {
+  const JWT = decodeJWT(req);
+  const ownerId = JWT.data.id;
+  const spot = await Spot.findByPk(req.params.spotId)
+
+  if (spot) {
+    if (spot.ownerId !== ownerId) return unauthorized(next)
+    await Spot.destroy({
+      where: {
+        id: req.params.spotId,
+        ownerId
+      }
+    });
+
+    res.json({ message: "Successfully deleted" });
+
+  } else {
+    const err = new Error(`Spot ${req.params.spotId} couldn't be found`);
+    err.title = 'Spot not found';
+    err.errors = {message: `Spot couldn't be found`};
+    err.status = 404;
+    next(err);
+  }
+});
 
 module.exports = router;
