@@ -67,13 +67,23 @@ const validateReview = [
   handleValidationErrors
 ]
 
+const today = Date.now();
 const validateBooking = [
   check('startDate')
     .exists({checkFalsy: true})
-    .withMessage("startDate cannot be in the past"),
+    .isDate()
+    .isAfter(new Date(today).toDateString())
+    .withMessage("startDate cannot be in the past")
+    .toDate(),
   check('endDate')
-    .exists({checkFalsy: true})
-    .withMessage("endDate cannot be on or before startDate"),
+    .exists({ checkFalsy: true })
+    .toDate()
+    .custom((endDate, { req }) => {
+      if (endDate.getTime() <= req.body.startDate.getTime()) {
+        throw new Error("endDate cannot be on or before startDate");
+      }
+      return true;
+    }),
     handleValidationErrors
 ]
 
@@ -165,19 +175,35 @@ const userExists = async function(username, email) {
 const hasExistingBooking = async function (spot, startDate, endDate) {
   // console.log(spot)
   const bookings = await spot.getBookings({});
+  startDate = startDate.getTime();
+  endDate = endDate.getTime();
+  const errors = {};
 
   for (let booking of bookings) {
-    const start = new Date(booking.startDate);
-    const end = new Date(booking.endDate);
+    const start = new Date(booking.startDate).getTime();
+    const end = new Date(booking.endDate).getTime();
 
-
-    if (startDate.getTime() >= start.getTime() && startDate.getTime() <= end.getTime()) {
-      return {startDate: "Start date conflicts with an existing booking"}
+    // startDate within an existing booking
+    if (startDate >= start && startDate <= end) {
+      errors.startDate = "Start date conflicts with an existing booking"
     }
-    if (endDate.getTime() >= start.getTime() && endDate.getTime() <= end.getTime()) {
-      return {endDate: "End date conflicts with an existing booking"}
+    // endDate within an existing booking
+    if (endDate >= start && endDate <= end) {
+      errors.endDate = "End date conflicts with an existing booking"
+    }
+    // startDate and EndDate surround existing booking
+    if (
+      start >= startDate &&
+      start <= endDate &&
+      end <= endDate &&
+      end >= startDate
+    ) {
+      errors.startDate = "Start date conflicts with an existing booking"
+      errors.endDate = "End date conflicts with an existing booking"
     }
 
+    // if errors has key value pairs return errors
+    if (errors.startDate || errors.endDate) return errors;
     return false;
   }
 }
