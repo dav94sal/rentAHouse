@@ -345,6 +345,7 @@ router.put('/:spotId', requireAuth, validateSpot, async (req,res,next) => {
       { address, city, state, country, lat, lng, name, description, price },
       { where: { id: req.params.spotId } }
     );
+    // this is sending the old info
     res.json(verifySpot);
   } else {
     const err = new Error(`Spot couldn't be found`);
