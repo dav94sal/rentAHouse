@@ -1,0 +1,18 @@
+.form-container, form, label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  margin-top: 20%;
+}
+
+input {
+  margin-top: 5px;
+}
+
+label {
+  margin-bottom: 25px;
+}

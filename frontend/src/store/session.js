@@ -19,8 +19,20 @@ export const removeUser = () => {
 export const login = (credentials) => async dispatch => {
   const response = await csrfFetch('/api/session', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(credentials)
+  });
+
+  if (response.ok) {
+    const user = await response.json();
+    dispatch(setUser(user))
+    return response
+  }
+}
+
+export const signup = newUser => async dispatch => {
+  const response = await csrfFetch('/api/users', {
+    method: 'POST',
+    body: JSON.stringify(newUser)
   });
 
   if (response.ok) {
