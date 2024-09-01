@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 import { signup } from '../../store/session';
 import './SignupForm.css'
 
@@ -9,11 +10,19 @@ function SignupForm() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({})
+  const sessionUser = useSelector(state => state.session.user);
   const dispatch = useDispatch();
+
+  if (sessionUser) return <Navigate to='/' replace={true} />
 
   const handleSubmit = e => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      return setErrors({confirmPassword: 'Passwords do not match'})
+    }
 
     const newUser = {
       username,
@@ -23,9 +32,12 @@ function SignupForm() {
       password
     }
 
-    return dispatch(signup(newUser)).catch(async res => {
-      const data = await res.json();
-      if(data?.errors) setErrors(data.errors)
+    setErrors({})
+
+    return dispatch(signup(newUser))
+      .catch(async res => {
+        const data = await res.json();
+        if(data?.errors) setErrors(data.errors)
     })
   }
 
@@ -44,6 +56,8 @@ function SignupForm() {
             />
         </label>
 
+          {errors.username && <p>{errors.username}</p>}
+
         <label htmlFor="email">
           Email
           <input
@@ -53,6 +67,8 @@ function SignupForm() {
             onChange={e => setEmail(e.target.value)}
             />
         </label>
+
+          {errors.email && <p>{errors.email}</p>}
 
         <label htmlFor="firstName">
           First Name
@@ -64,6 +80,8 @@ function SignupForm() {
             />
         </label>
 
+          {errors.firstName && <p>{errors.firstName}</p>}
+
         <label htmlFor="lastName">
           Last Name
           <input
@@ -73,6 +91,8 @@ function SignupForm() {
             onChange={e => setLastName(e.target.value)}
             />
         </label>
+
+         {errors.lastName && <p>{errors.lastName}</p>}
 
         <label htmlFor="password">
           Enter password
@@ -84,9 +104,21 @@ function SignupForm() {
             />
         </label>
 
-        {errors.credential && <p>{errors.credential}</p>}
+          {errors.password && <p>{errors.password}</p>}
 
-        <button type="submit">login</button>
+        <label htmlFor="confirm-password">
+          Confirm password
+          <input
+            type="password"
+            name="confirm-password"
+            value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
+            />
+        </label>
+
+        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+
+        <button type="submit">signup</button>
       </form>
     </div>
   )
