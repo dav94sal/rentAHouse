@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { restoreUser } from './store/session';
 import LoginFormPage from './components/LoginFormPage';
 import SignupForm from './components/SignupFormPage';
+import Navigation from './components/Navigation/Navigation';
 
 function Layout() {
   const [session, setSession] = useState(false);
@@ -16,6 +17,7 @@ function Layout() {
   return (
     <div className='page-wrapper'>
       <main>
+        <Navigation />
         {session? <Outlet /> : ''}
       </main>
     </div>
