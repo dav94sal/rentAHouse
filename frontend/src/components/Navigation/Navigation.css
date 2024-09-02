@@ -34,10 +34,24 @@ a {
 }
 
 li {
-  padding:  0 5px;
+  padding: 0 5px;
+  margin: 5px 0;
 }
 
 #profile-button {
-  display: flex;
   color: white;
+}
+
+.profile-dropdown {
+  background-color: rgb(61, 61, 64);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 5px;
+  top: 60px;
+  height: unset;
+}
+
+.hidden {
+  display: none;
 }
