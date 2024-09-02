@@ -1,0 +1,43 @@
+nav {
+  margin: unset;
+}
+
+ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: black;
+  margin: unset;
+  height: 50px;
+}
+
+button {
+  background-color: unset;
+  border: unset;
+  color: white;
+}
+
+a {
+  text-decoration: unset;
+  color: white;
+}
+
+#home-link, #login-signup-container {
+  font-size: large;
+}
+
+#login-signup-container {
+  display: flex;
+  padding:  0 5px;
+}
+
+li {
+  padding:  0 5px;
+}
+
+#profile-button {
+  display: flex;
+  color: white;
+}
