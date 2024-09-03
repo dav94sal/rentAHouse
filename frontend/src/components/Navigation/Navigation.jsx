@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import LoginFormModal from '../LoginFormPage';
+import SignupFormModal from '../SignupFormPage';
 import ProfileButton from './ProfileButton';
 import './Navigation.css'
 
@@ -29,7 +30,10 @@ function Navigation() {
             </li>
 
             <li>
-              <Link to='/signup'>Signup</Link>
+              <OpenModalButton
+                buttonText='Sign up'
+                modalComponenet={<SignupFormModal />}
+              />
             </li>
           </div>
         }
