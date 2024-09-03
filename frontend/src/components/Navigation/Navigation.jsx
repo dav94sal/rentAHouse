@@ -1,5 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import LoginFormModal from '../LoginFormPage';
 import ProfileButton from './ProfileButton';
 import './Navigation.css'
 
@@ -20,7 +22,10 @@ function Navigation() {
 
           <div id='login-signup-container'>
             <li>
-              <Link to='/login'>Login</Link>
+              <OpenModalButton
+                buttonText='Log in'
+                modalComponenet={<LoginFormModal />}
+              />
             </li>
 
             <li>

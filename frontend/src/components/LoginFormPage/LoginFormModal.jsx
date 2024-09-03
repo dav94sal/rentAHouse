@@ -1,17 +1,15 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { login } from "../../store/session";
-import { Navigate } from 'react-router-dom';
+import { useModal } from "../../context/Modal";
 import './LoginForm.css';
 
-function LoginFormPage() {
+function LoginFormModal() {
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const sessionUser = useSelector(state => state.session.user);
   const dispatch = useDispatch();
-
-  if (sessionUser) return <Navigate to='/' replace={true} />
+  const { closeModal } = useModal()
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -21,8 +19,9 @@ function LoginFormPage() {
       password
     }
 
-    return dispatch(login(user)).catch(
-      async (res) => {
+    return dispatch(login(user))
+      .then(closeModal)
+      .catch(async (res) => {
         const data = await res.json();
         if (data?.errors) setErrors(data.errors)
       }
@@ -55,11 +54,11 @@ function LoginFormPage() {
         </label>
 
         {errors.credential && <p>{errors.credential}</p>}
-        
+
         <button type="submit">login</button>
       </form>
     </div>
   )
 }
 
-export default LoginFormPage;
+export default LoginFormModal;
