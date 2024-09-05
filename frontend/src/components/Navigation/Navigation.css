@@ -24,6 +24,11 @@ a {
   color: white;
 }
 
+li {
+  padding: 0 5px;
+  margin: 5px 0;
+}
+
 #home-link, #login-signup-container {
   font-size: large;
 }
@@ -31,11 +36,6 @@ a {
 #login-signup-container {
   display: flex;
   padding:  0 5px;
-}
-
-li {
-  padding: 0 5px;
-  margin: 5px 0;
 }
 
 #profile-button {
@@ -54,4 +54,14 @@ li {
 
 .hidden {
   display: none;
+}
+
+.name-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#name {
+  padding: 0 5px;
 }

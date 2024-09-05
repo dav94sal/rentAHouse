@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { FaHome } from "react-icons/fa";
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import LoginFormModal from '../LoginFormPage';
 import SignupFormModal from '../SignupFormPage';
@@ -13,7 +14,12 @@ function Navigation() {
     <nav>
       <ul>
         <li id='home-link'>
-          <Link to='/'>Home</Link>
+          <Link to='/'>
+            <div className='name-icon'>
+              <FaHome />
+              <p id='name'>Rent-A-House</p>
+            </div>
+          </Link>
         </li>
 
         {sessionUser?

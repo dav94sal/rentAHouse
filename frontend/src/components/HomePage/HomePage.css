@@ -1,0 +1,29 @@
+img {
+  width: 275px;
+  height: 275px;
+  margin: 5px;
+}
+
+p {
+  margin: 5px;
+}
+
+.spot-tile-container {
+  padding: 10px;
+  width: 285px;
+  height: 360px;
+}
+
+.spot-info {
+  display: flex;
+  justify-content: space-between;
+  height: fit-content;
+}
+
+.spots-container {
+  margin: 10px 75px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
