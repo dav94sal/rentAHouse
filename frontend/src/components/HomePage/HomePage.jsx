@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getAllSpots } from '../../store/spot';
+import { getAllSpots } from '../../store/spots';
 import SpotTile from './SpotTile';
 import './HomePage.css';
 

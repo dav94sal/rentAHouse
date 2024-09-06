@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSpotDetails } from '../../store/spot';
+import { getSpotDetails } from '../../store/spots';
 import { FaStar } from "react-icons/fa";
 import Reviews from './Reviews';
 import './SpotDetails.css';
