@@ -23,7 +23,7 @@ function Navigation() {
         </li>
 
         {sessionUser?
-          <li id='profile-button'>
+          <li>
             <ProfileButton user={sessionUser} />
           </li> :
 

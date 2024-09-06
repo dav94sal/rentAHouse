@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { LiaDrupal } from "react-icons/lia";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/session";
+import './Navigation.css'
 
 function ProfileButton({ user }) {
   const [showMenu, setShowMenu] = useState(false)
@@ -33,7 +34,7 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={toggleMenu}>
+      <button onClick={toggleMenu}  id='profile-button'>
         <ProfileIcon />
       </button>
 

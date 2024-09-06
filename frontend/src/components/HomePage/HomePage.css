@@ -12,6 +12,7 @@ p {
   padding: 10px;
   width: 285px;
   height: 360px;
+  color: black;
 }
 
 .spot-info {
@@ -21,9 +22,7 @@ p {
 }
 
 .spots-container {
-  margin: 10px 75px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
-

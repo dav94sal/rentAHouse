@@ -1,20 +1,21 @@
 import { FaStar } from "react-icons/fa";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function SpotTile({ spot }) {
+
   return (
-    <div className="spot-tile-container">
-    {/* <Link to={spot.id}> */}
-      <img src={spot.previewImage}/>
+    <Link to={`/spots/${spot.id}`}>
+      <div className="spot-tile-container">
+        <img src={spot.previewImage}/>
 
-      <div className="spot-info">
-        <p>{`${spot.city}, ${spot.state}`}</p>
-        <p><FaStar /> {spot.avgRating}</p>
+        <div className="spot-info">
+          <p>{`${spot.city}, ${spot.state}`}</p>
+          <p><FaStar /> {spot.avgRating}</p>
+        </div>
+
+        <p>{`$${spot.price} / night`}</p>
       </div>
-
-      <p>{`$${spot.price} / night`}</p>
-    {/* </Link> */}
-    </div>
+    </Link>
   )
 }
  export default SpotTile;

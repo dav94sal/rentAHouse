@@ -3,3 +3,7 @@
 body {
   margin: unset;
 }
+
+main {
+  margin: 10px 75px;
+}

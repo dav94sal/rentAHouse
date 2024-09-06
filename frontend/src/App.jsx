@@ -2,9 +2,9 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { restoreUser } from './store/session';
-import { getAllSpots } from './store/spot';
 import Navigation from './components/Navigation/Navigation';
 import HomePage from './components/HomePage';
+import SpotDetailsPage from './components/SpotDetailsPage/SpotDetailsPage';
 
 function Layout() {
   const [session, setSession] = useState(false);
@@ -12,7 +12,6 @@ function Layout() {
 
   useEffect(() => {
     dispatch(restoreUser()).then(() => setSession(true));
-    dispatch(getAllSpots())
   }, [dispatch])
 
   return (
@@ -33,6 +32,10 @@ const router = createBrowserRouter([
         path: '/',
         element: <HomePage />
       },
+      {
+        path: '/spots/:spotId',
+        element: <SpotDetailsPage />
+      }
     ]
   }
 ])
