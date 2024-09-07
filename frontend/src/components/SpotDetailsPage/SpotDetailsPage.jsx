@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSpotDetails } from '../../store/spots';
+import { getSpotReviews, resetReviews } from "../../store/reviews";
 import { FaStar } from "react-icons/fa";
 import Reviews from './Reviews';
 import './SpotDetails.css';
@@ -12,10 +13,16 @@ function SpotDetailsPage() {
   const { spotId } = useParams();
 
   useEffect(() => {
-    dispatch(getSpotDetails(spotId)).then(() => setIsLoading(true))
+    dispatch(getSpotDetails(spotId))
+      .then(() => dispatch(getSpotReviews(spotId)))
+      .then(() => setIsLoading(true))
+
+    dispatch(resetReviews())
   }, [spotId, dispatch])
 
   const spot = useSelector(state => state.spots[spotId])
+  let reviews = useSelector(state => state.reviews)
+  reviews = Object.values(reviews)
 
   return (
     <div className='spot-details-container'>
@@ -45,7 +52,9 @@ function SpotDetailsPage() {
 
           <div className='reviews-container'>
             <h2><FaStar /> {` ${spot.avgStarRating} | ${spot.numReviews}`} </h2>
-            <Reviews />
+            {reviews.map(review => (
+              <Reviews review={review} key={`review: ${review.id}`}/>
+            ))}
           </div>
         </>
       }

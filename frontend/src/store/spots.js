@@ -45,8 +45,7 @@ export default function spotReducer(state = initialState, action) {
     case POPULATE: {
       const newState = {...state};
       action.allSpots.Spots.map((spot) => {
-        const id = spot.id;
-        newState[id] = spot
+        newState[spot.id] = spot
       })
       return newState;
     }
