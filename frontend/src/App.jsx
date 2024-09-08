@@ -5,6 +5,7 @@ import { restoreUser } from './store/session';
 import Navigation from './components/Navigation/Navigation';
 import HomePage from './components/HomePage';
 import SpotDetailsPage from './components/SpotDetailsPage/SpotDetailsPage';
+import SpotForm from './components/CreateSpotForm/SpotForm';
 
 function Layout() {
   const [session, setSession] = useState(false);
@@ -33,8 +34,17 @@ const router = createBrowserRouter([
         element: <HomePage />
       },
       {
-        path: '/spots/:spotId',
-        element: <SpotDetailsPage />
+        path: '/spots',
+        children: [
+          {
+            path: ':spotId',
+            element: <SpotDetailsPage />
+          },
+          {
+            path: 'new',
+            element: <SpotForm />
+          }
+        ]
       }
     ]
   }

@@ -7,3 +7,16 @@ body {
 main {
   margin: 10px 75px;
 }
+
+a {
+  text-decoration: unset;
+}
+
+li {
+  list-style-type: none;
+}
+
+input {
+  height: 22px;
+  margin-bottom: 10px;
+}
