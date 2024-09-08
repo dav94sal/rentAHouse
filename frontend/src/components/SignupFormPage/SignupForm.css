@@ -1,18 +1,12 @@
-.form-container, form, label {
+.signup-form-container,
+.signup-form-container form,
+.signup-form-container label {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.form-container {
+.signup-form-container {
   margin-top: 15%;
-}
-
-input {
-  margin-top: 5px;
-}
-
-label {
-  margin-bottom: 25px;
 }

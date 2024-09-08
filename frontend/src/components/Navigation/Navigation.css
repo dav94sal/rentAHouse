@@ -2,8 +2,17 @@ nav {
   margin: unset;
 }
 
-ul {
-  list-style-type: none;
+nav a {
+  text-decoration: unset;
+  color: white;
+}
+
+nav li {
+  padding: 0 5px;
+  margin: 5px 0;
+}
+
+.navigation-list {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -11,31 +20,6 @@ ul {
   background-color: black;
   margin: unset;
   height: 50px;
-}
-
-a {
-  text-decoration: unset;
-  color: white;
-}
-
-li {
-  padding: 0 5px;
-  margin: 5px 0;
-}
-
-#home-link, #login-signup-container {
-  font-size: large;
-}
-
-#login-signup-container {
-  display: flex;
-  padding:  0 5px;
-}
-
-#profile-button {
-  color: white;
-  background-color: black;
-  border: unset;
 }
 
 .profile-dropdown {
@@ -56,6 +40,27 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#home-link, #login-signup-container {
+  font-size: large;
+}
+
+#login-signup-container {
+  display: flex;
+  padding:  0 5px;
+}
+
+#profile-button {
+  color: white;
+  background-color: black;
+  border: unset;
 }
 
 #name {
