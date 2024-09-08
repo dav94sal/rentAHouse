@@ -70,7 +70,7 @@ function SpotForm() {
 
       <div className='description'>
         <h2>Describe your place to guests</h2>
-        
+
         <p>
           Mention the best features of your space,
           any special amentities like fast wifi or parking,
