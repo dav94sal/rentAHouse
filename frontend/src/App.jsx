@@ -5,7 +5,7 @@ import { restoreUser } from './store/session';
 import Navigation from './components/Navigation/Navigation';
 import HomePage from './components/HomePage';
 import SpotDetailsPage from './components/SpotDetailsPage/SpotDetailsPage';
-import SpotForm from './components/CreateSpotForm/SpotForm';
+import SpotForm from './components/SpotForm/SpotForm';
 
 function Layout() {
   const [session, setSession] = useState(false);

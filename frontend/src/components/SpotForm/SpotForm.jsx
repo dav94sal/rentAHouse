@@ -19,9 +19,13 @@ function SpotForm() {
   const [img3, setImg3] = useState('');
   const [img4, setImg4] = useState('');
   const [img5, setImg5] = useState('');
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const [errors, setErrors] = useState({})
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    console.log(errors)
+  }, [errors])
   const handleSubmit = e => {
     e.preventDefault();
 
@@ -50,16 +54,18 @@ function SpotForm() {
       images
     }
 
-    const newSpot = dispatch(postSpot(spotObj)).catch(err => validations.errors = err)
-    console.log(validations)
+    return dispatch(postSpot(spotObj)).then(async (res) => {
+        if (res.ok) {
+          const newSpot = await res.json();
+          <Navigate to={`/spots/${newSpot.id}`} />
+        } else if (res?.errors) {
+            let newValidate = {...res.errors, ...validations}
+            setErrors({...newValidate});
+            setHasSubmitted(true)
+        }
 
-    // if (newSpot) {
-    //   <Navigate to={`/spots/${newSpot.id}`} />
-    // }
+      })
 
-    validations[newSpot.errors] = newSpot.errors
-
-    setErrors(validations)
   }
 
   return (
@@ -76,6 +82,9 @@ function SpotForm() {
       <div className='location container'>
         <label htmlFor='country'>
           Country
+          <p className='errors'>
+            {hasSubmitted? errors?.country : ''}
+          </p>
         </label>
         <input
           name='country'
@@ -205,7 +214,10 @@ function SpotForm() {
           value={preview}
           onChange={e => setPreview(e.target.value)}
         />
-        {preview? '': errors.preview}
+
+        <p className='errors'>
+          {preview? '': errors.preview}
+        </p>
 
         <input
           type='text'
