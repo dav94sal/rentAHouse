@@ -19,17 +19,22 @@ nav li {
   padding: 5px 10px;
   background-color: black;
   margin: unset;
-  height: 50px;
+  height: 60px;
 }
 
 .profile-dropdown {
-  background-color: rgb(61, 61, 64);
+  background-color: white;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  right: 5px;
-  top: 60px;
-  height: unset;
+  align-items: center;
+  position: relative;
+  top: -5px;
+  z-index: 1;
+  height: 130px;
+  width: 160px;
+  border: 2px solid black;
+  padding: 0 5px;
+  box-sizing: border-box;
 }
 
 .hidden {
@@ -43,9 +48,30 @@ nav li {
 }
 
 .profile-container {
+  width: 200px;
+  height: 61px;
+}
+
+.dropdown-intro-container,
+.manage-spots {
+  border-bottom: 1px solid black;
+}
+
+.manage-spots {
+  padding-bottom: 3px;
+}
+
+.manage-spots a {
+  color: black;
+}
+
+#create-a-new-spot {
   display: flex;
-  justify-content: center;
   align-items: center;
+  height: 61px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 5px;
 }
 
 #home-link, #login-signup-container {
@@ -61,6 +87,9 @@ nav li {
   color: white;
   background-color: black;
   border: unset;
+  position: absolute;
+  right: 0;
+  top: 5px;
 }
 
 #name {

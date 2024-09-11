@@ -24,7 +24,7 @@ function Navigation() {
 
         {sessionUser?
           <div className='profile-container'>
-            <li>
+            <li id='create-a-new-spot'>
               <Link to='/spots/new'>Create a New Spot</Link>
             </li>
             <li>
