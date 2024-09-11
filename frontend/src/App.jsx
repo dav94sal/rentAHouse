@@ -42,7 +42,11 @@ const router = createBrowserRouter([
           },
           {
             path: 'new',
-            element: <SpotForm />
+            element: <SpotForm spotType={{type: "new"}} />
+          },
+          {
+            path: 'current',
+            element: <SpotForm spotType={{type: "current"}} />
           }
         ]
       }
