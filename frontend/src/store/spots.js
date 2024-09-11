@@ -72,7 +72,7 @@ export const postSpot = (spotObj) => async dispatch => {
     }
   } catch (error) {
     // let err = await error.json()
-    console.log("error: ", err);
+    console.log("error: ", error);
     return error;
   }
 }
