@@ -12,7 +12,7 @@ function Navigation() {
 
   return (
     <nav>
-      <ul>
+      <ul className='navigation-list'>
         <li id='home-link'>
           <Link to='/'>
             <div className='name-icon'>
@@ -23,9 +23,14 @@ function Navigation() {
         </li>
 
         {sessionUser?
-          <li>
-            <ProfileButton user={sessionUser} />
-          </li> :
+          <div className='profile-container'>
+            <li id='create-a-new-spot'>
+              <Link to='/spots/new'>Create a New Spot</Link>
+            </li>
+            <li>
+              <ProfileButton user={sessionUser} />
+            </li>
+          </div> :
 
           <div id='login-signup-container'>
             <li>

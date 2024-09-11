@@ -2,8 +2,41 @@
 
 body {
   margin: unset;
+  font-family: 'SUSE', sans-serif;
 }
 
 main {
   margin: 10px 75px;
+}
+
+a {
+  text-decoration: unset;
+}
+
+li {
+  list-style-type: none;
+}
+
+input {
+  height: 22px;
+  margin-bottom: 10px;
+  background-color: #E8F0FE;
+  border-radius: 3px;
+}
+
+h1 {
+  font-size: 24pt bold;
+}
+
+h2 {
+  font-size: 17pt bold;
+}
+
+p {
+  font-size: 13pt;
+}
+
+.errors {
+  color: red;
+  font-size: 14px;
 }

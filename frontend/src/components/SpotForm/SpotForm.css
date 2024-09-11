@@ -1,0 +1,60 @@
+.location label {
+  display: block;
+  margin: unset;
+  text-align: start;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  grid-column-start: 2;
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+}
+
+.container h1 {
+  margin: 0;
+}
+
+.container p {
+  margin: 2px 0;
+}
+
+.spot-form-container {
+  display: grid;
+  grid-template-columns: 33% 34% 33%;
+}
+
+.header {
+  border-bottom: unset;
+}
+
+.city-state, .lat-lng {
+  display: flex;
+  justify-content: space-between;
+}
+
+.submit {
+  border: unset;
+  min-height: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
+.submit button {
+  border-radius: 0;
+  background-color: orangered;
+  color: white;
+  width: 103px;
+  height: 27px;
+  box-shadow: 3px 3px black;
+}
+
+#comma {
+  display: flex;
+  align-items: end;
+}
+
+#input-description {
+  height: 150px;
+}

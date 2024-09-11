@@ -24,7 +24,7 @@ const handleValidationErrors = (req,res,next) => {
 const validateSpot = [
   check('address')
     .exists({checkFalsy: true})
-    .withMessage("Street address is required"),
+    .withMessage("Address is required"),
   check('city')
     .exists({checkFalsy: true})
     .withMessage("City is required"),
@@ -36,14 +36,20 @@ const validateSpot = [
     .withMessage("Country is required"),
   check('lat')
     .exists({checkFalsy: true})
+    .withMessage("Latitude is required"),
+  check('lat')
     .isFloat({ min: -90, max: 90})
     .withMessage("Latitude must be within -90 and 90"),
   check('lng')
     .exists({checkFalsy: true})
+    .withMessage("Longitude is required"),
+  check('lng')
     .isFloat({ min: -180, max: 180})
     .withMessage("Longitude must be within -180 and 180"),
   check('name')
     .exists({checkFalsy: true})
+    .withMessage("Name is required"),
+  check("name")
     .isLength({ min: 3, max: 49 })
     .withMessage("Name must be less than 50 characters"),
   check('description')
