@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { postSpot } from '../../store/spots';
 import './SpotForm.css';
 
@@ -20,23 +20,16 @@ function SpotForm() {
   const [img4, setImg4] = useState('');
   const [img5, setImg5] = useState('');
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [errors, setErrors] = useState({})
-  const dispatch = useDispatch()
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(errors)
-  }, [errors])
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    const validations = {}
+  const buildData = () => {
     const images = { 1: {url: preview, preview: true} };
     const imgArr = [img2, img3, img4, img5];
 
-    if (!preview) validations.preview = "Preview image is required";
-
     imgArr.forEach((img, i) => {
-      if (img) images[i + 2] = {url: img, preview: false};
+      if (img) {images[i + 2] = {url: img, preview: false}}
     });
 
     const spotObj = {
@@ -54,17 +47,57 @@ function SpotForm() {
       images
     }
 
-    return dispatch(postSpot(spotObj)).then(async (res) => {
-        if (res.ok) {
-          const newSpot = await res.json();
-          <Navigate to={`/spots/${newSpot.id}`} />
-        } else if (res?.errors) {
-            let newValidate = {...res.errors, ...validations}
-            setErrors({...newValidate});
-            setHasSubmitted(true)
-        }
+    return spotObj;
+  }
 
-      })
+  const validateData = (spotObj) => {
+    const validations = {};
+    const spotData = Object.entries(spotObj.spot);
+
+    spotData.forEach(el => {
+      if (el[1] === '') {
+        validations[el[0]] = `${el[0]} is required`
+      }
+    })
+
+    if (!preview) validations.preview = "Preview image is required";
+    const imageData = Object.entries(spotObj.images);
+
+    imageData.forEach(img => {
+      const url = img[1].url
+      // console.log(url)
+      if (
+        !url.endsWith('.png') &&
+        !url.endsWith('.jpg') &&
+        !url.endsWith('.jpeg')
+      ) {
+          validations[`img${img[0]}`] = `Image URL must end in .png, .jpg, or .jpeg`
+        }
+    })
+
+    const err = Object.keys(validations);
+    if (err.length === 0) return true
+    else {
+      setErrors(validations);
+      return false;
+    }
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const spotObject = buildData();
+    const valid = validateData(spotObject);
+
+    setHasSubmitted(true);
+
+    let response;
+
+    if (valid) {
+      response = await dispatch(postSpot(spotObject))
+      console.log("response", response)
+      navigate(`/spots/${response.id}`)
+    }
 
   }
 
@@ -96,6 +129,9 @@ function SpotForm() {
 
         <label>
           Street Address
+          <p className='errors'>
+            {hasSubmitted? errors?.address : ''}
+          </p>
         </label>
         <input
           type='text'
@@ -107,6 +143,9 @@ function SpotForm() {
         <div className='city-state'>
           <label>
             City
+            <p className='errors'>
+              {hasSubmitted? errors?.city : ''}
+            </p>
             <input
               type='text'
               placeholder='City'
@@ -118,6 +157,9 @@ function SpotForm() {
 
           <label>
             State
+            <p className='errors'>
+              {hasSubmitted? errors?.state : ''}
+            </p>
             <input
               type='text'
               placeholder='State'
@@ -130,6 +172,9 @@ function SpotForm() {
         <div className='lat-lng'>
           <label>
             Latitude
+            <p className='errors'>
+              {hasSubmitted? errors?.lat : ''}
+            </p>
             <input
               type='text'
               placeholder='Latitude'
@@ -140,6 +185,9 @@ function SpotForm() {
           <p id='comma'>,</p>
           <label>
             Longitude
+            <p className='errors'>
+              {hasSubmitted? errors?.lng : ''}
+            </p>
             <input
               type='text'
               placeholder='Longitude'
@@ -166,6 +214,10 @@ function SpotForm() {
           value={description}
           onChange={e => setDescription(e.target.value)}
         />
+
+        <p className='errors'>
+          {hasSubmitted? errors?.description : ''}
+        </p>
       </div>
 
       <div className='create-name container'>
@@ -182,6 +234,10 @@ function SpotForm() {
           value={name}
           onChange={e => setName(e.target.value)}
         />
+
+        <p className='errors'>
+          {hasSubmitted? errors?.name : ''}
+        </p>
       </div>
 
       <div className='pricing container'>
@@ -199,6 +255,10 @@ function SpotForm() {
           value={price}
           onChange={e => setPrice(e.target.value)}
         />
+
+        <p className='errors'>
+          {hasSubmitted? errors?.price : ''}
+        </p>
       </div>
 
       <div className='add-photos container'>
@@ -216,7 +276,7 @@ function SpotForm() {
         />
 
         <p className='errors'>
-          {preview? '': errors.preview}
+          {hasSubmitted? errors.preview : ''}
         </p>
 
         <input
@@ -225,6 +285,10 @@ function SpotForm() {
           value={img2}
           onChange={e => setImg2(e.target.value)}
         />
+
+        <p className='errors'>
+          {hasSubmitted? '': errors.img2}
+        </p>
 
         <input
           type='text'

@@ -46,32 +46,34 @@ export const getSpotDetails = (spotId) => async dispatch => {
   }
 }
 
-export const postSpot = (spot) => async dispatch => {
+export const postSpot = (spotObj) => async dispatch => {
 
   try {
     const response = await csrfFetch('/api/spots', {
       method: 'POST',
-      body: JSON.stringify({...spot.spot})
+      body: JSON.stringify({...spotObj.spot})
     })
 
-    console.log("response: ", response);
+    // console.log("response: ", response);
     if (response.ok) {
       const newSpot = await response.json();
       dispatch(addSpot(newSpot));
 
-      const images = Object.values(spot.images)
+      const images = Object.values(spotObj.images)
+
       images.forEach(async img => {
         await csrfFetch(`/api/spots/${newSpot.id}/images`, {
           method: 'POST',
-          body: { img }
+          body: JSON.stringify({ ...img })
         })
       });
 
-      return response;
+      return newSpot;
     }
   } catch (error) {
-    let err = await error.json()
-    return err;
+    // let err = await error.json()
+    console.log("error: ", err);
+    return error;
   }
 }
 
