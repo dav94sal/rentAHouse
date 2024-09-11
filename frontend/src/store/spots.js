@@ -1,8 +1,8 @@
 import { csrfFetch } from "./csrf";
 
 const POPULATE = 'spot/populate';
-const DETAILS = 'spot/details';
 const ADD_ONE = 'spot/add_one';
+const USER = 'spot/user';
 
 // action creators
 export const populateSpots = (allSpots) => {
@@ -12,17 +12,17 @@ export const populateSpots = (allSpots) => {
   }
 }
 
-export const spotDetails = (spot) => {
-  return {
-    type: DETAILS,
-    spot
-  }
-}
-
 export const addSpot = (newSpot) => {
   return {
     type: ADD_ONE,
     newSpot
+  }
+}
+
+export const userSpots = (spots) => {
+  return {
+    type: USER,
+    spots
   }
 }
 
@@ -41,8 +41,17 @@ export const getSpotDetails = (spotId) => async dispatch => {
 
   if (response.ok) {
     const spot = await response.json();
-    dispatch(spotDetails(spot));
+    dispatch(addSpot(spot.Spots));
     return spot;
+  }
+}
+
+export const getUserSpots = () => async dispatch => {
+  const response = await csrfFetch('/api/spots/current');
+
+  if (response.ok) {
+    const spots = await response.json();
+    dispatch(userSpots(spots.Spots))
   }
 }
 
@@ -77,7 +86,7 @@ export const postSpot = (spotObj) => async dispatch => {
   }
 }
 
-const initialState = {};
+const initialState = {current: {}};
 
 export default function spotReducer(state = initialState, action) {
   switch (action.type) {
@@ -88,14 +97,16 @@ export default function spotReducer(state = initialState, action) {
       })
       return newState;
     }
-    case DETAILS: {
-      const newState = {...state};
-      newState[action.spot.id] = action.spot;
-      return newState;
-    } // Combine DETAILS and ADD_ONE if testing goes well
     case ADD_ONE: {
       const newState = {...state};
       newState[action.newSpot.id] = action.newSpot;
+      return newState;
+    }
+    case USER: {
+      const newState = {...state};
+      action.spots.map((spot, i) => {
+        newState.current[i + 1] = spot;
+      })
       return newState;
     }
     default:

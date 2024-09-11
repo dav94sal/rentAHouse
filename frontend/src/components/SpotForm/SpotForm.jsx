@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { postSpot } from '../../store/spots';
 import './SpotForm.css';
 
-function SpotForm() {
+function SpotForm({spotType}) {
   const [country, setCountry] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
