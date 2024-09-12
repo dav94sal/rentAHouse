@@ -21,8 +21,14 @@ function SpotDetailsPage() {
   }, [spotId, dispatch])
 
   const spot = useSelector(state => state.spots[spotId])
+  const userId = useSelector(state => state.session.user.id)
   let reviews = useSelector(state => state.reviews)
   reviews = Object.values(reviews)
+
+  const isOwnSpot = () => {
+    if (spot.ownerId === userId) return true;
+    return false;
+  }
 
   return (
     <div className='spot-details-container'>
@@ -45,16 +51,31 @@ function SpotDetailsPage() {
 
             <div className='reserve-container'>
               <p>{`$${spot.price} night`}</p>
-              <p><FaStar /> {` ${spot.avgStarRating} | ${spot.numReviews}`} </p>
+              <p>
+                <FaStar />
+                {spot.numReviews? ` ${spot.avgStarRating} | ${spot.numReviews}` : ` new`}
+              </p>
               <button id='reserve-button'>Reserve</button>
             </div>
           </div>
 
           <div className='reviews-container'>
-            <h2><FaStar /> {` ${spot.avgStarRating} | ${spot.numReviews}`} </h2>
-            {reviews.map(review => (
-              <Reviews review={review} key={`review: ${review.id}`}/>
-            ))}
+            <h2>
+              <FaStar />
+              {spot.numReviews? ` ${spot.avgStarRating} | ${spot.numReviews}` : ` new`}
+            </h2>
+            {isOwnSpot()?
+              '' :
+              <button>Post Your Review</button>
+            }
+            {reviews.length?
+              reviews.map(review => (
+                <Reviews review={review} key={`review: ${review.id}`}/>
+              )) : isOwnSpot()? '' :
+              <div>
+                <p>Be the first to post a review!</p>
+              </div>
+            }
           </div>
         </>
       }
