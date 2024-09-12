@@ -39,7 +39,7 @@ function ProfileButton({ user }) {
         <ProfileIcon />
       </button>
 
-      <div className={
+      <ul className={
           `profile-dropdown ${showMenu? '' : 'hidden'}`
         }
         ref={ulref}
@@ -53,7 +53,7 @@ function ProfileButton({ user }) {
         <li>
           <button onClick={handleLogout}>Logout</button>
         </li>
-      </div>
+      </ul>
     </>
   )
 }

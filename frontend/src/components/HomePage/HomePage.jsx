@@ -19,7 +19,9 @@ function HomePage() {
   return (
     <div className='spots-container'>
       {spotsArr.map(spot => (
-          <SpotTile spot={spot} key={spot.id}/>
+        <>
+          {spot && <SpotTile spot={spot} key={spot.id}/>}
+        </>
       ))}
     </div>
   )

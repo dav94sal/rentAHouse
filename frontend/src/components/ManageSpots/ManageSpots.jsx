@@ -21,13 +21,15 @@ function ManageSpots () {
   return (
     <>
       <h1>Manage Your Spots</h1>
-      <button>Create a New Spot</button>
+      <Link to='/spots/new'>
+        <button>Create a New Spot</button>
+      </Link>
 
       <div className="manage-spots-container">
         {isLoading &&
           <>
             {spotArr.map((spot) => (
-              <>
+              <div key={spot.id}>
                 <SpotTile spot={spot}/>
                 <div className="spot-tile-buttons">
                   <Link to={`/spots/${spot.id}/edit`}>
@@ -40,7 +42,7 @@ function ManageSpots () {
                     Delete
                   </button>
                 </div>
-              </>
+              </div>
             ))}
           </>
         }

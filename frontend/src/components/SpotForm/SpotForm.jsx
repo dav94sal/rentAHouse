@@ -31,7 +31,7 @@ function SpotForm({isNewSpot}) {
     if (!isNewSpot) {
       dispatch(getUserSpots())
     }
-    console.log(errors)
+    // console.log(errors)
   }, [dispatch, isNewSpot, errors]);
 
   const buildData = () => {
@@ -336,7 +336,7 @@ function SpotForm({isNewSpot}) {
           type='submit'
           onClick={handleSubmit}
           >
-          Create Spot
+          {isNewSpot? "Create Spot" : "Update Spot"}
         </button>
       </div>
     </div>
