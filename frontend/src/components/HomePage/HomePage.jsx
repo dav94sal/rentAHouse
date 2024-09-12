@@ -17,7 +17,7 @@ function HomePage() {
   spotsArr.reverse();
 
   return (
-    <div className='spots-container'>
+    <div className='spots-container' key={"spot-container"}>
       {spotsArr.map(spot => (
         <>
           {spot && <SpotTile spot={spot} key={spot.id}/>}

@@ -49,7 +49,12 @@ function ProfileButton({ user }) {
           {/* <li>{user.firstName} {user.lastName}</li> */}
           <li>{user.email}</li>
         </div>
-        <li className="manage-spots"><Link to='/spots/current'>Manage Spots</Link></li>
+        <li
+          className="manage-spots"
+          onClick={toggleMenu}
+        >
+          <Link to='/spots/current'>Manage Spots</Link>
+        </li>
         <li>
           <button onClick={handleLogout}>Logout</button>
         </li>
