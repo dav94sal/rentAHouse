@@ -121,7 +121,7 @@ export default function spotReducer(state = initialState, action) {
     }
     case USER: {
       const newState = {...state};
-      action.spots.map((spot, i) => {
+      action.spots.map(spot => {
         newState.current[spot.id] = spot;
       })
       return newState;
