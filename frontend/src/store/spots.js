@@ -1,8 +1,8 @@
 import { csrfFetch } from "./csrf";
 
 const POPULATE = 'spot/populate';
-const DETAILS = 'spot/details';
 const ADD_ONE = 'spot/add_one';
+const USER = 'spot/user';
 
 // action creators
 export const populateSpots = (allSpots) => {
@@ -12,17 +12,17 @@ export const populateSpots = (allSpots) => {
   }
 }
 
-export const spotDetails = (spot) => {
-  return {
-    type: DETAILS,
-    spot
-  }
-}
-
 export const addSpot = (newSpot) => {
   return {
     type: ADD_ONE,
     newSpot
+  }
+}
+
+export const userSpots = (spots) => {
+  return {
+    type: USER,
+    spots
   }
 }
 
@@ -41,13 +41,21 @@ export const getSpotDetails = (spotId) => async dispatch => {
 
   if (response.ok) {
     const spot = await response.json();
-    dispatch(spotDetails(spot));
+    dispatch(addSpot(spot));
     return spot;
   }
 }
 
-export const postSpot = (spotObj) => async dispatch => {
+export const getUserSpots = () => async dispatch => {
+  const response = await csrfFetch('/api/spots/current');
 
+  if (response.ok) {
+    const spots = await response.json();
+    dispatch(userSpots(spots.Spots))
+  }
+}
+
+export const postSpot = (spotObj) => async dispatch => {
   try {
     const response = await csrfFetch('/api/spots', {
       method: 'POST',
@@ -77,25 +85,45 @@ export const postSpot = (spotObj) => async dispatch => {
   }
 }
 
-const initialState = {};
+export const updateSpot = (spotObj, spotId) => async dispatch => {
+  try {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+      method: 'PUT',
+      body: JSON.stringify({...spotObj.spot})
+    })
+
+    if (response.ok) {
+      const newSpot = await response.json();
+      dispatch(addSpot(newSpot));
+      return newSpot;
+    }
+  } catch (error) {
+    console.log("error: ", error);
+    return error;
+  }
+}
+
+const initialState = {current: {}};
 
 export default function spotReducer(state = initialState, action) {
   switch (action.type) {
     case POPULATE: {
-      const newState = {...state};
+      const newState = {...state, ...state.current};
       action.allSpots.Spots.map((spot) => {
         newState[spot.id] = spot
       })
       return newState;
     }
-    case DETAILS: {
-      const newState = {...state};
-      newState[action.spot.id] = action.spot;
-      return newState;
-    } // Combine DETAILS and ADD_ONE if testing goes well
     case ADD_ONE: {
       const newState = {...state};
       newState[action.newSpot.id] = action.newSpot;
+      return newState;
+    }
+    case USER: {
+      const newState = {...state};
+      action.spots.map(spot => {
+        newState.current[spot.id] = spot;
+      })
       return newState;
     }
     default:
