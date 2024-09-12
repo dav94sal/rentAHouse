@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUserSpots } from "../../store/spots";
 import SpotTile from "../HomePage/SpotTile";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import './ManageSpots.css'
 
 function ManageSpots () {
