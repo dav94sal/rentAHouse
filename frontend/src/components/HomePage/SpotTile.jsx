@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 function SpotTile({ spot }) {
 
   return (
-    <Link to={`/spots/${spot.id}`}>
-      <div className="spot-tile-container">
+    <div className="spot-tile-container">
+      <Link to={`/spots/${spot.id}`}>
         <img src={spot.previewImage}/>
 
         <div className="spot-info">
@@ -14,8 +14,8 @@ function SpotTile({ spot }) {
         </div>
 
         <p>{`$${spot.price} / night`}</p>
-      </div>
-    </Link>
+      </Link>
+    </div>
   )
 }
  export default SpotTile;
