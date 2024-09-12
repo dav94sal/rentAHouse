@@ -9,7 +9,7 @@ function LoginFormModal() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
-  const { closeModal } = useModal()
+  const { closeModal } = useModal();
 
   const handleSubmit = e => {
     e.preventDefault()
