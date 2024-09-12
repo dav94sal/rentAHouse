@@ -42,8 +42,12 @@ const router = createBrowserRouter([
             element: <SpotDetailsPage />
           },
           {
+            path: ':spotId/edit',
+            element: <SpotForm isNewSpot={false} />
+          },
+          {
             path: 'new',
-            element: <SpotForm spotType={{type: "new"}} />
+            element: <SpotForm isNewSpot={true} />
           },
           {
             path: 'current',

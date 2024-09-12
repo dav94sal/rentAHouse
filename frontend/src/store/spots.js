@@ -41,7 +41,7 @@ export const getSpotDetails = (spotId) => async dispatch => {
 
   if (response.ok) {
     const spot = await response.json();
-    dispatch(addSpot(spot.Spots));
+    dispatch(addSpot(spot));
     return spot;
   }
 }
@@ -56,7 +56,6 @@ export const getUserSpots = () => async dispatch => {
 }
 
 export const postSpot = (spotObj) => async dispatch => {
-
   try {
     const response = await csrfFetch('/api/spots', {
       method: 'POST',
@@ -86,12 +85,30 @@ export const postSpot = (spotObj) => async dispatch => {
   }
 }
 
+export const updateSpot = (spotObj, spotId) => async dispatch => {
+  try {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+      method: 'PUT',
+      body: JSON.stringify({...spotObj.spot})
+    })
+
+    if (response.ok) {
+      const newSpot = await response.json();
+      dispatch(addSpot(newSpot));
+      return newSpot;
+    }
+  } catch (error) {
+    console.log("error: ", error);
+    return error;
+  }
+}
+
 const initialState = {current: {}};
 
 export default function spotReducer(state = initialState, action) {
   switch (action.type) {
     case POPULATE: {
-      const newState = {...state};
+      const newState = {...state, ...state.current};
       action.allSpots.Spots.map((spot) => {
         newState[spot.id] = spot
       })
@@ -105,7 +122,7 @@ export default function spotReducer(state = initialState, action) {
     case USER: {
       const newState = {...state};
       action.spots.map((spot, i) => {
-        newState.current[i + 1] = spot;
+        newState.current[spot.id] = spot;
       })
       return newState;
     }

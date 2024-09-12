@@ -1,19 +1,22 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { postSpot } from '../../store/spots';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getUserSpots, postSpot, updateSpot } from '../../store/spots';
 import './SpotForm.css';
 
-function SpotForm({spotType}) {
-  const [country, setCountry] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
-  const [description, setDescription] = useState('');
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
+function SpotForm({isNewSpot}) {
+  const { spotId } = useParams()
+  const currSpot = useSelector(state => state.spots.current[spotId]);
+  // const [isLoading, setIsLoading] = useState();
+  const [country, setCountry] = useState(currSpot? currSpot.country : '');
+  const [address, setAddress] = useState(currSpot? currSpot.address : '');
+  const [city, setCity] = useState(currSpot? currSpot.city : '');
+  const [state, setState] = useState(currSpot? currSpot.state : '');
+  const [latitude, setLatitude] = useState(currSpot? currSpot.lat : '');
+  const [longitude, setLongitude] = useState(currSpot? currSpot.lng : '');
+  const [description, setDescription] = useState(currSpot? currSpot.description : '');
+  const [name, setName] = useState(currSpot? currSpot.name : '');
+  const [price, setPrice] = useState(currSpot? currSpot.price : '');
   const [preview, setPreview] = useState('');
   const [img2, setImg2] = useState('');
   const [img3, setImg3] = useState('');
@@ -23,6 +26,13 @@ function SpotForm({spotType}) {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!isNewSpot) {
+      dispatch(getUserSpots())
+    }
+    console.log(errors)
+  }, [dispatch, isNewSpot, errors]);
 
   const buildData = () => {
     const images = { 1: {url: preview, preview: true} };
@@ -60,13 +70,14 @@ function SpotForm({spotType}) {
       }
     })
 
-    if (!preview) validations.preview = "Preview image is required";
+    if (!preview && isNewSpot) validations.preview = "Preview image is required";
     const imageData = Object.entries(spotObj.images);
 
     imageData.forEach(img => {
       const url = img[1].url
       // console.log(url)
       if (
+        isNewSpot &&
         !url.endsWith('.png') &&
         !url.endsWith('.jpg') &&
         !url.endsWith('.jpeg')
@@ -94,7 +105,9 @@ function SpotForm({spotType}) {
     let response;
 
     if (valid) {
-      response = await dispatch(postSpot(spotObject))
+      isNewSpot?
+        response = await dispatch(postSpot(spotObject)) :
+        response = await dispatch(updateSpot(spotObject, spotId))
       console.log("response", response)
       navigate(`/spots/${response.id}`)
     }
@@ -105,7 +118,10 @@ function SpotForm({spotType}) {
     <div className='spot-form-container'>
 
       <div className='header container'>
-        <h1>Create a new Spot</h1>
+        <h1>
+          {isNewSpot? "Create a new Spot" : "Update your Spot"}
+
+        </h1>
         <h2>Where&apos;s your place located?</h2>
         <p>
           Guests will only get your exact address once they booked a reservation
@@ -261,62 +277,65 @@ function SpotForm({spotType}) {
         </p>
       </div>
 
-      <div className='add-photos container'>
-        <h2>Liven up your spot with photos</h2>
+      {
+        isNewSpot &&
+        <div className='add-photos container'>
+          <h2>Liven up your spot with photos</h2>
 
-        <p>
-          Submit a link to at least one photo to publish your spot.
-        </p>
+          <p>
+            Submit a link to at least one photo to publish your spot.
+          </p>
 
-        <input
-          type='text'
-          placeholder='Preview Image URL'
-          value={preview}
-          onChange={e => setPreview(e.target.value)}
-        />
+          <input
+            type='text'
+            placeholder='Preview Image URL'
+            value={preview}
+            onChange={e => setPreview(e.target.value)}
+            />
 
-        <p className='errors'>
-          {hasSubmitted? errors.preview : ''}
-        </p>
+          <p className='errors'>
+            {hasSubmitted? errors.preview : ''}
+          </p>
 
-        <input
-          type='text'
-          placeholder='Image URL'
-          value={img2}
-          onChange={e => setImg2(e.target.value)}
-        />
+          <input
+            type='text'
+            placeholder='Image URL'
+            value={img2}
+            onChange={e => setImg2(e.target.value)}
+            />
 
-        <p className='errors'>
-          {hasSubmitted? '': errors.img2}
-        </p>
+          <p className='errors'>
+            {hasSubmitted? '': errors.img2}
+          </p>
 
-        <input
-          type='text'
-          placeholder='Image URL'
-          value={img3}
-          onChange={e => setImg3(e.target.value)}
-        />
+          <input
+            type='text'
+            placeholder='Image URL'
+            value={img3}
+            onChange={e => setImg3(e.target.value)}
+            />
 
-        <input
-          type='text'
-          placeholder='Image URL'
-          value={img4}
-          onChange={e => setImg4(e.target.value)}
-        />
+          <input
+            type='text'
+            placeholder='Image URL'
+            value={img4}
+            onChange={e => setImg4(e.target.value)}
+            />
 
-        <input
-          type='text'
-          placeholder='Image URL'
-          value={img5}
-          onChange={e => setImg5(e.target.value)}
-        />
-      </div>
+          <input
+            type='text'
+            placeholder='Image URL'
+            value={img5}
+            onChange={e => setImg5(e.target.value)}
+            />
+        </div>
+      }
 
       <div className='submit container'>
         <button
           type='submit'
           onClick={handleSubmit}
-        >
+          >
           Create Spot
         </button>
       </div>

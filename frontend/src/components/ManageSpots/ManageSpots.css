@@ -1,0 +1,8 @@
+.manage-spots-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.spot-tile-buttons {
+
+}

@@ -14,6 +14,7 @@ function HomePage() {
   const spots = useSelector(state => state.spots);
 
   const spotsArr = Object.values(spots);
+  spotsArr.reverse();
 
   return (
     <div className='spots-container'>
