@@ -187,7 +187,8 @@ router.get('/', validateQueryParams, async (req,res,next) => {
     ) / reviews.length;
 
     spot = spot.toJSON();
-    spot.avgRating = avgRating;
+    spot.avgRating = Math.floor(avgRating);
+    console.log(spot.avgRating)
 
     if (image) {
       image = image.toJSON();

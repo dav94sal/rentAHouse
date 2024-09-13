@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
+
 function Reviews({ review }) {
+  // const [isLoading, setIsLoading] = useState(false);
   const date = new Date(review.createdAt)
   const month = date.getMonth();
   const year = date.getFullYear();
@@ -7,11 +10,19 @@ function Reviews({ review }) {
     'July', 'August', 'September', 'October', 'November', 'Decemeber'
   ]
 
+  useEffect(() => {
+
+  })
+
   return (
     <div>
-      <h3>{review.User.firstName}</h3>
-      <p>{`${months[month - 1]} ${year}`}</p>
-      <p>{review.review}</p>
+      {/* {isLoading && */}
+        <>
+          <h3>{review.User.firstName}</h3>
+          <p>{`${months[month - 1]} ${year}`}</p>
+          <p>{review.review}</p>
+        </>
+      {/* } */}
     </div>
   )
 }

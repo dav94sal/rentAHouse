@@ -7,6 +7,7 @@ import { FaStar } from "react-icons/fa";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import PostReviewModal from '../PostReviewModal/PostReviewModal';
 import Reviews from './Reviews';
+import DeleteModal from '../DeleteModal/DeleteModal';
 import './SpotDetails.css';
 
 function SpotDetailsPage() {
@@ -23,13 +24,25 @@ function SpotDetailsPage() {
   }, [spotId, dispatch])
 
   const spot = useSelector(state => state.spots[spotId])
-  const userId = useSelector(state => state.session.user.id)
+  const user = useSelector(state => state.session.user)
   let reviews = useSelector(state => state.reviews)
   reviews = Object.values(reviews)
+  reviews.reverse();
 
-  const isOwnSpot = () => {
-    if (spot.ownerId === userId) return true;
+  const hasReview = () => {
+    for (let i = 0; i < reviews.length; i++) {
+      const rev = reviews[i];
+      if (rev.userId === user.id) return rev.id
+    }
     return false;
+  }
+
+  const canPostReview = () => {
+    if (!user) return false;
+    if (spot.ownerId === user.id) return false;
+    if (hasReview()) return false;
+
+    return true;
   }
 
   return (
@@ -66,20 +79,27 @@ function SpotDetailsPage() {
               <FaStar />
               {spot.numReviews? ` ${spot.avgStarRating} | ${spot.numReviews}` : ` new`}
             </h2>
-            {isOwnSpot()?
-              '' :
+            {canPostReview()?
               <OpenModalButton
                 buttonText='Post Your Review'
-                modalComponenet={<PostReviewModal />}
-              />
+                modalComponenet={<PostReviewModal spotId={spotId}/>}
+              /> : ''
             }
             {reviews.length?
               reviews.map(review => (
-                <Reviews review={review} key={`review: ${review.id}`}/>
-              )) : isOwnSpot()? '' :
+                <>
+                  <Reviews review={review} key={`review: ${review.id}`}/>
+                  {hasReview() && hasReview() === review.id?
+                    <OpenModalButton
+                      buttonText='Delete'
+                      modalComponenet={<DeleteModal type={'review'} id={review.id}/>}
+                    /> : ''
+                  }
+                </>
+              )) : canPostReview()?
               <div>
                 <p>Be the first to post a review!</p>
-              </div>
+              </div> : ''
             }
           </div>
         </>
