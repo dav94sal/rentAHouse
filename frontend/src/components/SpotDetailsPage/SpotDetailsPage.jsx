@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSpotDetails } from '../../store/spots';
 import { getSpotReviews, resetReviews } from "../../store/reviews";
 import { FaStar } from "react-icons/fa";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import PostReviewModal from '../PostReviewModal/PostReviewModal';
 import Reviews from './Reviews';
 import './SpotDetails.css';
 
@@ -66,7 +68,10 @@ function SpotDetailsPage() {
             </h2>
             {isOwnSpot()?
               '' :
-              <button>Post Your Review</button>
+              <OpenModalButton
+                buttonText='Post Your Review'
+                modalComponenet={<PostReviewModal />}
+              />
             }
             {reviews.length?
               reviews.map(review => (
