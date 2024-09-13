@@ -30,6 +30,7 @@ function SpotDetailsPage() {
   reviews.reverse();
 
   const hasReview = () => {
+    if (!user) return false
     for (let i = 0; i < reviews.length; i++) {
       const rev = reviews[i];
       if (rev.userId === user.id) return rev.id
@@ -87,15 +88,15 @@ function SpotDetailsPage() {
             }
             {reviews.length?
               reviews.map(review => (
-                <>
-                  <Reviews review={review} key={`review: ${review.id}`}/>
+                <div key={`review: ${review.id}`}>
+                  <Reviews review={review} />
                   {hasReview() && hasReview() === review.id?
                     <OpenModalButton
                       buttonText='Delete'
                       modalComponenet={<DeleteModal type={'review'} id={review.id}/>}
                     /> : ''
                   }
-                </>
+                </div>
               )) : canPostReview()?
               <div>
                 <p>Be the first to post a review!</p>

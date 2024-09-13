@@ -8,10 +8,10 @@ function LoginFormModal() {
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const dispatch = useDispatch();
   const { closeModal } = useModal();
+  const dispatch = useDispatch();
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
 
     const user = {
@@ -26,6 +26,7 @@ function LoginFormModal() {
         if (data?.errors) setErrors(data.errors)
       }
     )
+
   }
 
   return (
