@@ -10,13 +10,17 @@ function PostReviewModal({spotId}) {
   const [review, setReview] = useState('');
   const [hoverRating, setHoverRating] = useState(0);
   const [rating, setRating] = useState(0);
+  const [validButton, setValidButton] = useState(false);
   const [errors, setErrors] = useState({})
   const dispatch = useDispatch()
   const { closeModal } = useModal();
 
   useEffect(() => {
-    console.log(errors)
-  }, [errors])
+    if (review.length >= 10 && rating > 0) {
+      setValidButton(true);
+    } else setValidButton(false)
+
+  }, [review, rating])
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -38,14 +42,17 @@ function PostReviewModal({spotId}) {
   }
 
   return (
-    <div>
+    <div className="add-review-container">
       <h1>How was your stay?</h1>
       <p className="errors">{errors?.review || errors?.message}</p>
-      <input
+      <textarea
+        rows="7" cols="44"
         type="textArea"
+        placeholder="Leave your review here..."
         value={review}
         onChange={e => setReview(e.target.value)}
-      />
+      >
+      </textarea>
       {/* <StarRating /> */}
       <div className="star-container">
         {[...Array(5)].map((_, i) => (
@@ -57,13 +64,21 @@ function PostReviewModal({spotId}) {
             onMouseLeave={() => setHoverRating(0)}
           >
             {(i + 1) <= (hoverRating || rating)?
-              <FaStar /> :
-              <FaRegStar />
+              <FaStar className="star"/> :
+              <FaRegStar className="star"/>
             }
+
           </div>
         ))}
+        <p>stars</p>
       </div>
-      <button onClick={handleSubmit}>Submit Your Review</button>
+      <button
+        className={`submit-button big-but ${validButton? '' : 'disabled'}`}
+        onClick={handleSubmit}
+        disabled={!validButton}
+      >
+        Submit Your Review
+      </button>
     </div>
   )
 }

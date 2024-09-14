@@ -119,7 +119,7 @@ function SignupFormModal() {
         </div>
 
         <button
-          className={`submit-button login-but ${validButton? '' : 'disabled'}`}
+          className={`submit-button big-but ${validButton? '' : 'disabled'}`}
           type="submit"
           disabled={!validButton}
         >

@@ -47,6 +47,12 @@ p {
   box-shadow: 3px 3px black;
 }
 
+
+.big-but {
+  width: 350px;
+  height: 50px;
+}
+
 .errors {
   color: red;
   font-size: 14px;
