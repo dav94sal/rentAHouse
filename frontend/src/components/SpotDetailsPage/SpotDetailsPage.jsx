@@ -69,7 +69,7 @@ function SpotDetailsPage() {
               <p>{`$${spot.price} night`}</p>
               <p>
                 <FaStar />
-                {spot.numReviews? ` ${spot.avgStarRating} | ${spot.numReviews}` : ` new`}
+                {spot.numReviews? ` ${spot.avgStarRating} | ${spot.numReviews} Reviews` : ` new`}
               </p>
               <button
                 id='reserve-button'
@@ -83,7 +83,7 @@ function SpotDetailsPage() {
           <div className='reviews-container'>
             <h2>
               <FaStar />
-              {spot.numReviews? ` ${spot.avgStarRating} | ${spot.numReviews}` : ` new`}
+              {spot.numReviews? ` ${spot.avgStarRating} | ${spot.numReviews} Reviews` : ` new`}
             </h2>
             {canPostReview()?
               <OpenModalButton
