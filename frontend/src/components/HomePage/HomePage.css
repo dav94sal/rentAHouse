@@ -1,3 +1,7 @@
+main {
+  grid-template-columns: 1% 98% 1%;
+}
+
 img {
   width: 275px;
   height: 275px;
@@ -10,9 +14,13 @@ p {
 
 .spot-tile-container {
   padding: 10px;
-  width: 285px;
+  max-width: 285px;
   height: 360px;
   color: black;
+  padding: 5px;
+  margin: 5px;
+  justify-self: center;
+
 }
 
 .spot-info {
@@ -22,7 +30,30 @@ p {
 }
 
 .spots-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  display: grid;
+  grid-column-start: 2;
+  grid-template-columns: 25% 25% 25% 25%;
+}
+
+@media (max-width: 1339px) {
+  .spots-container {
+    grid-template-columns: 33% 34% 33%;
+  }
+
+}
+
+@media (max-width: 1023px) {
+  .spots-container {
+    grid-template-columns: 50% 50%;
+  }
+
+}
+
+@media (max-width: 730px) {
+  .spots-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
 }

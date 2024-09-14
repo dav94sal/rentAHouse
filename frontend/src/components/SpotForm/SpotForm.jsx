@@ -237,13 +237,14 @@ function SpotForm({isNewSpot}) {
           and what you love about the neighborhood.
         </p>
 
-        <input
+        <textarea
           id='input-description'
           type='textarea'
           placeholder='Please write at least 30 characters'
           value={description}
           onChange={e => setDescription(e.target.value)}
-        />
+        >
+        </textarea>
 
         <p className='errors'>
           {hasSubmitted? formatError('description') : ''}
