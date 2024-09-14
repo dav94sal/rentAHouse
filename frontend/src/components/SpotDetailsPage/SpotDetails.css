@@ -4,6 +4,7 @@
   border: 1px solid black;
   height: 40px;
   width: 250px;
+  box-shadow: 3px 3px black;
 }
 
 .spot-details-container {

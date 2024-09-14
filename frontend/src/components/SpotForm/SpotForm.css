@@ -32,6 +32,7 @@
 .city-state, .lat-lng {
   display: flex;
   justify-content: space-between;
+  max-width: 330px;
 }
 
 .submit {
@@ -42,12 +43,16 @@
 }
 
 .submit button {
-  border-radius: 0;
-  background-color: orangered;
-  color: white;
   width: 103px;
   height: 27px;
-  box-shadow: 3px 3px black;
+}
+
+.special-input {
+  width: unset;
+}
+
+.city {
+  width: 60%;
 }
 
 #comma {

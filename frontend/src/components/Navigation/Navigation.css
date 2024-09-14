@@ -30,8 +30,8 @@ nav li {
   position: relative;
   top: -5px;
   z-index: 1;
-  height: 130px;
-  width: 160px;
+  min-height: 130px;
+  min-width: 160px;
   border: 2px solid black;
   padding: 0 5px;
   box-sizing: border-box;

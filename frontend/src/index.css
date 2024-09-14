@@ -36,7 +36,22 @@ p {
   font-size: 13pt;
 }
 
+#modal-content {
+  border-radius: 20px;
+}
+
+.submit-button {
+  border-radius: 0;
+  background-color: orangered;
+  color: white;
+  box-shadow: 3px 3px black;
+}
+
 .errors {
   color: red;
   font-size: 14px;
+}
+
+.disabled {
+  background-color: grey;
 }

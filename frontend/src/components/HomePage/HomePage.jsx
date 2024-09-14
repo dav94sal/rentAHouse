@@ -20,9 +20,10 @@ function HomePage() {
     <div className='spots-container' key={"spot-container"}>
       {spotsArr.map(spot => (
         <>
-          {spot && <SpotTile spot={spot} key={spot.id}/>}
+          {spot.id && <SpotTile spot={spot} key={spot.id}/>}
         </>
       ))}
+
     </div>
   )
 }

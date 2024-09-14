@@ -157,12 +157,13 @@ function SpotForm({isNewSpot}) {
         />
 
         <div className='city-state'>
-          <label>
+          <label className='city'>
             City
             <p className='errors'>
               {hasSubmitted? errors?.city : ''}
             </p>
             <input
+              className='special-input'
               type='text'
               placeholder='City'
               value={city}
@@ -177,6 +178,7 @@ function SpotForm({isNewSpot}) {
               {hasSubmitted? errors?.state : ''}
             </p>
             <input
+              className='special-input'
               type='text'
               placeholder='State'
               value={state}
@@ -192,6 +194,7 @@ function SpotForm({isNewSpot}) {
               {hasSubmitted? errors?.lat : ''}
             </p>
             <input
+              className='special-input'
               type='text'
               placeholder='Latitude'
               value={latitude}
@@ -205,6 +208,7 @@ function SpotForm({isNewSpot}) {
               {hasSubmitted? errors?.lng : ''}
             </p>
             <input
+              className='special-input'
               type='text'
               placeholder='Longitude'
               value={longitude}
@@ -333,6 +337,7 @@ function SpotForm({isNewSpot}) {
 
       <div className='submit container'>
         <button
+          className='submit-button'
           type='submit'
           onClick={handleSubmit}
           >
