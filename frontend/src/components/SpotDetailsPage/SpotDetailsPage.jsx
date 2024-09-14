@@ -12,8 +12,14 @@ import './SpotDetails.css';
 
 function SpotDetailsPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [reviewLabel, setReviewLabel] = useState('')
   const dispatch = useDispatch();
   const { spotId } = useParams();
+  const spot = useSelector(state => state.spots[spotId])
+  const user = useSelector(state => state.session.user)
+  let reviews = useSelector(state => state.reviews)
+  reviews = Object.values(reviews)
+  reviews.reverse();
 
   useEffect(() => {
     dispatch(getSpotDetails(spotId))
@@ -23,11 +29,10 @@ function SpotDetailsPage() {
     dispatch(resetReviews())
   }, [spotId, dispatch])
 
-  const spot = useSelector(state => state.spots[spotId])
-  const user = useSelector(state => state.session.user)
-  let reviews = useSelector(state => state.reviews)
-  reviews = Object.values(reviews)
-  reviews.reverse();
+  useEffect(() => {
+    if (reviews.length === 1) setReviewLabel('Review')
+    if (reviews.length > 1) setReviewLabel('Reviews')
+  })
 
   const hasReview = () => {
     if (!user) return false
@@ -44,6 +49,12 @@ function SpotDetailsPage() {
     if (hasReview()) return false;
 
     return true;
+  }
+
+  const reviewRating = () => {
+    return (<p>
+      {` ${spot.avgStarRating}`} &middot; {`${spot.numReviews}`} {`${reviewLabel}`}
+    </p>)
   }
 
   return (
@@ -67,9 +78,9 @@ function SpotDetailsPage() {
 
             <div className='reserve-container'>
               <p>{`$${spot.price} night`}</p>
-              <p>
                 <FaStar />
-                {spot.numReviews? ` ${spot.avgStarRating} | ${spot.numReviews} Reviews` : ` new`}
+              <p>
+                {spot.numReviews? reviewRating() : ` new`}
               </p>
               <button
                 id='reserve-button'
@@ -83,7 +94,7 @@ function SpotDetailsPage() {
           <div className='reviews-container'>
             <h2>
               <FaStar />
-              {spot.numReviews? ` ${spot.avgStarRating} | ${spot.numReviews} Reviews` : ` new`}
+              {spot.numReviews? reviewRating() : ` new`}
             </h2>
             {canPostReview()?
               <OpenModalButton
