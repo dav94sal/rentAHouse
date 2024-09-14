@@ -71,7 +71,12 @@ function SpotDetailsPage() {
                 <FaStar />
                 {spot.numReviews? ` ${spot.avgStarRating} | ${spot.numReviews}` : ` new`}
               </p>
-              <button id='reserve-button'>Reserve</button>
+              <button
+                id='reserve-button'
+                onClick={() => alert('Feature Coming Soon')}
+              >
+                Reserve
+              </button>
             </div>
           </div>
 
