@@ -60,13 +60,23 @@ function SpotForm({isNewSpot}) {
     return spotObj;
   }
 
+
+  const formatError = (type) => {
+    if (errors[type]) {
+      return errors[type].slice(0, 1).toUpperCase() + errors[type].slice(1)
+    }
+  }
+
   const validateData = (spotObj) => {
     const validations = {};
     const spotData = Object.entries(spotObj.spot);
 
     spotData.forEach(el => {
+      if (el[0] === 'description' && el[1].length < 30) {
+        return validations[el[0]] = "Description needs 30 or more characters"
+      }
       if (el[1] === '') {
-        validations[el[0]] = `${el[0]} is required`
+        return validations[el[0]] = `${el[0]} is required`
       }
     })
 
@@ -132,7 +142,7 @@ function SpotForm({isNewSpot}) {
         <label htmlFor='country'>
           Country
           <p className='errors'>
-            {hasSubmitted? errors?.country : ''}
+            {hasSubmitted? formatError('country') : ''}
           </p>
         </label>
         <input
@@ -146,7 +156,7 @@ function SpotForm({isNewSpot}) {
         <label>
           Street Address
           <p className='errors'>
-            {hasSubmitted? errors?.address : ''}
+            {hasSubmitted? formatError('address') : ''}
           </p>
         </label>
         <input
@@ -160,7 +170,7 @@ function SpotForm({isNewSpot}) {
           <label className='city'>
             City
             <p className='errors'>
-              {hasSubmitted? errors?.city : ''}
+              {hasSubmitted? formatError('city') : ''}
             </p>
             <input
               className='special-input'
@@ -175,7 +185,7 @@ function SpotForm({isNewSpot}) {
           <label>
             State
             <p className='errors'>
-              {hasSubmitted? errors?.state : ''}
+              {hasSubmitted? formatError('state') : ''}
             </p>
             <input
               className='special-input'
@@ -191,7 +201,7 @@ function SpotForm({isNewSpot}) {
           <label>
             Latitude
             <p className='errors'>
-              {hasSubmitted? errors?.lat : ''}
+              {hasSubmitted? formatError('lat') : ''}
             </p>
             <input
               className='special-input'
@@ -205,7 +215,7 @@ function SpotForm({isNewSpot}) {
           <label>
             Longitude
             <p className='errors'>
-              {hasSubmitted? errors?.lng : ''}
+              {hasSubmitted? formatError('lng') : ''}
             </p>
             <input
               className='special-input'
@@ -236,7 +246,7 @@ function SpotForm({isNewSpot}) {
         />
 
         <p className='errors'>
-          {hasSubmitted? errors?.description : ''}
+          {hasSubmitted? formatError('description') : ''}
         </p>
       </div>
 
@@ -256,7 +266,7 @@ function SpotForm({isNewSpot}) {
         />
 
         <p className='errors'>
-          {hasSubmitted? errors?.name : ''}
+          {hasSubmitted? formatError('name') : ''}
         </p>
       </div>
 
@@ -277,7 +287,7 @@ function SpotForm({isNewSpot}) {
         />
 
         <p className='errors'>
-          {hasSubmitted? errors?.price : ''}
+          {hasSubmitted? formatError('price') : ''}
         </p>
       </div>
 
