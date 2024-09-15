@@ -52,9 +52,14 @@ function SpotDetailsPage() {
   }
 
   const reviewRating = () => {
-    return (<p>
-      {` ${spot.avgStarRating}`} &middot; {`${spot.numReviews}`} {`${reviewLabel}`}
-    </p>)
+    return (
+      <>
+        {` ${spot.avgStarRating}`} &middot; {`${spot.numReviews}`} {`${reviewLabel}`}
+      </>
+    )
+    // return (<p>
+    //   {` ${spot.avgStarRating}`} &middot; {`${spot.numReviews}`} {`${reviewLabel}`}
+    // </p>)
   }
 
   return (
@@ -78,12 +83,17 @@ function SpotDetailsPage() {
 
             <div className='reserve-container'>
               <p>{`$${spot.price} night`}</p>
+
+              <div className='reserve-reviews-container'>
                 <FaStar />
-              <p>
-                {spot.numReviews? reviewRating() : ` new`}
-              </p>
+                <p>
+                  {spot.numReviews? reviewRating() : ` new`}
+                </p>
+              </div>
+
               <button
                 id='reserve-button'
+                className='submit-button'
                 onClick={() => alert('Feature Coming Soon')}
               >
                 Reserve
