@@ -1,3 +1,7 @@
+input {
+  width: 99%;
+}
+
 .location label {
   display: block;
   margin: unset;
@@ -32,7 +36,7 @@
 .city-state, .lat-lng {
   display: flex;
   justify-content: space-between;
-  max-width: 330px;
+
 }
 
 .submit {
@@ -47,12 +51,26 @@
   height: 27px;
 }
 
-.special-input {
-  width: unset;
+.lat-lng {
+  width: 100%;
+}
+
+.lat-lng label {
+  width: 47%;
 }
 
 .city {
   width: 60%;
+}
+
+.dollar-sign {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dollar-sign p {
+  margin: 8px;
+  margin-left: 0;
 }
 
 #comma {

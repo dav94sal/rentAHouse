@@ -24,6 +24,12 @@ input {
   border-radius: 3px;
 }
 
+textarea {
+  background-color: #E8F0FE;
+  border-radius: 3px;
+  border: 2px solid black;
+}
+
 h1 {
   font-size: 24pt bold;
 }

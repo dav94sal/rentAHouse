@@ -181,7 +181,7 @@ function SpotForm({isNewSpot}) {
               onChange={e => setCity(e.target.value)}
             />
           </label>
-          <p id='comma'>,</p>
+          <p id='comma'> , </p>
 
           <label>
             State
@@ -253,10 +253,10 @@ function SpotForm({isNewSpot}) {
       </div>
 
       <div className='create-name container'>
-        <h2>Create a name for your spot</h2>
+        <h2>Create a title for your spot</h2>
 
         <p>
-          Catch guests&apos; attention with a spot name that highlights what makes
+          Catch guests&apos; attention with a spot title that highlights what makes
           your place special..
         </p>
 
@@ -280,13 +280,15 @@ function SpotForm({isNewSpot}) {
           in search results.
         </p>
 
-        <p>$</p>
-        <input
-          type='text'
-          placeholder='Price per night (USD)'
-          value={price}
-          onChange={e => setPrice(e.target.value)}
-        />
+        <div className='dollar-sign'>
+          <p>$</p>
+          <input
+            type='text'
+            placeholder='Price per night (USD)'
+            value={price}
+            onChange={e => setPrice(e.target.value)}
+          />
+        </div>
 
         <p className='errors'>
           {hasSubmitted? formatError('price') : ''}
