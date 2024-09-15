@@ -44,17 +44,19 @@ function DeleteModal({type, id}) {
 
   return (
     <div className='delete-spot container'>
-      <h1>Confirm Delete</h1>
+      <h1 id="confirm-delete">Confirm Delete</h1>
       <p>
         {manageType().text}
       </p>
       <button
         onClick={handleYes}
+        className="submit-button big-but"
       >
         {`Yes (Delete ${manageType().type})`}
       </button>
       <button
         onClick={handleNo}
+        className="submit-button big-but disabled"
       >
         {`No (Keep ${manageType().type})`}
       </button>
