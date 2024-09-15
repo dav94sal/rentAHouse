@@ -1,7 +1,8 @@
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { restoreUser } from './store/session';
+import { getAllSpots, getUserSpots, resetUser } from './store/spots';
 import Navigation from './components/Navigation/Navigation';
 import HomePage from './components/HomePage';
 import SpotDetailsPage from './components/SpotDetailsPage/SpotDetailsPage';
@@ -10,11 +11,20 @@ import ManageSpots from './components/ManageSpots/ManageSpots';
 
 function Layout() {
   const [session, setSession] = useState(false);
+  const user = useSelector(state => state.session.user)
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(restoreUser()).then(() => setSession(true));
+    dispatch(getAllSpots())
   }, [dispatch])
+
+  useEffect(() => {
+    if (user) dispatch(getUserSpots())
+
+    dispatch(resetUser())
+  }, [user])
 
   return (
     <div className='page-wrapper'>

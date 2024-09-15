@@ -119,6 +119,7 @@ function SpotForm({isNewSpot}) {
         response = await dispatch(postSpot(spotObject)) :
         response = await dispatch(updateSpot(spotObject, spotId))
       console.log("response", response)
+
       navigate(`/spots/${response.id}`)
     }
 

@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 const POPULATE = 'spot/populate';
 const ADD_ONE = 'spot/add_one';
 const USER = 'spot/user';
+const RESET = 'spot/reset';
 const REMOVE = 'spot/remove';
 
 // action creators
@@ -24,6 +25,12 @@ export const userSpots = (spots) => {
   return {
     type: USER,
     spots
+  }
+}
+
+export const resetUser = () => {
+  return {
+    type: RESET
   }
 }
 
@@ -145,6 +152,11 @@ export default function spotReducer(state = initialState, action) {
         newState.current[spot.id] = spot;
       })
       return newState;
+    }
+    case RESET: {
+      const newState = {...state}
+      newState.current = {};
+      return newState
     }
     case REMOVE: {
       const newState = {...state, ...state.current};

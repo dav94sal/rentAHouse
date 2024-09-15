@@ -1,14 +1,21 @@
 import { useEffect, useState, useRef } from "react";
 import { LiaDrupal } from "react-icons/lia";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/session";
 import './Navigation.css'
 import { Link } from "react-router-dom";
 
 function ProfileButton({ user }) {
   const [showMenu, setShowMenu] = useState(false)
+  const [hasSpots, setHasSpots] = useState(false)
+  const userSpots = useSelector(state => state.spots.current)
   const dispatch = useDispatch();
   const ulref = useRef();
+
+  useEffect(() => {
+    const usersArray = Object.values(userSpots)
+    if (usersArray.length > 0) setHasSpots(true)
+  }, [userSpots])
 
   useEffect(() => {
     if (!showMenu) return;
@@ -26,6 +33,7 @@ function ProfileButton({ user }) {
   const handleLogout = e => {
     e.preventDefault();
     dispatch(logout())
+    // try to navigate from here
   }
 
   const toggleMenu = e => {
@@ -53,7 +61,11 @@ function ProfileButton({ user }) {
           className="manage-spots"
           onClick={toggleMenu}
         >
-          <Link to='/spots/current'>Manage Spots</Link>
+          {
+            hasSpots?
+            <Link to='/spots/current'>Manage Spots</Link> :
+            <Link to='/spots/new'>Create Spot</Link>
+          }
         </li>
         <li>
           <button onClick={handleLogout}>Logout</button>

@@ -1,16 +1,8 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { getAllSpots } from '../../store/spots';
+import { useSelector } from 'react-redux';
 import SpotTile from './SpotTile';
 import './HomePage.css';
 
 function HomePage() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getAllSpots());
-  }, [dispatch])
-
   const spots = useSelector(state => state.spots);
 
   const spotsArr = Object.values(spots);

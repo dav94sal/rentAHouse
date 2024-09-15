@@ -65,8 +65,8 @@ function SpotDetailsPage() {
           <p>{`${spot.city}, ${spot.state}, ${spot.country}`}</p>
 
           <div className='images-container'>
-            {spot.SpotImages.map((image) => (
-              <img src={image.url} key={image.id} />
+            {spot.SpotImages.map((image, i) => (
+              <img src={image.url} key={image.id} id={`img-${i + 1}`} />
             ))}
           </div>
 
