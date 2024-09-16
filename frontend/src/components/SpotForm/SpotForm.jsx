@@ -140,12 +140,14 @@ function SpotForm({isNewSpot}) {
       </div>
 
       <div className='location container'>
-        <label htmlFor='country'>
-          Country
+        <div className='location-label'>
+          <label htmlFor='country'>
+            {`Country `}
+          </label>
           <p className='errors'>
             {hasSubmitted? formatError('country') : ''}
           </p>
-        </label>
+        </div>
         <input
           name='country'
           type='text'
@@ -154,12 +156,14 @@ function SpotForm({isNewSpot}) {
           onChange={e => setCountry(e.target.value)}
         />
 
-        <label>
-          Street Address
+        <div className='location-label'>
+          <label>
+            Street Address
+          </label>
           <p className='errors'>
             {hasSubmitted? formatError('address') : ''}
           </p>
-        </label>
+        </div>
         <input
           type='text'
           placeholder='Address'
@@ -168,64 +172,72 @@ function SpotForm({isNewSpot}) {
         />
 
         <div className='city-state'>
-          <label className='city'>
-            City
+          <div className='location-label city-header'>
+            <label className='city'>
+              City
+            </label>
             <p className='errors'>
               {hasSubmitted? formatError('city') : ''}
             </p>
-            <input
-              className='special-input'
-              type='text'
-              placeholder='City'
-              value={city}
-              onChange={e => setCity(e.target.value)}
-            />
-          </label>
+          </div>
+          <input
+            className='special-input'
+            type='text'
+            placeholder='City'
+            value={city}
+            onChange={e => setCity(e.target.value)}
+          />
           <p id='comma'> , </p>
 
-          <label>
-            State
+          <div className='location-label state'>
+            <label >
+              State
+            </label>
             <p className='errors'>
               {hasSubmitted? formatError('state') : ''}
             </p>
-            <input
-              className='special-input'
-              type='text'
-              placeholder='State'
-              value={state}
-              onChange={e => setState(e.target.value)}
-            />
-          </label>
+          </div>
+          <input
+            className='special-input state-input'
+            type='text'
+            placeholder='State'
+            value={state}
+            onChange={e => setState(e.target.value)}
+          />
         </div>
 
         <div className='lat-lng'>
-          <label>
-            Latitude
+          <div className='location-label'>
+            <label>
+              Latitude
+            </label>
             <p className='errors'>
               {hasSubmitted? formatError('lat') : ''}
             </p>
-            <input
-              className='special-input'
-              type='text'
-              placeholder='Latitude'
-              value={latitude}
-              onChange={e => setLatitude(e.target.value)}
-            />
-          </label>
+          </div>
+          <input
+            className='special-input lat-input'
+            type='text'
+            placeholder='Latitude'
+            value={latitude}
+            onChange={e => setLatitude(e.target.value)}
+          />
           <p id='comma'>,</p>
-          <label>
-            Longitude
+          <div className='location-label state'>
+            <label>
+              Longitude
+            </label>
             <p className='errors'>
               {hasSubmitted? formatError('lng') : ''}
             </p>
-            <input
-              className='special-input'
-              type='text'
-              placeholder='Longitude'
-              value={longitude}
-              onChange={e => setLongitude(e.target.value)}
-            />
-          </label>
+          </div>
+          <input
+            className='special-input'
+            type='text'
+            placeholder='Longitude'
+            value={longitude}
+            onChange={e => setLongitude(e.target.value)}
+          />
         </div>
       </div>
 

@@ -24,7 +24,7 @@ function Layout() {
     if (user) dispatch(getUserSpots())
 
     dispatch(resetUser())
-  }, [user])
+  }, [user, dispatch])
 
   return (
     <div className='page-wrapper'>

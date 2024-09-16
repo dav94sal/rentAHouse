@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function Reviews({ review }) {
   // const [isLoading, setIsLoading] = useState(false);

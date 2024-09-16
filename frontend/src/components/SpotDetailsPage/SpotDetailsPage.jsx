@@ -32,7 +32,7 @@ function SpotDetailsPage() {
   useEffect(() => {
     if (reviews.length === 1) setReviewLabel('Review')
     if (reviews.length > 1) setReviewLabel('Reviews')
-  })
+  }, [reviews])
 
   const hasReview = () => {
     if (!user) return false
