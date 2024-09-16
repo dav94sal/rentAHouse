@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet, RouterProvider, useNavigate } from 'react-router-dom'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { restoreUser, getUserSpots } from './store/session';
@@ -11,8 +11,8 @@ import ManageSpots from './components/ManageSpots/ManageSpots';
 import { useSession } from './context/sessionContext';
 
 function Layout() {
-  const { session, setSession, userExists, setHasSpots } = useSession();
-  const navigate = useNavigate('/');
+  const { session, setSession, setHasSpots } = useSession();
+  // const navigate = useNavigate('/');
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -33,7 +33,7 @@ function Layout() {
   useEffect(() => {
     const spotsArr = Object.values(spots);
     if (spotsArr.length > 0) setHasSpots(true)
-  }, [spots])
+  }, [spots, setHasSpots])
 
   // useEffect(() => {
   //   if (userExists) dispatch(getUserSpots())

@@ -6,12 +6,12 @@ import LoginFormModal from '../LoginFormPage';
 import SignupFormModal from '../SignupFormPage';
 import ProfileButton from './ProfileButton';
 import './Navigation.css'
-import { useEffect } from 'react';
-import { useSession } from '../../context/sessionContext';
+// import { useEffect } from 'react';
+// import { useSession } from '../../context/sessionContext';
 
 function Navigation() {
   const sessionUser = useSelector(state => state.session.user);
-  const { userExists } = useSession();
+  // const { userExists } = useSession();
 
   // useEffect(() => {
   //   console.log(sessionUser)

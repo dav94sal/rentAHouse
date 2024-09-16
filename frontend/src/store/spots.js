@@ -2,7 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const POPULATE = 'spot/populate';
 const ADD_ONE = 'spot/add_one';
-const RESET = 'spot/reset';
+// const RESET = 'spot/reset';
 const REMOVE = 'spot/remove';
 
 // action creators
