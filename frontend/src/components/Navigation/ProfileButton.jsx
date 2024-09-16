@@ -19,11 +19,11 @@ function ProfileButton({ user }) {
   // useEffect(() => {
   //   console.log(hasSpots)
   // }, [hasSpots])
+  const usersArray = Object.values(userSpots)
 
   useEffect(() => {
-    const usersArray = Object.values(userSpots)
     if (usersArray.length > 0) setHasSpots(true)
-  }, [hasSpots, userSpots, setHasSpots])
+  }, [hasSpots, usersArray, setHasSpots])
 
   useEffect(() => {
     if (!showMenu) return;

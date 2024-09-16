@@ -9,9 +9,7 @@ import './ManageSpots.css'
 
 function ManageSpots () {
   const [isLoading, setIsLoading] = useState(false);
-  // const [reload, setReload] = useState(false);
   const dispatch = useDispatch();
-  // const revalidator = useRevalidator();
 
   useEffect(() => {
     dispatch(getUserSpots())
@@ -20,19 +18,9 @@ function ManageSpots () {
     setIsLoading(false)
   }, [dispatch]);
 
-    const userSpots = useSelector(state => state.session.spots)
-    const spotArr = Object.values(userSpots);
-    spotArr.reverse();
-
-  // useEffect(() => {
-  //   if (reload) {
-  //     revalidator.revalidate()
-  //   }
-  // }, [reload, revalidator])
-  // const handleModalClose = () => {
-  //   // setIsLoading(false)
-  //   dispatch(getUserSpots())
-  // }
+  const userSpots = useSelector(state => state.session.spots)
+  const spotArr = Object.values(userSpots);
+  spotArr.reverse();
 
   return (
     <>
