@@ -121,7 +121,7 @@ function SpotForm({isNewSpot}) {
       isNewSpot?
         response = await dispatch(postSpot(spotObject)) :
         response = await dispatch(updateSpot(spotObject, spotId))
-      console.log("response", response)
+      // console.log("response", response)
       await dispatch(addUserSpot(response))
       await dispatch(getAllSpots())
       setHasSpots(true)

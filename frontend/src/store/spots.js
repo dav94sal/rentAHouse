@@ -68,12 +68,14 @@ export const postSpot = (spotObj) => async dispatch => {
       const images = Object.values(spotObj.images)
 
       images.forEach(async img => {
+        if (img.preview) newSpot.previewImage = img.url;
         await csrfFetch(`/api/spots/${newSpot.id}/images`, {
           method: 'POST',
           body: JSON.stringify({ ...img })
         })
       });
 
+      console.log(newSpot)
       return newSpot;
     }
   } catch (error) {

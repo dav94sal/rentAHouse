@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUserSpots } from "../../store/session";
@@ -24,8 +24,8 @@ function ManageSpots () {
   spotArr.reverse();
 
   // useEffect(() => {
-  //   if(!isLoading) {}
-  // })
+  //   console.log(spotArr)
+  // }, [spotArr])
 
   return (
     <>
