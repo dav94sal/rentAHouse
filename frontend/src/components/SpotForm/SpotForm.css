@@ -1,7 +1,20 @@
+input {
+  width: 98%;
+}
+
 .location label {
   display: block;
   margin: unset;
   text-align: start;
+}
+
+.location-label {
+  display: flex;
+  grid-row-start: 1;
+}
+
+.location-label label {
+  padding-right: 4px;
 }
 
 .container {
@@ -29,9 +42,25 @@
   border-bottom: unset;
 }
 
-.city-state, .lat-lng {
+/* .city-state, .lat-lng {
   display: flex;
   justify-content: space-between;
+} */
+
+.special-input {
+  grid-row-start: 2;
+}
+
+.city-state {
+  display: grid;
+  grid-template-columns: 55% 5% 40%;
+  grid-template-rows: 30% 70%;
+}
+
+.lat-lng {
+  display: grid;
+  grid-template-columns: 47% 5% 48%;
+  grid-template-rows: 30% 70%;
 }
 
 .submit {
@@ -42,17 +71,38 @@
 }
 
 .submit button {
-  border-radius: 0;
-  background-color: orangered;
-  color: white;
   width: 103px;
   height: 27px;
-  box-shadow: 3px 3px black;
+}
+
+.dollar-sign {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dollar-sign p {
+  margin: 8px;
+  margin-left: 0;
+}
+
+.state {
+  grid-column-start: 3;
+}
+
+.state-input {
+  width: 95%;
+}
+
+.location-label label {
+  margin: unset;
 }
 
 #comma {
   display: flex;
+  justify-content: center;
   align-items: end;
+  grid-column-start: 2;
+  grid-row-start: 2;
 }
 
 #input-description {

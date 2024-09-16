@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import App from './App';
-import './index.css';
-import configureStore from './store';
+import { ModalProvider, Modal } from './context/Modal';
 import { restoreCSRF, csrfFetch } from './store/csrf';
+import SessionProvider from './context/sessionContext';
+import App from './App';
+import configureStore from './store';
 import * as sessionActions from './store/session';
 import * as spotActions from './store/spots'
 import * as reviewActions from './store/reviews'
-import { ModalProvider, Modal } from './context/Modal';
+import './index.css';
 
 const store = configureStore();
 
@@ -24,11 +25,13 @@ if (process.env.NODE_ENV !== 'production') {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ModalProvider>
-      <Provider store={store}>
-        <App />
-        <Modal />
-      </Provider>
-    </ModalProvider>
+    <SessionProvider>
+      <ModalProvider>
+        <Provider store={store}>
+          <App />
+          <Modal />
+        </Provider>
+      </ModalProvider>
+    </SessionProvider>
   </React.StrictMode>
 );

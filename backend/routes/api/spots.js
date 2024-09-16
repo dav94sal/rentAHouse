@@ -55,9 +55,11 @@ router.get('/:spotId', async (req,res,next) => {
 
     spot = spot.toJSON();
     spot.numReviews = reviews.length;
-    spot.avgStarRating = avgStarRating;
     spot.SpotImages = images;
     spot.Owner = owner;
+
+    if (avgStarRating) spot.avgStarRating = avgStarRating.toFixed(1);
+    else spot.avgStarRating = avgStarRating;
 
     res.json(spot)
   } else {
@@ -187,7 +189,11 @@ router.get('/', validateQueryParams, async (req,res,next) => {
     ) / reviews.length;
 
     spot = spot.toJSON();
-    spot.avgRating = avgRating;
+
+    if (avgRating) spot.avgRating = avgRating.toFixed(1);
+    else spot.avgRating = avgRating;
+
+    // console.log(spot.avgRating)
 
     if (image) {
       image = image.toJSON();

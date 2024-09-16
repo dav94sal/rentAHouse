@@ -1,0 +1,19 @@
+.delete-spot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+}
+
+#confirm-delete {
+  margin: 10px;
+}
+
+.delete-spot p {
+  padding: 10px 25px;
+
+}
+
+.delete-spot button {
+  margin: 7px;
+}

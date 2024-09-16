@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getUserSpots, postSpot, updateSpot } from '../../store/spots';
+import { postSpot, updateSpot } from '../../store/spots';
+import { getUserSpots } from '../../store/session';
 import './SpotForm.css';
+import { useSession } from '../../context/sessionContext';
 
 function SpotForm({isNewSpot}) {
   const { spotId } = useParams()
   const currSpot = useSelector(state => state.spots.current[spotId]);
+  const { setHasSpots } = useSession();
   // const [isLoading, setIsLoading] = useState();
   const [country, setCountry] = useState(currSpot? currSpot.country : '');
   const [address, setAddress] = useState(currSpot? currSpot.address : '');
@@ -60,13 +63,23 @@ function SpotForm({isNewSpot}) {
     return spotObj;
   }
 
+
+  const formatError = (type) => {
+    if (errors[type]) {
+      return errors[type].slice(0, 1).toUpperCase() + errors[type].slice(1)
+    }
+  }
+
   const validateData = (spotObj) => {
     const validations = {};
     const spotData = Object.entries(spotObj.spot);
 
     spotData.forEach(el => {
+      if (el[0] === 'description' && el[1].length < 30) {
+        return validations[el[0]] = "Description needs 30 or more characters"
+      }
       if (el[1] === '') {
-        validations[el[0]] = `${el[0]} is required`
+        return validations[el[0]] = `${el[0]} is required`
       }
     })
 
@@ -108,7 +121,8 @@ function SpotForm({isNewSpot}) {
       isNewSpot?
         response = await dispatch(postSpot(spotObject)) :
         response = await dispatch(updateSpot(spotObject, spotId))
-      console.log("response", response)
+      // console.log("response", response)
+      setHasSpots(true)
       navigate(`/spots/${response.id}`)
     }
 
@@ -129,12 +143,14 @@ function SpotForm({isNewSpot}) {
       </div>
 
       <div className='location container'>
-        <label htmlFor='country'>
-          Country
+        <div className='location-label'>
+          <label htmlFor='country'>
+            {`Country `}
+          </label>
           <p className='errors'>
-            {hasSubmitted? errors?.country : ''}
+            {hasSubmitted? formatError('country') : ''}
           </p>
-        </label>
+        </div>
         <input
           name='country'
           type='text'
@@ -143,12 +159,14 @@ function SpotForm({isNewSpot}) {
           onChange={e => setCountry(e.target.value)}
         />
 
-        <label>
-          Street Address
+        <div className='location-label'>
+          <label>
+            Street Address
+          </label>
           <p className='errors'>
-            {hasSubmitted? errors?.address : ''}
+            {hasSubmitted? formatError('address') : ''}
           </p>
-        </label>
+        </div>
         <input
           type='text'
           placeholder='Address'
@@ -157,60 +175,72 @@ function SpotForm({isNewSpot}) {
         />
 
         <div className='city-state'>
-          <label>
-            City
+          <div className='location-label city-header'>
+            <label className='city'>
+              City
+            </label>
             <p className='errors'>
-              {hasSubmitted? errors?.city : ''}
+              {hasSubmitted? formatError('city') : ''}
             </p>
-            <input
-              type='text'
-              placeholder='City'
-              value={city}
-              onChange={e => setCity(e.target.value)}
-            />
-          </label>
-          <p id='comma'>,</p>
+          </div>
+          <input
+            className='special-input'
+            type='text'
+            placeholder='City'
+            value={city}
+            onChange={e => setCity(e.target.value)}
+          />
+          <p id='comma'> , </p>
 
-          <label>
-            State
+          <div className='location-label state'>
+            <label >
+              State
+            </label>
             <p className='errors'>
-              {hasSubmitted? errors?.state : ''}
+              {hasSubmitted? formatError('state') : ''}
             </p>
-            <input
-              type='text'
-              placeholder='State'
-              value={state}
-              onChange={e => setState(e.target.value)}
-            />
-          </label>
+          </div>
+          <input
+            className='special-input state-input'
+            type='text'
+            placeholder='State'
+            value={state}
+            onChange={e => setState(e.target.value)}
+          />
         </div>
 
         <div className='lat-lng'>
-          <label>
-            Latitude
+          <div className='location-label'>
+            <label>
+              Latitude
+            </label>
             <p className='errors'>
-              {hasSubmitted? errors?.lat : ''}
+              {hasSubmitted? formatError('lat') : ''}
             </p>
-            <input
-              type='text'
-              placeholder='Latitude'
-              value={latitude}
-              onChange={e => setLatitude(e.target.value)}
-            />
-          </label>
+          </div>
+          <input
+            className='special-input lat-input'
+            type='text'
+            placeholder='Latitude'
+            value={latitude}
+            onChange={e => setLatitude(e.target.value)}
+          />
           <p id='comma'>,</p>
-          <label>
-            Longitude
+          <div className='location-label state'>
+            <label>
+              Longitude
+            </label>
             <p className='errors'>
-              {hasSubmitted? errors?.lng : ''}
+              {hasSubmitted? formatError('lng') : ''}
             </p>
-            <input
-              type='text'
-              placeholder='Longitude'
-              value={longitude}
-              onChange={e => setLongitude(e.target.value)}
-            />
-          </label>
+          </div>
+          <input
+            className='special-input'
+            type='text'
+            placeholder='Longitude'
+            value={longitude}
+            onChange={e => setLongitude(e.target.value)}
+          />
         </div>
       </div>
 
@@ -223,24 +253,25 @@ function SpotForm({isNewSpot}) {
           and what you love about the neighborhood.
         </p>
 
-        <input
+        <textarea
           id='input-description'
           type='textarea'
           placeholder='Please write at least 30 characters'
           value={description}
           onChange={e => setDescription(e.target.value)}
-        />
+        >
+        </textarea>
 
         <p className='errors'>
-          {hasSubmitted? errors?.description : ''}
+          {hasSubmitted? formatError('description') : ''}
         </p>
       </div>
 
       <div className='create-name container'>
-        <h2>Create a name for your spot</h2>
+        <h2>Create a title for your spot</h2>
 
         <p>
-          Catch guests&apos; attention with a spot name that highlights what makes
+          Catch guests&apos; attention with a spot title that highlights what makes
           your place special..
         </p>
 
@@ -252,7 +283,7 @@ function SpotForm({isNewSpot}) {
         />
 
         <p className='errors'>
-          {hasSubmitted? errors?.name : ''}
+          {hasSubmitted? formatError('name') : ''}
         </p>
       </div>
 
@@ -264,16 +295,18 @@ function SpotForm({isNewSpot}) {
           in search results.
         </p>
 
-        <p>$</p>
-        <input
-          type='text'
-          placeholder='Price per night (USD)'
-          value={price}
-          onChange={e => setPrice(e.target.value)}
-        />
+        <div className='dollar-sign'>
+          <p>$</p>
+          <input
+            type='text'
+            placeholder='Price per night (USD)'
+            value={price}
+            onChange={e => setPrice(e.target.value)}
+          />
+        </div>
 
         <p className='errors'>
-          {hasSubmitted? errors?.price : ''}
+          {hasSubmitted? formatError('price') : ''}
         </p>
       </div>
 
@@ -333,6 +366,7 @@ function SpotForm({isNewSpot}) {
 
       <div className='submit container'>
         <button
+          className='submit-button'
           type='submit'
           onClick={handleSubmit}
           >

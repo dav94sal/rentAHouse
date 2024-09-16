@@ -1,32 +1,34 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useRevalidator } from "react-router-dom";
-import { getUserSpots } from "../../store/spots";
+import { Link } from "react-router-dom";
+import { getUserSpots } from "../../store/session";
 import SpotTile from "../HomePage/SpotTile";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
-import DeleteSpotModal from "../DeleteSpotModal/DeleteSpotModal";
+import DeleteModal from "../DeleteModal/DeleteModal";
 import './ManageSpots.css'
 
 function ManageSpots () {
   const [isLoading, setIsLoading] = useState(false);
-  const [reload, setReload] = useState(false);
+  // const [reload, setReload] = useState(false);
   const dispatch = useDispatch();
-  const revalidator = useRevalidator();
+  // const revalidator = useRevalidator();
 
   useEffect(() => {
     dispatch(getUserSpots())
     .then(() => setIsLoading(true))
+
+    setIsLoading(false)
   }, [dispatch]);
 
-    const userSpots = useSelector(state => state.spots.current)
+    const userSpots = useSelector(state => state.session.spots)
     const spotArr = Object.values(userSpots);
     spotArr.reverse();
 
-  useEffect(() => {
-    if (reload) {
-      revalidator.revalidate()
-    }
-  }, [reload, revalidator])
+  // useEffect(() => {
+  //   if (reload) {
+  //     revalidator.revalidate()
+  //   }
+  // }, [reload, revalidator])
   // const handleModalClose = () => {
   //   // setIsLoading(false)
   //   dispatch(getUserSpots())
@@ -53,8 +55,7 @@ function ManageSpots () {
 
                 <OpenModalButton
                   buttonText='Delete'
-                  modalComponenet={<DeleteSpotModal spotId={spot.id}/>}
-                  onModalClose={() => setReload(true)}
+                  modalComponenet={<DeleteModal type={'spot'} id={spot.id}/>}
                 />
               </div>
             </div>

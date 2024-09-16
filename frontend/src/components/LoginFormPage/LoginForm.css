@@ -1,16 +1,31 @@
-.form-container, form, label {
+.form-container, .input-container, form, label {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-container h1 {
+  margin: 10px 0;
 }
 
 .form-container {
-  margin-top: 33%;
+  width: 400px;
+  /* height: 300px; */
+}
+
+.demo-user-button {
+  background-color: white;
+  border: unset;
+  text-decoration: underline;
+  font-size: 16px;
+  margin: 20px;
 }
 
 input {
   margin-top: 5px;
+  width: 340px;
 }
 
 label {

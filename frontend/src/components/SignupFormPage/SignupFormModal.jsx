@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { signup } from '../../store/session';
 import { useModal } from '../../context/Modal';
@@ -12,8 +12,19 @@ function SignupFormModal() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({})
+  const [validButton, setValidButton] = useState(false);
   const dispatch = useDispatch();
-  const { closeModal } = useModal()
+  const { closeModal } = useModal();
+
+  useEffect(() => {
+    if (username.length > 3 &&
+      password.length > 5 &&
+      confirmPassword.length > 5 &&
+      email && firstName && lastName
+    ) {
+      setValidButton(true);
+    } else setValidButton(false)
+  }, [username, password, confirmPassword, email, firstName, lastName])
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -41,83 +52,79 @@ function SignupFormModal() {
   }
 
   return (
-    <div className='signup-form-container'>
+    <div className='form-container'>
       <h1>Signup</h1>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="username">
-          Username
+        <div className='input-container'>
           <input
             type="text"
             name="username"
             value={username}
+            placeholder='Username'
             onChange={e => setUsername(e.target.value)}
             />
-        </label>
 
-          {errors.username && <p>{errors.username}</p>}
+          {errors.username && <p className='errors'>{errors.username}</p>}
 
-        <label htmlFor="email">
-          Email
           <input
             type="email"
             name="email"
             value={email}
+            placeholder='Email'
             onChange={e => setEmail(e.target.value)}
-            />
-        </label>
+          />
 
-          {errors.email && <p>{errors.email}</p>}
+          {errors.email && <p className='errors'>{errors.email}</p>}
 
-        <label htmlFor="firstName">
-          First Name
           <input
             type="text"
             name="firstName"
             value={firstName}
+            placeholder='First Name'
             onChange={e => setFirstName(e.target.value)}
             />
-        </label>
 
-          {errors.firstName && <p>{errors.firstName}</p>}
+          {errors.firstName && <p className='errors'>{errors.firstName}</p>}
 
-        <label htmlFor="lastName">
-          Last Name
           <input
             type="text"
             name="lastName"
             value={lastName}
+            placeholder='Last Name'
             onChange={e => setLastName(e.target.value)}
             />
-        </label>
 
-         {errors.lastName && <p>{errors.lastName}</p>}
+          {errors.lastName && <p className='errors'>{errors.lastName}</p>}
 
-        <label htmlFor="password">
-          Enter password
           <input
             type="password"
             name="password"
             value={password}
+            placeholder='Enter password'
             onChange={e => setPassword(e.target.value)}
             />
-        </label>
 
-          {errors.password && <p>{errors.password}</p>}
+          {errors.password && <p className='errors'>{errors.password}</p>}
 
-        <label htmlFor="confirm-password">
-          Confirm password
           <input
             type="password"
             name="confirm-password"
             value={confirmPassword}
+            placeholder='Confirm password'
             onChange={e => setConfirmPassword(e.target.value)}
             />
-        </label>
 
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+          {errors.confirmPassword && <p className='errors'>{errors.confirmPassword}</p>}
+        </div>
 
-        <button type="submit">signup</button>
+        <button
+          className={`submit-button big-but ${validButton? '' : 'disabled'}`}
+          type="submit"
+          disabled={!validButton}
+        >
+          signup
+        </button>
       </form>
     </div>
   )
