@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getUserSpots, postSpot, updateSpot } from '../../store/spots';
+import { postSpot, updateSpot } from '../../store/spots';
+import { getUserSpots } from '../../store/session';
 import './SpotForm.css';
+import { useSession } from '../../context/sessionContext';
 
 function SpotForm({isNewSpot}) {
   const { spotId } = useParams()
   const currSpot = useSelector(state => state.spots.current[spotId]);
+  const { setHasSpots } = useSession();
   // const [isLoading, setIsLoading] = useState();
   const [country, setCountry] = useState(currSpot? currSpot.country : '');
   const [address, setAddress] = useState(currSpot? currSpot.address : '');
@@ -118,8 +121,8 @@ function SpotForm({isNewSpot}) {
       isNewSpot?
         response = await dispatch(postSpot(spotObject)) :
         response = await dispatch(updateSpot(spotObject, spotId))
-      console.log("response", response)
-
+      // console.log("response", response)
+      setHasSpots(true)
       navigate(`/spots/${response.id}`)
     }
 

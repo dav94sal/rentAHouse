@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux'
-import { login } from "../../store/session";
+import { getUserSpots, login } from "../../store/session";
 import { useModal } from "../../context/Modal";
+import { useSession } from "../../context/sessionContext";
 import './LoginForm.css';
 
 function LoginFormModal() {
@@ -10,6 +11,7 @@ function LoginFormModal() {
   const [errors, setErrors] = useState({});
   const [validButton, setValidButton] = useState(false);
   const { closeModal } = useModal();
+  const { setUserExists, setHasSpots } = useSession();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,13 +28,22 @@ function LoginFormModal() {
       password
     }
 
-    return dispatch(login(user))
-      .then(closeModal)
+    const response = await dispatch(login(user))
       .catch(async (res) => {
         const data = await res.json();
         if (data?.errors) setErrors(data.errors)
       }
     )
+
+    if (response.ok) {
+      setUserExists(true);
+      const res = dispatch(getUserSpots());
+      if (res.ok) {
+        let spots = await res.json()
+        spots.length? setHasSpots(true) : setHasSpots(false)
+      }
+      closeModal();
+    }
   }
 
   const handleClick = e => {

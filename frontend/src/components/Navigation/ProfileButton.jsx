@@ -2,20 +2,28 @@ import { useEffect, useState, useRef } from "react";
 import { LiaDrupal } from "react-icons/lia";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/session";
+// import { resetUser } from "../../store/session";
 import './Navigation.css'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+// import { useSession } from "../../context/sessionContext";
 
 function ProfileButton({ user }) {
-  const [showMenu, setShowMenu] = useState(false)
-  const [hasSpots, setHasSpots] = useState(false)
-  const userSpots = useSelector(state => state.spots.current)
+  const [showMenu, setShowMenu] = useState(false);
+  const [hasSpots, setHasSpots] = useState(false);
+  // const { hasSpots, setHasSpots } = useSession();
+  const userSpots = useSelector(state => state.session.spots)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const ulref = useRef();
+
+  // useEffect(() => {
+  //   console.log(userSpots)
+  // }, [userSpots])
 
   useEffect(() => {
     const usersArray = Object.values(userSpots)
     if (usersArray.length > 0) setHasSpots(true)
-  }, [userSpots])
+  }, [userSpots, setHasSpots])
 
   useEffect(() => {
     if (!showMenu) return;
@@ -32,8 +40,9 @@ function ProfileButton({ user }) {
 
   const handleLogout = e => {
     e.preventDefault();
-    dispatch(logout())
-    // try to navigate from here
+    dispatch(logout());
+    // dispatch(resetUser());
+    navigate('/')
   }
 
   const toggleMenu = e => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useRevalidator } from "react-router-dom";
-import { getUserSpots } from "../../store/spots";
+import { Link } from "react-router-dom";
+import { getUserSpots } from "../../store/session";
 import SpotTile from "../HomePage/SpotTile";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import DeleteModal from "../DeleteModal/DeleteModal";
@@ -16,9 +16,11 @@ function ManageSpots () {
   useEffect(() => {
     dispatch(getUserSpots())
     .then(() => setIsLoading(true))
+
+    setIsLoading(false)
   }, [dispatch]);
 
-    const userSpots = useSelector(state => state.spots.current)
+    const userSpots = useSelector(state => state.session.spots)
     const spotArr = Object.values(userSpots);
     spotArr.reverse();
 
@@ -54,7 +56,6 @@ function ManageSpots () {
                 <OpenModalButton
                   buttonText='Delete'
                   modalComponenet={<DeleteModal type={'spot'} id={spot.id}/>}
-                  onModalClose={() => setReload(true)}
                 />
               </div>
             </div>

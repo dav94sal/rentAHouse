@@ -2,7 +2,6 @@ import { csrfFetch } from "./csrf";
 
 const POPULATE = 'spot/populate';
 const ADD_ONE = 'spot/add_one';
-const USER = 'spot/user';
 const RESET = 'spot/reset';
 const REMOVE = 'spot/remove';
 
@@ -21,18 +20,11 @@ export const addSpot = (newSpot) => {
   }
 }
 
-export const userSpots = (spots) => {
-  return {
-    type: USER,
-    spots
-  }
-}
-
-export const resetUser = () => {
-  return {
-    type: RESET
-  }
-}
+// export const resetUser = () => {
+//   return {
+//     type: RESET
+//   }
+// }
 
 export const removeSpot = (spotId) => {
   return {
@@ -58,15 +50,6 @@ export const getSpotDetails = (spotId) => async dispatch => {
     const spot = await response.json();
     dispatch(addSpot(spot));
     return spot;
-  }
-}
-
-export const getUserSpots = () => async dispatch => {
-  const response = await csrfFetch('/api/spots/current');
-
-  if (response.ok) {
-    const spots = await response.json();
-    dispatch(userSpots(spots.Spots))
   }
 }
 
@@ -135,29 +118,24 @@ const initialState = {current: {}};
 export default function spotReducer(state = initialState, action) {
   switch (action.type) {
     case POPULATE: {
-      const newState = {...state, ...state.current};
+      const newState = {...state};
       action.allSpots.Spots.map((spot) => {
         newState[spot.id] = spot
       })
       return newState;
     }
     case ADD_ONE: {
-      const newState = {...state, ...state.current};
-      newState[action.newSpot.id] = action.newSpot;
-      return newState;
-    }
-    case USER: {
       const newState = {...state};
-      action.spots.map(spot => {
-        newState.current[spot.id] = spot;
-      })
+      // if (!newState[action.newSpot.id]) newState[action.newSpot.id] = action.newSpot
+      newState.current = action.newSpot;
+      // newState[action.newSpot.id] = action.newSpot;
       return newState;
     }
-    case RESET: {
-      const newState = {...state}
-      newState.current = {};
-      return newState
-    }
+    // case RESET: {
+    //   const newState = {...state}
+    //   newState.current = {};
+    //   return newState
+    // }
     case REMOVE: {
       const newState = {...state, ...state.current};
       delete newState[action.spotId];

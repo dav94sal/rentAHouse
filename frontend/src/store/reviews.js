@@ -39,6 +39,7 @@ export const getSpotReviews = spotId => async dispatch => {
 
   if (response.ok) {
     const reviews = await response.json();
+    // console.log(reviews)
     dispatch(addSpotReviews(reviews))
   }
 }
@@ -73,9 +74,10 @@ export default function reviewReducer(state = initialState, action) {
     case ADD_REVIEWS: {
       const newState = {...state}
       action.reviews.Reviews.map(review => {
-        newState[review.id] = review;
+        console.log(review);
+        newState[review.id] = {...review};
       })
-      return newState;
+      return {...newState};
     }
     case ADD_ONE: {
       const newState = {...state}

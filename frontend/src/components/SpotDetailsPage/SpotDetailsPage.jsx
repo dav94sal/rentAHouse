@@ -15,11 +15,11 @@ function SpotDetailsPage() {
   const [reviewLabel, setReviewLabel] = useState('')
   const dispatch = useDispatch();
   const { spotId } = useParams();
-  const spot = useSelector(state => state.spots[spotId])
+  const spot = useSelector(state => state.spots.current)
   const user = useSelector(state => state.session.user)
-  let reviews = useSelector(state => state.reviews)
-  reviews = Object.values(reviews)
-  reviews.reverse();
+  const reviews = useSelector(state => state.reviews)
+  const reviewsArr = Object.values(reviews)
+  reviewsArr.reverse();
 
   useEffect(() => {
     dispatch(getSpotDetails(spotId))
@@ -30,14 +30,14 @@ function SpotDetailsPage() {
   }, [spotId, dispatch])
 
   useEffect(() => {
-    if (reviews.length === 1) setReviewLabel('Review')
-    if (reviews.length > 1) setReviewLabel('Reviews')
-  }, [reviews])
+    if (reviewsArr.length === 1) setReviewLabel('Review')
+    if (reviewsArr.length > 1) setReviewLabel('Reviews')
+  }, [reviewsArr])
 
   const hasReview = () => {
     if (!user) return false
-    for (let i = 0; i < reviews.length; i++) {
-      const rev = reviews[i];
+    for (let i = 0; i < reviewsArr.length; i++) {
+      const rev = reviewsArr[i];
       if (rev.userId === user.id) return rev.id
     }
     return false;
@@ -57,16 +57,13 @@ function SpotDetailsPage() {
         {` ${spot.avgStarRating}`} &middot; {`${spot.numReviews}`} {`${reviewLabel}`}
       </>
     )
-    // return (<p>
-    //   {` ${spot.avgStarRating}`} &middot; {`${spot.numReviews}`} {`${reviewLabel}`}
-    // </p>)
   }
 
   return (
     <div className='spot-details-container'>
       {isLoading &&
         <>
-          <h1>{spot?.name}</h1>
+          <h1>{spot.name}</h1>
           <p>{`${spot.city}, ${spot.state}, ${spot.country}`}</p>
 
           <div className='images-container'>
@@ -112,8 +109,8 @@ function SpotDetailsPage() {
                 modalComponenet={<PostReviewModal spotId={spotId}/>}
               /> : ''
             }
-            {reviews.length?
-              reviews.map(review => (
+            {reviewsArr.length?
+              reviewsArr.map(review => (
                 <div key={`review: ${review.id}`}>
                   <Reviews review={review} />
                   {hasReview() && hasReview() === review.id?

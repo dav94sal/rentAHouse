@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
+const USER_SPOTS = 'session/userSpots';
 
 export const setUser = (user) => {
   return {
@@ -16,6 +17,13 @@ export const removeUser = () => {
   }
 }
 
+export const userSpots = (spots) => {
+  return {
+    type: USER_SPOTS,
+    spots
+  }
+}
+
 export const login = (credentials) => async dispatch => {
   const response = await csrfFetch('/api/session', {
     method: 'POST',
@@ -25,6 +33,7 @@ export const login = (credentials) => async dispatch => {
   if (response.ok) {
     const user = await response.json();
     dispatch(setUser(user))
+    dispatch(getUserSpots())
     return response
   }
 }
@@ -62,18 +71,37 @@ export const restoreUser = () => async dispatch => {
   }
 }
 
-const initialState = { user: null }
+export const getUserSpots = () => async dispatch => {
+  const response = await csrfFetch('/api/spots/current');
+
+  if (response.ok) {
+    const spots = await response.json();
+    dispatch(userSpots(spots.Spots))
+  }
+
+  return response;
+}
+
+const initialState = { user: null, spots: {} }
 
 export default function sessionReducer (state = initialState, action) {
   switch (action.type) {
     case SET_USER:{
       const newState = {...state};
-      newState.user = action.user;
-      return {...action.user};
+      newState.user = action.user.user;
+      return newState;
+    }
+    case USER_SPOTS: {
+      const newState = {...state};
+      action.spots.map(spot => {
+        newState.spots[spot.id] = spot;
+      })
+      return newState;
     }
     case REMOVE_USER:
-      return initialState
+      return {...initialState, spots: {}}
     default:
       return state;
   }
+
 }
