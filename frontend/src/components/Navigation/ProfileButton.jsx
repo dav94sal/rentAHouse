@@ -5,25 +5,25 @@ import { logout } from "../../store/session";
 // import { resetUser } from "../../store/session";
 import './Navigation.css'
 import { Link, useNavigate } from "react-router-dom";
-// import { useSession } from "../../context/sessionContext";
+import { useSession } from "../../context/sessionContext";
 
 function ProfileButton({ user }) {
   const [showMenu, setShowMenu] = useState(false);
-  const [hasSpots, setHasSpots] = useState(false);
-  // const { hasSpots, setHasSpots } = useSession();
+  // const [hasSpots, setHasSpots] = useState(false);
+  const { hasSpots, setHasSpots } = useSession();
   const userSpots = useSelector(state => state.session.spots)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const ulref = useRef();
 
   // useEffect(() => {
-  //   console.log(userSpots)
-  // }, [userSpots])
+  //   console.log(hasSpots)
+  // }, [hasSpots])
 
   useEffect(() => {
     const usersArray = Object.values(userSpots)
     if (usersArray.length > 0) setHasSpots(true)
-  }, [userSpots, setHasSpots])
+  }, [hasSpots, userSpots, setHasSpots])
 
   useEffect(() => {
     if (!showMenu) return;

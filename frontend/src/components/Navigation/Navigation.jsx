@@ -40,14 +40,14 @@ function Navigation() {
           </div> :
 
           <div id='login-signup-container'>
-            <li>
+            <li className='LS-li'>
               <OpenModalButton
                 buttonText='Log in'
                 modalComponenet={<LoginFormModal />}
               />
             </li>
 
-            <li>
+            <li className='LS-li'>
               <OpenModalButton
                 buttonText='Sign up'
                 modalComponenet={<SignupFormModal />}

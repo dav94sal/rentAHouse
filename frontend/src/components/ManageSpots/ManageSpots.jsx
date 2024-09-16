@@ -38,7 +38,7 @@ function ManageSpots () {
     <>
       <h1>Manage Your Spots</h1>
       <Link to='/spots/new'>
-        <button>Create a New Spot</button>
+        <button className="submit-button disabled">Create a New Spot</button>
       </Link>
 
       <div className="manage-spots-container">
@@ -48,7 +48,7 @@ function ManageSpots () {
               <SpotTile spot={spot}/>
               <div className="spot-tile-buttons">
                 <Link to={`/spots/${spot.id}/edit`}>
-                  <button>
+                  <button className="submit-button disabled">
                       Update
                   </button>
                   </Link>
