@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
 const ADD_USER_SPOTS = 'session/addUserSpots';
+const ADD_ONE = 'session/addOneSpot';
 const REMOVE_USER_SPOT = 'session/removeUserSpots';
 
 export const setUser = (user) => {
@@ -22,6 +23,13 @@ export const setUserSpots = (spots) => {
   return {
     type: ADD_USER_SPOTS,
     spots
+  }
+}
+
+export const addUserSpot = (spot) => {
+  return {
+    type: ADD_ONE,
+    spot
   }
 }
 
@@ -105,6 +113,11 @@ export default function sessionReducer (state = initialState, action) {
         newState.spots[spot.id] = spot;
       })
       return newState;
+    }
+    case ADD_ONE: {
+      const newState = {...state, spots: {...state.spots}};
+      newState.spots[action.spot.id] = {...action.spot}
+      return {...newState};
     }
     case REMOVE_USER_SPOT: {
       const newState = {...state};
