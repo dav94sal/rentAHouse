@@ -115,6 +115,7 @@ export default function sessionReducer (state = initialState, action) {
       return newState;
     }
     case ADD_ONE: {
+      // check format
       const newState = {...state, spots: {...state.spots}};
       newState.spots[action.spot.id] = {...action.spot}
       return {...newState};

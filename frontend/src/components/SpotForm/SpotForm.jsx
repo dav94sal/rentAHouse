@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAllSpots, postSpot, updateSpot } from '../../store/spots';
+import { getAllSpots, getSpotDetails, postSpot, updateSpot } from '../../store/spots';
 import { addUserSpot, getUserSpots } from '../../store/session';
 import './SpotForm.css';
 import { useSession } from '../../context/sessionContext';
@@ -117,6 +117,8 @@ function SpotForm({isNewSpot}) {
 
     let response;
 
+    // state.spots.current slice of state is in wrong format
+    // after dispatch
     if (valid) {
       isNewSpot?
         response = await dispatch(postSpot(spotObject)) :
@@ -124,6 +126,7 @@ function SpotForm({isNewSpot}) {
       // console.log("response", response)
       await dispatch(addUserSpot(response))
       await dispatch(getAllSpots())
+      await dispatch(getSpotDetails(spotId))
       setHasSpots(true)
       navigate(`/spots/${response.id}`)
     }
