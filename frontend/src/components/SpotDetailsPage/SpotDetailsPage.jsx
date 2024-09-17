@@ -9,9 +9,11 @@ import PostReviewModal from '../PostReviewModal/PostReviewModal';
 import Reviews from './Reviews';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import './SpotDetails.css';
+import { useSession } from '../../context/sessionContext';
 
 function SpotDetailsPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const {isLoading, setIsLoading} = useSession();
   const [reviewLabel, setReviewLabel] = useState('')
   const dispatch = useDispatch();
   const { spotId } = useParams();
@@ -27,11 +29,12 @@ function SpotDetailsPage() {
       .then(() => setIsLoading(true))
 
     dispatch(resetReviews())
-  }, [spotId, dispatch])
+  }, [spotId, dispatch, setIsLoading, isLoading])
 
   useEffect(() => {
     if (reviewsArr.length === 1) setReviewLabel('Review')
     if (reviewsArr.length > 1) setReviewLabel('Reviews')
+      console.log('Reviews Array: ', reviewsArr)
   }, [reviewsArr])
 
   const hasReview = () => {

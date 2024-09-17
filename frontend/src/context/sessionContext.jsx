@@ -9,12 +9,7 @@ export default function SessionProvider({ children }) {
   const [session, setSession] = useState(false);
   const [userExists, setUserExists] = useState(false);
   const [hasSpots, setHasSpots] = useState(false);
-  // const userSpots = useSelector(state => state.session.spots)
-
-  // useEffect(() => {
-  //   if (userSpots.length > 0) setHasSpots(true);
-  //   if (userSpots.length ===  0) setHasSpots(false);
-  // }, [userSpots, setHasSpots])
+  const [isLoading, setIsLoading] = useState(false);
 
   const value = {
     session,
@@ -22,7 +17,9 @@ export default function SessionProvider({ children }) {
     userExists,
     setUserExists,
     hasSpots,
-    setHasSpots
+    setHasSpots,
+    isLoading,
+    setIsLoading
   }
 
   return (

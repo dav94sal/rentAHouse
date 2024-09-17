@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUserSpots } from "../../store/session";
@@ -6,39 +6,32 @@ import SpotTile from "../HomePage/SpotTile";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import './ManageSpots.css'
+import { useSession } from "../../context/sessionContext";
 
 function ManageSpots () {
-  const [isLoading, setIsLoading] = useState(false);
-  // const [reload, setReload] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const {isLoading, setIsLoading} = useSession();
   const dispatch = useDispatch();
-  // const revalidator = useRevalidator();
 
   useEffect(() => {
     dispatch(getUserSpots())
-    .then(() => setIsLoading(true))
+      .then(() => setIsLoading(true))
 
-    setIsLoading(false)
-  }, [dispatch]);
+  }, [dispatch, setIsLoading]);
 
-    const userSpots = useSelector(state => state.session.spots)
-    const spotArr = Object.values(userSpots);
-    spotArr.reverse();
+  const userSpots = useSelector(state => state.session.spots)
+  const spotArr = Object.values(userSpots);
+  spotArr.reverse();
 
   // useEffect(() => {
-  //   if (reload) {
-  //     revalidator.revalidate()
-  //   }
-  // }, [reload, revalidator])
-  // const handleModalClose = () => {
-  //   // setIsLoading(false)
-  //   dispatch(getUserSpots())
-  // }
+  //   console.log(spotArr)
+  // }, [spotArr])
 
   return (
     <>
       <h1>Manage Your Spots</h1>
       <Link to='/spots/new'>
-        <button>Create a New Spot</button>
+        <button className="submit-button disabled">Create a New Spot</button>
       </Link>
 
       <div className="manage-spots-container">
@@ -48,7 +41,7 @@ function ManageSpots () {
               <SpotTile spot={spot}/>
               <div className="spot-tile-buttons">
                 <Link to={`/spots/${spot.id}/edit`}>
-                  <button>
+                  <button className="submit-button disabled">
                       Update
                   </button>
                   </Link>

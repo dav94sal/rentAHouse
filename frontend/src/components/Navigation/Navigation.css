@@ -65,6 +65,12 @@ nav li {
   color: black;
 }
 
+.LS-li button {
+  background-color: white;
+  color: black;
+  box-shadow: 2px 2px grey;
+}
+
 #create-a-new-spot {
   display: flex;
   align-items: center;

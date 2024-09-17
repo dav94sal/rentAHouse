@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { deleteSpot } from "../../store/spots";
 import { deleteReview } from "../../store/reviews";
+import { removeUserSpot } from "../../store/session";
 import './DeleteModal.css'
 
 function DeleteModal({type, id}) {
@@ -28,6 +29,7 @@ function DeleteModal({type, id}) {
 
     if (manageType().type === 'spot') {
       dispatch(deleteSpot(id))
+      .then(dispatch(removeUserSpot(id)))
       .then(closeModal)
     }
 

@@ -5,6 +5,7 @@ import { FaRegStar } from "react-icons/fa";
 import { postReview } from "../../store/reviews";
 import { useModal } from "../../context/Modal";
 import './PostReview.css';
+import { useSession } from "../../context/sessionContext";
 
 function PostReviewModal({spotId}) {
   const [review, setReview] = useState('');
@@ -14,6 +15,7 @@ function PostReviewModal({spotId}) {
   const [errors, setErrors] = useState({})
   const dispatch = useDispatch()
   const { closeModal } = useModal();
+  const {setIsLoading} = useSession();
 
   useEffect(() => {
     if (review.length >= 10 && rating > 0) {
@@ -34,6 +36,7 @@ function PostReviewModal({spotId}) {
     }
 
     dispatch(postReview(reviewObj))
+      .then(setIsLoading(false))
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();

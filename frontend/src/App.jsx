@@ -21,19 +21,20 @@ function Layout() {
     //   // if (!userExists) navigate('/')
     // }, [userExists, navigate])
 
-    useEffect(() => {
-      dispatch(restoreUser()).then(() => setSession(true));
-      dispatch(getAllSpots())
-      dispatch(getUserSpots())
+  useEffect(() => {
+    dispatch(restoreUser()).then(() => setSession(true));
+    dispatch(getAllSpots())
+    dispatch(getUserSpots())
 
-      return setSession(false)
-    }, [dispatch, setSession])
-    const spots = useSelector(state => state.session.spots)
+    return setSession(false)
+  }, [dispatch, setSession])
+
+  const spots = useSelector(state => state.session.spots)
+  const spotsArr = Object.values(spots);
 
   useEffect(() => {
-    const spotsArr = Object.values(spots);
     if (spotsArr.length > 0) setHasSpots(true)
-  }, [spots, setHasSpots])
+  }, [spotsArr.length, setHasSpots])
 
   // useEffect(() => {
   //   if (userExists) dispatch(getUserSpots())

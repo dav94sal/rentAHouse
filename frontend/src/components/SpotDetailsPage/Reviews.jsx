@@ -10,19 +10,19 @@ function Reviews({ review }) {
     'July', 'August', 'September', 'October', 'November', 'Decemeber'
   ]
 
-  useEffect(() => {
-
-  })
+  // useEffect(() => {
+  //   console.log('Review: ', review.User)
+  // }, [review])
 
   return (
     <div>
-      {/* {isLoading && */}
+      {review.User &&
         <>
           <h3>{review.User.firstName}</h3>
           <p>{`${months[month - 1]} ${year}`}</p>
           <p>{review.review}</p>
         </>
-      {/* } */}
+      }
     </div>
   )
 }

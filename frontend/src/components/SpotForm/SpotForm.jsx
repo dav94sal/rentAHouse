@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { postSpot, updateSpot } from '../../store/spots';
-import { getUserSpots } from '../../store/session';
+import { getAllSpots, postSpot, updateSpot } from '../../store/spots';
+import { addUserSpot, getUserSpots } from '../../store/session';
 import './SpotForm.css';
 import { useSession } from '../../context/sessionContext';
 
@@ -122,6 +122,8 @@ function SpotForm({isNewSpot}) {
         response = await dispatch(postSpot(spotObject)) :
         response = await dispatch(updateSpot(spotObject, spotId))
       // console.log("response", response)
+      await dispatch(addUserSpot(response))
+      await dispatch(getAllSpots())
       setHasSpots(true)
       navigate(`/spots/${response.id}`)
     }
