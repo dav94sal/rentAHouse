@@ -5,4 +5,12 @@ const unauthorized = function(next) {
   next(err);
 }
 
-module.exports = { unauthorized }
+const notFound = (reqType, next, title=null, message=null) => {
+  const err = new Error(`${reqType} couldn't be found`);
+    err.title = title || `${reqType} not found`;
+    err.errors = message || {message: `${reqType} couldn't be found`};
+    err.status = 404;
+    next(err);
+}
+
+module.exports = { unauthorized, notFound }

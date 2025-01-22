@@ -122,11 +122,11 @@ function SpotForm({isNewSpot}) {
     if (valid) {
       isNewSpot?
         response = await dispatch(postSpot(spotObject)) :
-        response = await dispatch(updateSpot(spotObject, spotId))
-      // console.log("response", response)
-      await dispatch(addUserSpot(response))
+        response = await dispatch(updateSpot(spotObject, currSpot.id))
+      console.log("response", spotId)
+      await dispatch(addUserSpot(spotId))
       await dispatch(getAllSpots())
-      await dispatch(getSpotDetails(spotId))
+      // await dispatch(getSpotDetails(spotId))
       setHasSpots(true)
       navigate(`/spots/${response.id}`)
     }

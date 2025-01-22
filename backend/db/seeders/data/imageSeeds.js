@@ -1,0 +1,148 @@
+const demoImages = [
+    {
+      imageableId: 1,
+      imageableType: 'Spot',
+      url: 'https://i.ibb.co/jhtYvy2/cabin-1406376.jpg',
+      preview: true
+    },
+    {
+      imageableId: 2,
+      imageableType: 'Spot',
+      url: 'https://i.ibb.co/w6rnbWC/prison-walls-1460144.jpg',
+      preview: true
+    },
+    {
+      imageableId: 3,
+      imageableType: 'Spot',
+      url: 'https://i.ibb.co/QKQFdRW/chairs-2-1489343.jpg',
+      preview: true
+    },
+    {
+      imageableId: 4,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 5,
+      imageableType: 'Spot',
+      url: 'https://i.ibb.co/mBdvGHp/cemetary-1-1442451.jpg',
+      preview: true
+    },
+    {
+      imageableId: 6,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 7,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 8,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 9,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 10,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 11,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 12,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 13,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 14,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 15,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 16,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 17,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 18,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 19,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 20,
+      imageableType: 'Spot',
+      url: '',
+      preview: true
+    },
+    {
+      imageableId: 1,
+      imageableType: 'Review',
+      url: 'https://i.ibb.co/NxgL179/childhood-1241405.jpg',
+      preview: false
+    },
+    {
+      imageableId: 2,
+      imageableType: 'Review',
+      url: 'https://i.ibb.co/SnQzr1h/old-vacant-room-1539752.jpg',
+      preview: false
+    },
+    {
+      imageableId: 3,
+      imageableType: 'Review',
+      url: 'https://i.ibb.co/ZTp0pYJ/father-and-children-on-a-walk-1429203.jpg',
+      preview: false
+    },
+    {
+      imageableId: 4,
+      imageableType: 'Review',
+      url: 'https://i.ibb.co/th5SZRP/lonely-bouquet-1385870.jpg',
+      preview: false
+    },
+]
+
+module.exports = demoImages;

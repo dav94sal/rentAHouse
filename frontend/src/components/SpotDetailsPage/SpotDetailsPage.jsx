@@ -12,8 +12,8 @@ import './SpotDetails.css';
 import { useSession } from '../../context/sessionContext';
 
 function SpotDetailsPage() {
-  // const [isLoading, setIsLoading] = useState(false);
-  const {isLoading, setIsLoading} = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+  // const {isLoading, setIsLoading} = useSession();
   const [reviewLabel, setReviewLabel] = useState('')
   const dispatch = useDispatch();
   const { spotId } = useParams();
@@ -64,7 +64,7 @@ function SpotDetailsPage() {
 
   return (
     <div className='spot-details-container'>
-      {isLoading &&
+      {isLoading && spot &&
         <>
           <h1>{spot.name}</h1>
           <p>{`${spot.city}, ${spot.state}, ${spot.country}`}</p>

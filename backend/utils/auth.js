@@ -61,7 +61,8 @@ const restoreUser = (req, res, next) => {
 
 const decodeJWT = function (req) {
   const { token } = req.cookies;
-  return jwt.decode(token);
+  const JWT = jwt.decode(token);
+  return JWT.data.id
 }
 
 const requireAuth = function (req, res, next) {
