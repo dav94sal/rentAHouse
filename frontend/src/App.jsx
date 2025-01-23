@@ -3,23 +3,17 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { restoreUser, getUserSpots } from './store/session';
 import { getAllSpots } from './store/spots';
+import { useSession } from './context/sessionContext';
 import Navigation from './components/Navigation/Navigation';
 import HomePage from './components/HomePage';
 import SpotDetailsPage from './components/SpotDetailsPage/SpotDetailsPage';
 import SpotForm from './components/SpotForm/SpotForm';
 import ManageSpots from './components/ManageSpots/ManageSpots';
-import { useSession } from './context/sessionContext';
+import Footer from './components/Footer'
 
 function Layout() {
   const { session, setSession, setHasSpots } = useSession();
-  // const navigate = useNavigate('/');
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-    //   if (user === null) setUserExists(false);
-    //   else setUserExists(true);
-    //   // if (!userExists) navigate('/')
-    // }, [userExists, navigate])
 
   useEffect(() => {
     dispatch(restoreUser()).then(() => setSession(true));
@@ -36,18 +30,13 @@ function Layout() {
     if (spotsArr.length > 0) setHasSpots(true)
   }, [spotsArr.length, setHasSpots])
 
-  // useEffect(() => {
-  //   if (userExists) dispatch(getUserSpots())
-
-  //   dispatch(resetUser())
-  // }, [userExists, dispatch])
-
   return (
     <div className='page-wrapper'>
         <Navigation />
       <main>
-        {session? <Outlet /> : ''}
+        { session && <Outlet /> }
       </main>
+      { session && <Footer /> }
     </div>
   )
 }
