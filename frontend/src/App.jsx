@@ -32,11 +32,11 @@ function Layout() {
 
   return (
     <div className='page-wrapper'>
-        <Navigation />
+      <Navigation />
       <main>
         { session && <Outlet /> }
-        { session && <Footer /> }
       </main>
+      <Footer />
     </div>
   )
 }
