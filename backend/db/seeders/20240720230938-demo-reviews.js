@@ -17,8 +17,9 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete(options, {
-      stars: {[Op.in]: [1, 2, 3, 4, 5]}
+    return demoReviews.map(review => {
+      return queryInterface.bulkDelete(
+        options, { review: review.review }, {})
     })
   }
 };

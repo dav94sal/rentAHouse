@@ -19,12 +19,9 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete(options, {
-      username: {
-        [Op.in]: [
-          'demo-user', 'FakeUser1', 'FakeUser2',
-          'bonJovifan1', 'bSinger', 'sasquatch'
-        ]}
-    }, {});
+    return demoUsers.map(user => {
+      return queryInterface.bulkDelete(
+        options, { username: user.username }, {});
+    })
   }
 };

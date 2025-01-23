@@ -17,8 +17,9 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete(options, {
-      name: {[Op.in]: ['demo-spot', 'The Camp', "Ya'lls place", "Cemetary Gates"]}
-    }, {});
+    return demoSpots.map(spot => {
+      return queryInterface.bulkDelete(
+        options, { name: spot.name }, {});
+    })
   }
 };

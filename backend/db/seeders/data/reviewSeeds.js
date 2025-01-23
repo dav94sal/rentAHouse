@@ -477,25 +477,25 @@ const demoReviews = [
     // Spot 20, OwnerId 10
     {
       userId: 4,
-      spotId: 19,
+      spotId: 20,
         review: "Yo! You guys can party.",
         stars: 5
     },
     {
       userId: 5,
-      spotId: 19,
+      spotId: 20,
         review: "Can't put 'em back like I used to.",
         stars: 5
     },
     {
       userId: 1,
-      spotId: 19,
+      spotId: 20,
         review: "Very old house but I call it home.",
         stars: 4
     },
     {
       userId: 2,
-      spotId: 19,
+      spotId: 20,
         review: "Greatest BBQ in all of Houston!",
         stars: 4
     },

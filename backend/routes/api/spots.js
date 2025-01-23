@@ -46,11 +46,14 @@ router.get('/current', requireAuth, async (req,res,next) => {
 // get spot by id
 router.get('/:spotId', async (req,res,next) => {
   let spot = await Spot.findByPk(req.params.spotId);
+  // console.log("Spot: ", spot.toJSON())
 
   if (spot) {
     const owner = await spot.getUser({attributes: ['id', 'firstName', 'lastName']});
+    // console.log("Owner: ", owner)
     const images = await spot.getImages({attributes: ['id', 'url', 'preview']});
     const reviews = await spot.getReviews({attributes: ['stars']});
+    // console.log("Reviews: ", reviews)
     const avgStarRating = reviews.reduce((acc, rev) => acc + rev.stars, 0) / reviews.length;
 
     spot = spot.toJSON();

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAllSpots, getSpotDetails, postSpot, updateSpot } from '../../store/spots';
+import { getAllSpots, postSpot, updateSpot } from '../../store/spots';
 import { addUserSpot, getUserSpots } from '../../store/session';
 import './SpotForm.css';
 import { useSession } from '../../context/sessionContext';

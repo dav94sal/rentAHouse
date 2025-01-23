@@ -18,7 +18,7 @@ module.exports = {
 
   async down (queryInterface, Sequelize) {
     await queryInterface.bulkDelete(options, {
-      userId: {[Op.in]: [1, 2, 3]}
+      spotId: {[Op.between]: [0, 20]}
     })
   }
 };
