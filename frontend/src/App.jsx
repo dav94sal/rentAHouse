@@ -35,8 +35,8 @@ function Layout() {
         <Navigation />
       <main>
         { session && <Outlet /> }
+        { session && <Footer /> }
       </main>
-      { session && <Footer /> }
     </div>
   )
 }

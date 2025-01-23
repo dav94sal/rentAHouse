@@ -1,7 +1,7 @@
 function Reviews({ review }) {
   // const [isLoading, setIsLoading] = useState(false);
   const date = new Date(review.createdAt)
-  const month = date.getUTCMonth();
+  const month = date.getMonth();
   const year = date.getFullYear();
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
