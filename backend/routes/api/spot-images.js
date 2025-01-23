@@ -7,8 +7,7 @@ const router = express.Router();
 
 // delete review for a spot
 router.delete('/:imageId', requireAuth, async (req,res,next) => {
-  const JWT = decodeJWT(req);
-  const ownerId = JWT.data.id;
+  const ownerId = decodeJWT(req);
   const image = await Image.findOne({
     where: { id: req.params.imageId },
     include: Spot
@@ -26,11 +25,12 @@ router.delete('/:imageId', requireAuth, async (req,res,next) => {
     res.json({ message: "Successfully deleted" });
 
   } else {
-    const err = new Error(`Spot Image couldn't be found`);
-    err.title = 'Spot Image not found';
-    err.errors = {message: `Spot Image couldn't be found`};
-    err.status = 404;
-    next(err);
+    notFound("Spot Image", next)
+    // const err = new Error(`Spot Image couldn't be found`);
+    // err.title = 'Spot Image not found';
+    // err.errors = {message: `Spot Image couldn't be found`};
+    // err.status = 404;
+    // next(err);
   }
 })
 

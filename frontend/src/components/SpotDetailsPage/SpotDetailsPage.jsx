@@ -9,11 +9,10 @@ import PostReviewModal from '../PostReviewModal/PostReviewModal';
 import Reviews from './Reviews';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import './SpotDetails.css';
-import { useSession } from '../../context/sessionContext';
 
 function SpotDetailsPage() {
-  // const [isLoading, setIsLoading] = useState(false);
-  const {isLoading, setIsLoading} = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+  // const {isLoading, setIsLoading} = useSession();
   const [reviewLabel, setReviewLabel] = useState('')
   const dispatch = useDispatch();
   const { spotId } = useParams();
@@ -64,20 +63,20 @@ function SpotDetailsPage() {
 
   return (
     <div className='spot-details-container'>
-      {isLoading &&
+      {isLoading && spot &&
         <>
           <h1>{spot.name}</h1>
           <p>{`${spot.city}, ${spot.state}, ${spot.country}`}</p>
 
           <div className='images-container'>
-            {spot.SpotImages.map((image, i) => (
+            {spot.SpotImages?.map((image, i) => (
               <img src={image.url} key={image.id} id={`img-${i + 1}`} />
             ))}
           </div>
 
           <div className='details-container'>
             <div className='name-description-container'>
-              <h2>{`Hosted by ${spot.Owner.firstName} ${spot.Owner.lastName}`}</h2>
+              <h2>{`Hosted by ${spot.Owner?.firstName} ${spot.Owner?.lastName}`}</h2>
               <p>{spot.description}</p>
             </div>
 

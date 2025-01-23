@@ -1,9 +1,9 @@
 const express = require('express');
-const { Booking, Review, Spot, User, Image } = require('../../db/models');
+const { Booking, Spot } = require('../../db/models');
 const { requireAuth, decodeJWT } = require('../../utils/auth');
 
 const { validateBooking, hasExistingBooking } = require('../../utils/validation');
-const { unauthorized } = require('../../utils/errors');
+const { unauthorized, notFound } = require('../../utils/errors');
 
 const router = express.Router();
 
@@ -14,8 +14,7 @@ const getPreviewImage = async function (spot) {
 
 // get current user bookings
 router.get('/current', requireAuth, async (req,res,next) => {
-  const JWT = decodeJWT(req);
-  const userId = JWT.data.id;
+  const userId = decodeJWT(req);
   const response = [];
 
   const bookings = await Booking.findAll({ where: { userId } });
@@ -23,7 +22,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
   for (let booking of bookings) {
     let spot = await booking.getSpot({ attributes: { exclude: ['description', 'createdAt', 'updatedAt'] }});
     const previewImage = await getPreviewImage(spot);
-    console.log(previewImage)
+    // console.log(previewImage)
 
     booking = booking.toJSON();
     spot = spot.toJSON();
@@ -40,8 +39,7 @@ router.get('/current', requireAuth, async (req,res,next) => {
 
 // edit booking
 router.put('/:bookingId', requireAuth, validateBooking, async (req,res,next) => {
-  const JWT = decodeJWT(req);
-  const ownerId = JWT.data.id;
+  const ownerId = decodeJWT(req);
   let booking = await Booking.findByPk(req.params.bookingId);
   const today = Date.now();
 
@@ -77,17 +75,17 @@ router.put('/:bookingId', requireAuth, validateBooking, async (req,res,next) => 
     }
 
   } else {
-    const err = new Error(`Booking couldn't be found`);
-    err.title = "Couldn't find a Booking with the specified id";
-    err.status = 404;
-    next(err);
+    notFound("Booking", next, title="Couldn't find a Booking with the specified id")
+    // const err = new Error(`Booking couldn't be found`);
+    // err.title = "Couldn't find a Booking with the specified id";
+    // err.status = 404;
+    // next(err);
   }
 })
 
 // delete a booking
 router.delete('/:bookingId', requireAuth, async (req,res,next) => {
-  const JWT = decodeJWT(req);
-  const userId = JWT.data.id;
+  const userId = decodeJWT(req);
   const booking = await Booking.findByPk(req.params.bookingId);
 
   if (booking) {
@@ -101,10 +99,11 @@ router.delete('/:bookingId', requireAuth, async (req,res,next) => {
     await Booking.destroy({ where: { id: req.params.bookingId }});
     res.json({ message: "Successfully deleted" })
   } else {
-    const err = new Error(`Booking couldn't be found`);
-    err.title = 'Booking not found';
-    err.status = 404;
-    next(err);
+    notFound("Booking", next)
+    // const err = new Error(`Booking couldn't be found`);
+    // err.title = 'Booking not found';
+    // err.status = 404;
+    // next(err);
   }
 })
 

@@ -26,7 +26,7 @@ export const setUserSpots = (spots) => {
   }
 }
 
-export const addUserSpot = (spot) => {
+export const addOneSpot = (spot) => {
   return {
     type: ADD_ONE,
     spot
@@ -96,6 +96,15 @@ export const getUserSpots = () => async dispatch => {
   }
 
   return response;
+}
+
+export const addUserSpot = (spotId) => async dispatch => {
+  const response = await csrfFetch(`/api/spots/${spotId}`);
+
+  if (response.ok) {
+    const spot = response.json();
+    dispatch(addOneSpot(spot))
+  }
 }
 
 const initialState = { user: null, spots: {} }

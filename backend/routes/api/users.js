@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs')
 
-const { setTokenCookie, requireAuth, restoreUser, decodeJWT } = require('../../utils/auth');
+const { setTokenCookie } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
 const { validateSignup, userExists } = require('../../utils/validation')
