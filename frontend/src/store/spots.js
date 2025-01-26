@@ -75,12 +75,12 @@ export const postSpot = (spotObj) => async dispatch => {
         })
       });
 
-      console.log(newSpot)
+      // console.log(newSpot)
       return newSpot;
     }
   } catch (error) {
     // let err = await error.json()
-    console.log("error: ", error);
+    // console.log("error: ", error);
     return error;
   }
 }
@@ -98,7 +98,7 @@ export const updateSpot = (spotObj, spotId) => async dispatch => {
       return newSpot;
     }
   } catch (error) {
-    console.log("error: ", error);
+    // console.log("error: ", error);
     return error;
   }
 }
