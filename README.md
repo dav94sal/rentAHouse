@@ -24,3 +24,8 @@ Extensive documentation available at the [Rent-A-House Wiki!](https://github.com
 - PostgreSQL
 
 ## Screenshots
+
+![Home Page](https://i.ibb.co/vYBDcnS/Home.jpg)
+![Spot Page](https://i.ibb.co/yqVF1RW/Spot-Page.jpg)
+![Manage Page](https://i.ibb.co/qmqWx8D/Manage-spots.jpg)
+
