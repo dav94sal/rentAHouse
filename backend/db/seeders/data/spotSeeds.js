@@ -216,7 +216,7 @@ const demoSpots = [
       country: 'UK',
       lat: 51.481422,
       lng: 0.058427,
-      name: "Barrack Field",
+      name: "Gnome Garden",
       description: 'HA HA! JK',
       price: 110
     },
