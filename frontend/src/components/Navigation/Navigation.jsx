@@ -1,21 +1,13 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { FaHome } from "react-icons/fa";
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import LoginFormModal from '../LoginFormPage';
 import SignupFormModal from '../SignupFormPage';
 import ProfileButton from './ProfileButton';
 import './Navigation.css'
-// import { useEffect } from 'react';
-// import { useSession } from '../../context/sessionContext';
 
 function Navigation() {
   const sessionUser = useSelector(state => state.session.user);
-  // const { userExists } = useSession();
-
-  // useEffect(() => {
-  //   console.log(sessionUser)
-  // }, [sessionUser])
 
   return (
     <nav>
@@ -23,7 +15,7 @@ function Navigation() {
         <li id='home-link'>
           <Link to='/'>
             <div className='name-icon'>
-              <FaHome />
+              <img src='/android-chrome-192x192.png' className='home-button'/>
               <p id='name'>Rent-A-House</p>
             </div>
           </Link>
