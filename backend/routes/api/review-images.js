@@ -23,11 +23,6 @@ router.delete('/:imageId', requireAuth, async (req,res,next) => {
 
   } else {
     notFound("Review Image", next)
-    // const err = new Error(`Review Image couldn't be found`);
-    // err.title = 'Review Image not found';
-    // err.errors = {message: `Review Image couldn't be found`};
-    // err.status = 404;
-    // next(err);
   }
 })
 

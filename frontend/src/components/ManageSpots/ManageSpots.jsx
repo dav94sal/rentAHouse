@@ -1,16 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUserSpots } from "../../store/session";
+// import { useSession } from "../../context/sessionContext";
 import SpotTile from "../HomePage/SpotTile";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import './ManageSpots.css'
-import { useSession } from "../../context/sessionContext";
 
 function ManageSpots () {
-  // const [isLoading, setIsLoading] = useState(false);
-  const {isLoading, setIsLoading} = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+  // const {isLoading, setIsLoading} = useSession();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,9 +23,9 @@ function ManageSpots () {
   const spotArr = Object.values(userSpots);
   spotArr.reverse();
 
-  // useEffect(() => {
-  //   console.log(spotArr)
-  // }, [spotArr])
+  useEffect(() => {
+    console.log(userSpots)
+  }, [userSpots])
 
   return (
     <>
@@ -37,21 +37,23 @@ function ManageSpots () {
       <div className="manage-spots-container">
         {isLoading &&
           spotArr.map((spot) => (
-            <div className='update-spot-container' key={spot.id}>
-              <SpotTile spot={spot}/>
-              <div className="spot-tile-buttons">
-                <Link to={`/spots/${spot.id}/edit`}>
-                  <button className="submit-button disabled">
-                      Update
-                  </button>
-                  </Link>
+            <>
+              <div className='update-spot-container' key={spot.id}>
+                <SpotTile spot={spot}/>
+                <div className="spot-tile-buttons">
+                  <Link to={`/spots/${spot.id}/edit`}>
+                    <button className="submit-button disabled">
+                        Update
+                    </button>
+                    </Link>
 
-                <OpenModalButton
-                  buttonText='Delete'
-                  modalComponenet={<DeleteModal type={'spot'} id={spot.id}/>}
-                />
+                  <OpenModalButton
+                    buttonText='Delete'
+                    modalComponenet={<DeleteModal type={'spot'} id={spot.id}/>}
+                    />
+                </div>
               </div>
-            </div>
+            </>
           ))
         }
       </div>

@@ -76,10 +76,6 @@ router.put('/:bookingId', requireAuth, validateBooking, async (req,res,next) => 
 
   } else {
     notFound("Booking", next, title="Couldn't find a Booking with the specified id")
-    // const err = new Error(`Booking couldn't be found`);
-    // err.title = "Couldn't find a Booking with the specified id";
-    // err.status = 404;
-    // next(err);
   }
 })
 
@@ -100,10 +96,6 @@ router.delete('/:bookingId', requireAuth, async (req,res,next) => {
     res.json({ message: "Successfully deleted" })
   } else {
     notFound("Booking", next)
-    // const err = new Error(`Booking couldn't be found`);
-    // err.title = 'Booking not found';
-    // err.status = 404;
-    // next(err);
   }
 })
 

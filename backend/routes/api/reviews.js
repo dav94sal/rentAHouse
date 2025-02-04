@@ -88,10 +88,6 @@ router.post('/:reviewId/images', requireAuth, async (req,res,next) => {
     }
   } else { // send error if id's don't match
     notFound("Review", next)
-    // const err = new Error(`Review couldn't be found`);
-    // err.title = 'Review not found';
-    // err.status = 404;
-    // next(err);
   }
 })
 
@@ -110,11 +106,6 @@ router.put('/:reviewId', requireAuth, validateReview, async (req,res,next) => {
     res.json(userReview)
   } else {
     notFound("Review", next)
-    // const err = new Error(`Could not find review ${req.params.reviewId}`);
-    // err.title = 'Review not found';
-    // err.errors = {message: `Review couldn't be found`};
-    // err.status = 404;
-    // next(err);
   }
 })
 
@@ -130,10 +121,6 @@ router.delete('/:reviewId', requireAuth, async (req,res,next) => {
     res.json({ message: "Successfully deleted" })
   } else {
     notFound("Review", next)
-    // const err = new Error(`Review couldn't be found`);
-    // err.title = 'Review not found';
-    // err.status = 404;
-    // next(err);
   }
 })
 

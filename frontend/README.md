@@ -1,4 +1,4 @@
-# App Academy React Vite Template
+# Rent A House
 
 This repo contains a basic Vite React template configured for use in App Academy
 projects.

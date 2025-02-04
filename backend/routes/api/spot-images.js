@@ -26,11 +26,6 @@ router.delete('/:imageId', requireAuth, async (req,res,next) => {
 
   } else {
     notFound("Spot Image", next)
-    // const err = new Error(`Spot Image couldn't be found`);
-    // err.title = 'Spot Image not found';
-    // err.errors = {message: `Spot Image couldn't be found`};
-    // err.status = 404;
-    // next(err);
   }
 })
 

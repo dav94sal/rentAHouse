@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getAllSpots, postSpot, updateSpot } from '../../store/spots';
 import { addUserSpot, getUserSpots } from '../../store/session';
-import './SpotForm.css';
 import { useSession } from '../../context/sessionContext';
+import './SpotForm.css';
 
 function SpotForm({isNewSpot}) {
   const { spotId } = useParams()
@@ -36,6 +36,26 @@ function SpotForm({isNewSpot}) {
     }
     // console.log(errors)
   }, [dispatch, isNewSpot, errors]);
+
+  useEffect(() => {
+    if (hasSubmitted) {
+      if (country) delete errors.country
+      if (address) delete errors.address
+      if (city) delete errors.city
+      if (state) delete errors.state
+      if (latitude) delete errors.lat
+      if (longitude) delete errors.lng
+      if (description.length >= 30) delete errors.description
+      if (price) delete errors.price
+      if (name) delete errors.name
+      if (preview) {
+        delete errors.preview
+        if (preview.endsWith('png')) delete errors.img1
+        else if (preview.endsWith('jpg')) delete errors.img1
+        else if (preview.endsWith('jpeg')) delete errors.img1
+      }
+    }
+  })
 
   const buildData = () => {
     const images = { 1: {url: preview, preview: true} };
@@ -117,16 +137,12 @@ function SpotForm({isNewSpot}) {
 
     let response;
 
-    // state.spots.current slice of state is in wrong format
-    // after dispatch
     if (valid) {
       isNewSpot?
         response = await dispatch(postSpot(spotObject)) :
         response = await dispatch(updateSpot(spotObject, currSpot.id))
-      console.log("response", spotId)
-      await dispatch(addUserSpot(spotId))
+      await dispatch(addUserSpot(response.id))
       await dispatch(getAllSpots())
-      // await dispatch(getSpotDetails(spotId))
       setHasSpots(true)
       navigate(`/spots/${response.id}`)
     }
@@ -333,6 +349,7 @@ function SpotForm({isNewSpot}) {
 
           <p className='errors'>
             {hasSubmitted? errors.preview : ''}
+            {hasSubmitted? errors.img1 : ''}
           </p>
 
           <input
