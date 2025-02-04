@@ -1,7 +1,4 @@
-// import { useEffect } from "react";
-
 function Reviews({ review }) {
-  // const [isLoading, setIsLoading] = useState(false);
   const date = new Date(review.createdAt)
   const month = date.getMonth();
   const year = date.getFullYear();
@@ -9,12 +6,6 @@ function Reviews({ review }) {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'Decemeber'
   ]
-
-  // console.log(months)
-
-  // useEffect(() => {
-  //   console.log("Month idx: ", month)
-  // }, [month])
 
   return (
     <div>

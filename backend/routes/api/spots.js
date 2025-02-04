@@ -67,11 +67,6 @@ router.get('/:spotId', async (req,res,next) => {
     res.json(spot)
   } else {
     notFound("Spot", next, title=`Could not find spot ${req.params.spotId}`)
-    // const err = new Error(`Spot couldn't be found`);
-    // err.title = `Could not find spot ${req.params.spotId}`;
-    // err.errors = {message: `Spot couldn't be found`};
-    // err.status = 404;
-    // next(err);
   }
 });
 
@@ -99,11 +94,6 @@ router.get('/:spotId/reviews', async (req,res,next) => {
     res.json({ Reviews: response });
   } else {
     notFound("Spot", next)
-    // const err = new Error(`Could not find spot ${req.params.spotId}`);
-    // err.title = 'Spot not found';
-    // err.errors = {message: `Spot couldn't be found`};
-    // err.status = 404;
-    // next(err);
   }
 });
 
@@ -133,10 +123,6 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
     res.json({ Bookings: bookings });
   } else {
     return notFound("Spot", next)
-    // const err = new Error(`Spot couldn't be found`);
-    // err.title = 'Spot not found';
-    // err.status = 404;
-    // next(err);
   }
 });
 
@@ -240,10 +226,6 @@ router.post('/:spotId/images', requireAuth, async (req,res,next) => {
     res.json(response);
   } else {
     notFound("Spot", next, title="Couldn't find a Spot with the specified id")
-    // const err = new Error(`Spot couldn't be found`);
-    // err.title = "Couldn't find a Spot with the specified id";
-    // err.status = 404;
-    // next(err);
   }
 });
 
@@ -280,10 +262,6 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req,res,ne
     }
   } else {
     notFound("Spot", next)
-    // const err = new Error(`Spot couldn't be found`);
-    // err.title = "Couldn't find a Spot with the specified id";
-    // err.status = 404;
-    // next(err);
   }
 });
 
@@ -322,10 +300,6 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req,res,next
 
   } else {
     notFound("Spot", next)
-    // const err = new Error(`Spot couldn't be found`);
-    // err.title = 'Spot not found';
-    // err.status = 404;
-    // next(err);
   }
 });
 
@@ -358,10 +332,6 @@ router.put('/:spotId', requireAuth, validateSpot, async (req,res,next) => {
     res.json(verifySpot);
   } else {
     notFound("Spot", next)
-    // const err = new Error(`Spot couldn't be found`);
-    // err.title = "Couldn't find a Spot with the specified id";
-    // err.status = 404;
-    // next(err);
   }
 });
 
@@ -383,11 +353,6 @@ router.delete('/:spotId', requireAuth, async (req,res,next) => {
 
   } else {
     notFound("Spot", next)
-    // const err = new Error(`Spot ${req.params.spotId} couldn't be found`);
-    // err.title = 'Spot not found';
-    // err.errors = {message: `Spot couldn't be found`};
-    // err.status = 404;
-    // next(err);
   }
 });
 
