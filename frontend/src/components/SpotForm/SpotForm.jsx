@@ -137,17 +137,12 @@ function SpotForm({isNewSpot}) {
 
     let response;
 
-    // state.spots.current slice of state is in wrong format
-    // after dispatch
     if (valid) {
-      // console.log(valid)
       isNewSpot?
         response = await dispatch(postSpot(spotObject)) :
         response = await dispatch(updateSpot(spotObject, currSpot.id))
-      // console.log("response", spotId)
       await dispatch(addUserSpot(response.id))
       await dispatch(getAllSpots())
-      // await dispatch(getSpotDetails(spotId))
       setHasSpots(true)
       navigate(`/spots/${response.id}`)
     }

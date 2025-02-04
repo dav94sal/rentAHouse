@@ -63,7 +63,7 @@ export const postSpot = (spotObj) => async dispatch => {
     // console.log("response: ", response);
     if (response.ok) {
       const newSpot = await response.json();
-      dispatch(addSpot(newSpot));
+      await dispatch(addSpot(newSpot));
 
       const images = Object.values(spotObj.images)
 
